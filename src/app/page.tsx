@@ -6,18 +6,27 @@ import { Dialog, useDialog } from '@/components/Dialog';
 import { Toast, useToast } from '@/components/Toast';
 import { MediaCard, MediaItem, spinnerStyles } from '@/components/MediaCard';
 import { UserPanel } from '@/components/UserPanel';
-import { QualitySelector, CompressionQuality } from '@/components/QualitySelector';
+
+type CompressionQuality = 'none' | 'high' | 'balanced' | 'small';
+
+interface Settings {
+  allowPublicUpload: boolean;
+  allowRegistration?: boolean;
+  defaultCompression: CompressionQuality;
+  showNoCompression: boolean;
+  showPrivateOption: boolean;
+}
 
 export default function Home() {
   const router = useRouter();
   const [user, setUser] = useState<{ username: string; isAdmin: boolean; mustChangePassword?: boolean } | null>(null);
   const [file, setFile] = useState<File | null>(null);
-  const [quality, setQuality] = useState<CompressionQuality>('balanced');
+  const [noCompression, setNoCompression] = useState(false);
   const [isPrivate, setIsPrivate] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [lastUploadId, setLastUploadId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [settings, setSettings] = useState<{ allowPublicUpload: boolean; allowRegistration?: boolean } | null>(null);
+  const [settings, setSettings] = useState<Settings | null>(null);
   const [loading, setLoading] = useState(true);
   const [myUploads, setMyUploads] = useState<MediaItem[]>([]);
   const { dialog, showDialog, closeDialog } = useDialog();
@@ -108,9 +117,13 @@ export default function Home() {
     try {
       const formData = new FormData();
       formData.append('file', file);
+
+      // Use noCompression checkbox or default compression from admin settings
       if (isVideo) {
+        const quality = noCompression ? 'none' : (settings?.defaultCompression || 'balanced');
         formData.append('quality', quality);
       }
+
       if (user && isPrivate) {
         formData.append('isPrivate', 'true');
       }
@@ -127,6 +140,7 @@ export default function Home() {
       }
 
       setFile(null);
+      setNoCompression(false);
       refreshUploads();
 
       if (data.transcodeStatus === 'pending') {
@@ -244,37 +258,65 @@ export default function Home() {
             )}
           </label>
 
-          {/* Quality Selector for Videos */}
-          {isVideo && (
-            <QualitySelector value={quality} onChange={setQuality} />
-          )}
-
-          {/* Privacy Toggle */}
-          {user && (
-            <label style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px',
-              width: '100%',
-              padding: '12px 16px',
-              backgroundColor: '#1a1a1a',
-              borderRadius: '8px',
-              cursor: 'pointer',
-            }}>
-              <input
-                type="checkbox"
-                checked={isPrivate}
-                onChange={(e) => setIsPrivate(e.target.checked)}
-                style={{ accentColor: '#5865f2', width: '18px', height: '18px' }}
-              />
-              <div>
-                <div>🔒 Private Upload</div>
-                <div style={{ fontSize: '0.8rem', color: '#888' }}>
-                  Hidden from admin view
+          {/* Upload Options */}
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '12px',
+            width: '100%',
+          }}>
+            {/* No Compression Checkbox - only for videos, controlled by admin */}
+            {isVideo && settings?.showNoCompression && (
+              <label style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+                padding: '12px 16px',
+                backgroundColor: '#1a1a1a',
+                borderRadius: '8px',
+                cursor: 'pointer',
+              }}>
+                <input
+                  type="checkbox"
+                  checked={noCompression}
+                  onChange={(e) => setNoCompression(e.target.checked)}
+                  style={{ accentColor: '#5865f2', width: '18px', height: '18px' }}
+                />
+                <div>
+                  <div>🎬 No Compression</div>
+                  <div style={{ fontSize: '0.8rem', color: '#888' }}>
+                    Keep original quality (not recommended for large files)
+                  </div>
                 </div>
-              </div>
-            </label>
-          )}
+              </label>
+            )}
+
+            {/* Privacy Toggle - only for logged in users, controlled by admin */}
+            {user && settings?.showPrivateOption && (
+              <label style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+                padding: '12px 16px',
+                backgroundColor: '#1a1a1a',
+                borderRadius: '8px',
+                cursor: 'pointer',
+              }}>
+                <input
+                  type="checkbox"
+                  checked={isPrivate}
+                  onChange={(e) => setIsPrivate(e.target.checked)}
+                  style={{ accentColor: '#5865f2', width: '18px', height: '18px' }}
+                />
+                <div>
+                  <div>🔒 Private Upload</div>
+                  <div style={{ fontSize: '0.8rem', color: '#888' }}>
+                    Hidden from admin view
+                  </div>
+                </div>
+              </label>
+            )}
+          </div>
 
           {/* Upload Button */}
           <button

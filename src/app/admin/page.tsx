@@ -17,12 +17,22 @@ interface User {
 interface Settings {
     allowPublicUpload: boolean;
     allowRegistration: boolean;
+    defaultCompression: string;
+    showNoCompression: boolean;
+    showPrivateOption: boolean;
     smtpHost: string | null;
     smtpPort: number | null;
     smtpUser: string | null;
     smtpFrom: string | null;
     smtpConfigured: boolean;
 }
+
+const COMPRESSION_OPTIONS = [
+    { value: 'none', label: 'None (Original)' },
+    { value: 'high', label: 'High Quality' },
+    { value: 'balanced', label: 'Balanced' },
+    { value: 'small', label: 'Smaller File' },
+];
 
 const inputStyle: React.CSSProperties = {
     padding: '12px',
@@ -87,7 +97,7 @@ export default function AdminPage() {
         }
     }, [user]);
 
-    const toggleSetting = async (key: 'allowPublicUpload' | 'allowRegistration') => {
+    const toggleSetting = async (key: keyof Pick<Settings, 'allowPublicUpload' | 'allowRegistration' | 'showNoCompression' | 'showPrivateOption'>) => {
         if (!settings) return;
         setSaving(true);
         try {
@@ -95,6 +105,23 @@ export default function AdminPage() {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ [key]: !settings[key] }),
+            });
+            const data = await res.json();
+            setSettings(data);
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    const updateDefaultCompression = async (value: string) => {
+        setSaving(true);
+        try {
+            const res = await fetch('/api/settings', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ defaultCompression: value }),
             });
             const data = await res.json();
             setSettings(data);
@@ -236,6 +263,7 @@ export default function AdminPage() {
                 {/* Settings Tab */}
                 {activeTab === 'settings' && (
                     <>
+                        {/* General Settings */}
                         <div style={{
                             display: 'flex',
                             flexDirection: 'column',
@@ -246,31 +274,69 @@ export default function AdminPage() {
                         }}>
                             <h3 style={{ margin: 0, marginBottom: '8px' }}>General Settings</h3>
 
-                            {(['allowPublicUpload', 'allowRegistration'] as const).map(key => (
-                                <div key={key} style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'space-between',
-                                }}>
-                                    <span>{key === 'allowPublicUpload' ? 'Allow Public Upload' : 'Allow Registration'}</span>
-                                    <button
-                                        onClick={() => toggleSetting(key)}
-                                        disabled={saving}
-                                        style={{
-                                            padding: '8px 16px',
-                                            backgroundColor: settings[key] ? '#43b581' : '#333',
-                                            color: '#fff',
-                                            border: 'none',
-                                            borderRadius: '4px',
-                                            cursor: 'pointer',
-                                        }}
-                                    >
-                                        {settings[key] ? 'ON' : 'OFF'}
-                                    </button>
-                                </div>
-                            ))}
+                            <SettingToggle
+                                label="Allow Public Upload"
+                                value={settings.allowPublicUpload}
+                                onChange={() => toggleSetting('allowPublicUpload')}
+                                disabled={saving}
+                            />
+                            <SettingToggle
+                                label="Allow Registration"
+                                value={settings.allowRegistration}
+                                onChange={() => toggleSetting('allowRegistration')}
+                                disabled={saving}
+                            />
                         </div>
 
+                        {/* Upload Options */}
+                        <div style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '12px',
+                            backgroundColor: '#1a1a1a',
+                            borderRadius: '8px',
+                            padding: '16px',
+                        }}>
+                            <h3 style={{ margin: 0, marginBottom: '8px' }}>Upload Options</h3>
+
+                            {/* Default Compression */}
+                            <div style={{ marginBottom: '8px' }}>
+                                <label style={{ display: 'block', marginBottom: '8px', color: '#888' }}>
+                                    Default Video Compression
+                                </label>
+                                <select
+                                    value={settings.defaultCompression}
+                                    onChange={(e) => updateDefaultCompression(e.target.value)}
+                                    disabled={saving}
+                                    style={{
+                                        ...inputStyle,
+                                        width: '100%',
+                                        cursor: 'pointer',
+                                    }}
+                                >
+                                    {COMPRESSION_OPTIONS.map(opt => (
+                                        <option key={opt.value} value={opt.value}>{opt.label}</option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <SettingToggle
+                                label="Show 'No Compression' option"
+                                description="Allow users to opt-out of compression"
+                                value={settings.showNoCompression}
+                                onChange={() => toggleSetting('showNoCompression')}
+                                disabled={saving}
+                            />
+                            <SettingToggle
+                                label="Show 'Private Upload' option"
+                                description="Allow users to hide uploads from admin"
+                                value={settings.showPrivateOption}
+                                onChange={() => toggleSetting('showPrivateOption')}
+                                disabled={saving}
+                            />
+                        </div>
+
+                        {/* SMTP Configuration */}
                         <div style={{ backgroundColor: '#1a1a1a', borderRadius: '8px', padding: '16px' }}>
                             <h3 style={{ margin: 0, marginBottom: '16px' }}>
                                 SMTP Configuration
@@ -384,6 +450,49 @@ export default function AdminPage() {
             </div>
 
             <style>{spinnerStyles}</style>
+        </div>
+    );
+}
+
+// Helper component for toggle settings
+function SettingToggle({
+    label,
+    description,
+    value,
+    onChange,
+    disabled,
+}: {
+    label: string;
+    description?: string;
+    value: boolean;
+    onChange: () => void;
+    disabled: boolean;
+}) {
+    return (
+        <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+        }}>
+            <div>
+                <span>{label}</span>
+                {description && <div style={{ fontSize: '0.8rem', color: '#666' }}>{description}</div>}
+            </div>
+            <button
+                onClick={onChange}
+                disabled={disabled}
+                style={{
+                    padding: '8px 16px',
+                    backgroundColor: value ? '#43b581' : '#333',
+                    color: '#fff',
+                    border: 'none',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                    minWidth: '60px',
+                }}
+            >
+                {value ? 'ON' : 'OFF'}
+            </button>
         </div>
     );
 }

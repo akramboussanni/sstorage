@@ -12,6 +12,9 @@ export async function GET() {
                     id: 'default',
                     allowPublicUpload: false,
                     allowRegistration: false,
+                    defaultCompression: 'balanced',
+                    showNoCompression: true,
+                    showPrivateOption: true,
                 },
             });
         }
@@ -50,6 +53,18 @@ export async function PUT(request: NextRequest) {
             updateData.allowRegistration = body.allowRegistration;
         }
 
+        if (typeof body.defaultCompression === 'string') {
+            updateData.defaultCompression = body.defaultCompression;
+        }
+
+        if (typeof body.showNoCompression === 'boolean') {
+            updateData.showNoCompression = body.showNoCompression;
+        }
+
+        if (typeof body.showPrivateOption === 'boolean') {
+            updateData.showPrivateOption = body.showPrivateOption;
+        }
+
         // SMTP settings
         if (body.smtpHost !== undefined) {
             updateData.smtpHost = body.smtpHost || null;
@@ -78,6 +93,9 @@ export async function PUT(request: NextRequest) {
                 id: 'default',
                 allowPublicUpload: body.allowPublicUpload ?? false,
                 allowRegistration: body.allowRegistration ?? false,
+                defaultCompression: body.defaultCompression ?? 'balanced',
+                showNoCompression: body.showNoCompression ?? true,
+                showPrivateOption: body.showPrivateOption ?? true,
                 smtpHost: body.smtpHost || null,
                 smtpPort: body.smtpPort ? parseInt(body.smtpPort, 10) : null,
                 smtpUser: body.smtpUser || null,

@@ -34,12 +34,15 @@ model Media {
 }
 
 model Settings {
-  id                String  @id @default("default")
-  allowPublicUpload Boolean @default(false)
-  allowRegistration Boolean @default(false)
-  smtpHost          String?
-  smtpPort          Int?
-  smtpUser          String?
-  smtpPassword      String?
-  smtpFrom          String?
+  id                 String  @id @default("default")
+  allowPublicUpload  Boolean @default(false)
+  allowRegistration  Boolean @default(false)
+  defaultCompression String  @default("balanced") // none, high, balanced, small
+  showNoCompression  Boolean @default(true)
+  showPrivateOption  Boolean @default(true)
+  smtpHost           String?
+  smtpPort           Int?
+  smtpUser           String?
+  smtpPassword       String?
+  smtpFrom           String?
 }

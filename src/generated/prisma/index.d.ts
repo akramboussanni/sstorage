@@ -3366,6 +3366,9 @@ export namespace Prisma {
     id: string | null
     allowPublicUpload: boolean | null
     allowRegistration: boolean | null
+    defaultCompression: string | null
+    showNoCompression: boolean | null
+    showPrivateOption: boolean | null
     smtpHost: string | null
     smtpPort: number | null
     smtpUser: string | null
@@ -3377,6 +3380,9 @@ export namespace Prisma {
     id: string | null
     allowPublicUpload: boolean | null
     allowRegistration: boolean | null
+    defaultCompression: string | null
+    showNoCompression: boolean | null
+    showPrivateOption: boolean | null
     smtpHost: string | null
     smtpPort: number | null
     smtpUser: string | null
@@ -3388,6 +3394,9 @@ export namespace Prisma {
     id: number
     allowPublicUpload: number
     allowRegistration: number
+    defaultCompression: number
+    showNoCompression: number
+    showPrivateOption: number
     smtpHost: number
     smtpPort: number
     smtpUser: number
@@ -3409,6 +3418,9 @@ export namespace Prisma {
     id?: true
     allowPublicUpload?: true
     allowRegistration?: true
+    defaultCompression?: true
+    showNoCompression?: true
+    showPrivateOption?: true
     smtpHost?: true
     smtpPort?: true
     smtpUser?: true
@@ -3420,6 +3432,9 @@ export namespace Prisma {
     id?: true
     allowPublicUpload?: true
     allowRegistration?: true
+    defaultCompression?: true
+    showNoCompression?: true
+    showPrivateOption?: true
     smtpHost?: true
     smtpPort?: true
     smtpUser?: true
@@ -3431,6 +3446,9 @@ export namespace Prisma {
     id?: true
     allowPublicUpload?: true
     allowRegistration?: true
+    defaultCompression?: true
+    showNoCompression?: true
+    showPrivateOption?: true
     smtpHost?: true
     smtpPort?: true
     smtpUser?: true
@@ -3529,6 +3547,9 @@ export namespace Prisma {
     id: string
     allowPublicUpload: boolean
     allowRegistration: boolean
+    defaultCompression: string
+    showNoCompression: boolean
+    showPrivateOption: boolean
     smtpHost: string | null
     smtpPort: number | null
     smtpUser: string | null
@@ -3559,6 +3580,9 @@ export namespace Prisma {
     id?: boolean
     allowPublicUpload?: boolean
     allowRegistration?: boolean
+    defaultCompression?: boolean
+    showNoCompression?: boolean
+    showPrivateOption?: boolean
     smtpHost?: boolean
     smtpPort?: boolean
     smtpUser?: boolean
@@ -3570,6 +3594,9 @@ export namespace Prisma {
     id?: boolean
     allowPublicUpload?: boolean
     allowRegistration?: boolean
+    defaultCompression?: boolean
+    showNoCompression?: boolean
+    showPrivateOption?: boolean
     smtpHost?: boolean
     smtpPort?: boolean
     smtpUser?: boolean
@@ -3581,6 +3608,9 @@ export namespace Prisma {
     id?: boolean
     allowPublicUpload?: boolean
     allowRegistration?: boolean
+    defaultCompression?: boolean
+    showNoCompression?: boolean
+    showPrivateOption?: boolean
     smtpHost?: boolean
     smtpPort?: boolean
     smtpUser?: boolean
@@ -3592,6 +3622,9 @@ export namespace Prisma {
     id?: boolean
     allowPublicUpload?: boolean
     allowRegistration?: boolean
+    defaultCompression?: boolean
+    showNoCompression?: boolean
+    showPrivateOption?: boolean
     smtpHost?: boolean
     smtpPort?: boolean
     smtpUser?: boolean
@@ -3599,7 +3632,7 @@ export namespace Prisma {
     smtpFrom?: boolean
   }
 
-  export type SettingsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "allowPublicUpload" | "allowRegistration" | "smtpHost" | "smtpPort" | "smtpUser" | "smtpPassword" | "smtpFrom", ExtArgs["result"]["settings"]>
+  export type SettingsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "allowPublicUpload" | "allowRegistration" | "defaultCompression" | "showNoCompression" | "showPrivateOption" | "smtpHost" | "smtpPort" | "smtpUser" | "smtpPassword" | "smtpFrom", ExtArgs["result"]["settings"]>
 
   export type $SettingsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Settings"
@@ -3608,6 +3641,9 @@ export namespace Prisma {
       id: string
       allowPublicUpload: boolean
       allowRegistration: boolean
+      defaultCompression: string
+      showNoCompression: boolean
+      showPrivateOption: boolean
       smtpHost: string | null
       smtpPort: number | null
       smtpUser: string | null
@@ -4039,6 +4075,9 @@ export namespace Prisma {
     readonly id: FieldRef<"Settings", 'String'>
     readonly allowPublicUpload: FieldRef<"Settings", 'Boolean'>
     readonly allowRegistration: FieldRef<"Settings", 'Boolean'>
+    readonly defaultCompression: FieldRef<"Settings", 'String'>
+    readonly showNoCompression: FieldRef<"Settings", 'Boolean'>
+    readonly showPrivateOption: FieldRef<"Settings", 'Boolean'>
     readonly smtpHost: FieldRef<"Settings", 'String'>
     readonly smtpPort: FieldRef<"Settings", 'Int'>
     readonly smtpUser: FieldRef<"Settings", 'String'>
@@ -4452,6 +4491,9 @@ export namespace Prisma {
     id: 'id',
     allowPublicUpload: 'allowPublicUpload',
     allowRegistration: 'allowRegistration',
+    defaultCompression: 'defaultCompression',
+    showNoCompression: 'showNoCompression',
+    showPrivateOption: 'showPrivateOption',
     smtpHost: 'smtpHost',
     smtpPort: 'smtpPort',
     smtpUser: 'smtpUser',
@@ -4675,6 +4717,9 @@ export namespace Prisma {
     id?: StringFilter<"Settings"> | string
     allowPublicUpload?: BoolFilter<"Settings"> | boolean
     allowRegistration?: BoolFilter<"Settings"> | boolean
+    defaultCompression?: StringFilter<"Settings"> | string
+    showNoCompression?: BoolFilter<"Settings"> | boolean
+    showPrivateOption?: BoolFilter<"Settings"> | boolean
     smtpHost?: StringNullableFilter<"Settings"> | string | null
     smtpPort?: IntNullableFilter<"Settings"> | number | null
     smtpUser?: StringNullableFilter<"Settings"> | string | null
@@ -4686,6 +4731,9 @@ export namespace Prisma {
     id?: SortOrder
     allowPublicUpload?: SortOrder
     allowRegistration?: SortOrder
+    defaultCompression?: SortOrder
+    showNoCompression?: SortOrder
+    showPrivateOption?: SortOrder
     smtpHost?: SortOrderInput | SortOrder
     smtpPort?: SortOrderInput | SortOrder
     smtpUser?: SortOrderInput | SortOrder
@@ -4700,6 +4748,9 @@ export namespace Prisma {
     NOT?: SettingsWhereInput | SettingsWhereInput[]
     allowPublicUpload?: BoolFilter<"Settings"> | boolean
     allowRegistration?: BoolFilter<"Settings"> | boolean
+    defaultCompression?: StringFilter<"Settings"> | string
+    showNoCompression?: BoolFilter<"Settings"> | boolean
+    showPrivateOption?: BoolFilter<"Settings"> | boolean
     smtpHost?: StringNullableFilter<"Settings"> | string | null
     smtpPort?: IntNullableFilter<"Settings"> | number | null
     smtpUser?: StringNullableFilter<"Settings"> | string | null
@@ -4711,6 +4762,9 @@ export namespace Prisma {
     id?: SortOrder
     allowPublicUpload?: SortOrder
     allowRegistration?: SortOrder
+    defaultCompression?: SortOrder
+    showNoCompression?: SortOrder
+    showPrivateOption?: SortOrder
     smtpHost?: SortOrderInput | SortOrder
     smtpPort?: SortOrderInput | SortOrder
     smtpUser?: SortOrderInput | SortOrder
@@ -4730,6 +4784,9 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Settings"> | string
     allowPublicUpload?: BoolWithAggregatesFilter<"Settings"> | boolean
     allowRegistration?: BoolWithAggregatesFilter<"Settings"> | boolean
+    defaultCompression?: StringWithAggregatesFilter<"Settings"> | string
+    showNoCompression?: BoolWithAggregatesFilter<"Settings"> | boolean
+    showPrivateOption?: BoolWithAggregatesFilter<"Settings"> | boolean
     smtpHost?: StringNullableWithAggregatesFilter<"Settings"> | string | null
     smtpPort?: IntNullableWithAggregatesFilter<"Settings"> | number | null
     smtpUser?: StringNullableWithAggregatesFilter<"Settings"> | string | null
@@ -4905,6 +4962,9 @@ export namespace Prisma {
     id?: string
     allowPublicUpload?: boolean
     allowRegistration?: boolean
+    defaultCompression?: string
+    showNoCompression?: boolean
+    showPrivateOption?: boolean
     smtpHost?: string | null
     smtpPort?: number | null
     smtpUser?: string | null
@@ -4916,6 +4976,9 @@ export namespace Prisma {
     id?: string
     allowPublicUpload?: boolean
     allowRegistration?: boolean
+    defaultCompression?: string
+    showNoCompression?: boolean
+    showPrivateOption?: boolean
     smtpHost?: string | null
     smtpPort?: number | null
     smtpUser?: string | null
@@ -4927,6 +4990,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     allowPublicUpload?: BoolFieldUpdateOperationsInput | boolean
     allowRegistration?: BoolFieldUpdateOperationsInput | boolean
+    defaultCompression?: StringFieldUpdateOperationsInput | string
+    showNoCompression?: BoolFieldUpdateOperationsInput | boolean
+    showPrivateOption?: BoolFieldUpdateOperationsInput | boolean
     smtpHost?: NullableStringFieldUpdateOperationsInput | string | null
     smtpPort?: NullableIntFieldUpdateOperationsInput | number | null
     smtpUser?: NullableStringFieldUpdateOperationsInput | string | null
@@ -4938,6 +5004,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     allowPublicUpload?: BoolFieldUpdateOperationsInput | boolean
     allowRegistration?: BoolFieldUpdateOperationsInput | boolean
+    defaultCompression?: StringFieldUpdateOperationsInput | string
+    showNoCompression?: BoolFieldUpdateOperationsInput | boolean
+    showPrivateOption?: BoolFieldUpdateOperationsInput | boolean
     smtpHost?: NullableStringFieldUpdateOperationsInput | string | null
     smtpPort?: NullableIntFieldUpdateOperationsInput | number | null
     smtpUser?: NullableStringFieldUpdateOperationsInput | string | null
@@ -4949,6 +5018,9 @@ export namespace Prisma {
     id?: string
     allowPublicUpload?: boolean
     allowRegistration?: boolean
+    defaultCompression?: string
+    showNoCompression?: boolean
+    showPrivateOption?: boolean
     smtpHost?: string | null
     smtpPort?: number | null
     smtpUser?: string | null
@@ -4960,6 +5032,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     allowPublicUpload?: BoolFieldUpdateOperationsInput | boolean
     allowRegistration?: BoolFieldUpdateOperationsInput | boolean
+    defaultCompression?: StringFieldUpdateOperationsInput | string
+    showNoCompression?: BoolFieldUpdateOperationsInput | boolean
+    showPrivateOption?: BoolFieldUpdateOperationsInput | boolean
     smtpHost?: NullableStringFieldUpdateOperationsInput | string | null
     smtpPort?: NullableIntFieldUpdateOperationsInput | number | null
     smtpUser?: NullableStringFieldUpdateOperationsInput | string | null
@@ -4971,6 +5046,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     allowPublicUpload?: BoolFieldUpdateOperationsInput | boolean
     allowRegistration?: BoolFieldUpdateOperationsInput | boolean
+    defaultCompression?: StringFieldUpdateOperationsInput | string
+    showNoCompression?: BoolFieldUpdateOperationsInput | boolean
+    showPrivateOption?: BoolFieldUpdateOperationsInput | boolean
     smtpHost?: NullableStringFieldUpdateOperationsInput | string | null
     smtpPort?: NullableIntFieldUpdateOperationsInput | number | null
     smtpUser?: NullableStringFieldUpdateOperationsInput | string | null
@@ -5217,6 +5295,9 @@ export namespace Prisma {
     id?: SortOrder
     allowPublicUpload?: SortOrder
     allowRegistration?: SortOrder
+    defaultCompression?: SortOrder
+    showNoCompression?: SortOrder
+    showPrivateOption?: SortOrder
     smtpHost?: SortOrder
     smtpPort?: SortOrder
     smtpUser?: SortOrder
@@ -5232,6 +5313,9 @@ export namespace Prisma {
     id?: SortOrder
     allowPublicUpload?: SortOrder
     allowRegistration?: SortOrder
+    defaultCompression?: SortOrder
+    showNoCompression?: SortOrder
+    showPrivateOption?: SortOrder
     smtpHost?: SortOrder
     smtpPort?: SortOrder
     smtpUser?: SortOrder
@@ -5243,6 +5327,9 @@ export namespace Prisma {
     id?: SortOrder
     allowPublicUpload?: SortOrder
     allowRegistration?: SortOrder
+    defaultCompression?: SortOrder
+    showNoCompression?: SortOrder
+    showPrivateOption?: SortOrder
     smtpHost?: SortOrder
     smtpPort?: SortOrder
     smtpUser?: SortOrder
