@@ -3,6 +3,6 @@ export default {
         url: process.env.DATABASE_URL,
     },
     migrations: {
-        seed: 'npx tsx prisma/seed.ts',
+        seed: process.env.NODE_ENV === 'production' ? 'node prisma/seed.js' : 'npx tsx prisma/seed.ts',
     },
 };

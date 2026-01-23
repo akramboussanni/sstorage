@@ -16,6 +16,9 @@ RUN npm ci
 # Generate Prisma client
 RUN npx prisma generate
 
+# Compile seed script
+RUN npx tsc prisma/seed.ts --module commonjs --esModuleInterop --skipLibCheck --moduleResolution node --target es2020 --outDir prisma
+
 # Copy source files
 COPY . .
 
@@ -39,8 +42,9 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/src/generated ./src/generated
-COPY --from=builder /app/prisma/seed-docker.js ./seed.js
+
 COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/prisma/seed.js ./prisma/seed.js
 COPY --from=builder /app/prisma.config.ts ./prisma.config.ts
 
 # Copy entrypoint script
