@@ -1,0 +1,72 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { writeFile, mkdir } from 'fs/promises';
+import { join } from 'path';
+import { v4 as uuidv4 } from 'uuid';
+import { prisma } from '@/lib/db';
+import { getSession } from '@/lib/auth';
+
+const UPLOAD_DIR = join(process.cwd(), 'uploads');
+const MAX_SIZE = 100 * 1024 * 1024; // 100MB
+
+export async function POST(request: NextRequest) {
+    try {
+        // Check if public upload is allowed or user is logged in
+        const session = await getSession();
+        const settings = await prisma.settings.findUnique({ where: { id: 'default' } });
+
+        if (!settings?.allowPublicUpload && !session) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+
+        const formData = await request.formData();
+        const file = formData.get('file') as File;
+
+        if (!file) {
+            return NextResponse.json({ error: 'No file provided' }, { status: 400 });
+        }
+
+        if (file.size > MAX_SIZE) {
+            return NextResponse.json({ error: 'File too large (max 100MB)' }, { status: 400 });
+        }
+
+        // Validate mime type
+        const allowedTypes = ['image/', 'video/', 'image/gif'];
+        const isAllowed = allowedTypes.some(type => file.type.startsWith(type));
+        if (!isAllowed) {
+            return NextResponse.json({ error: 'Invalid file type' }, { status: 400 });
+        }
+
+        // Create upload directory if not exists
+        await mkdir(UPLOAD_DIR, { recursive: true });
+
+        // Generate unique filename
+        const ext = file.name.split('.').pop();
+        const id = uuidv4();
+        const filename = `${id}.${ext}`;
+        const filepath = join(UPLOAD_DIR, filename);
+
+        // Save file
+        const bytes = await file.arrayBuffer();
+        await writeFile(filepath, Buffer.from(bytes));
+
+        // Save to database
+        const media = await prisma.media.create({
+            data: {
+                id,
+                filename,
+                originalName: file.name,
+                mimeType: file.type,
+                size: file.size,
+            },
+        });
+
+        return NextResponse.json({
+            success: true,
+            id: media.id,
+            url: `/${media.id}`,
+        });
+    } catch (error) {
+        console.error('Upload error:', error);
+        return NextResponse.json({ error: 'Upload failed' }, { status: 500 });
+    }
+}

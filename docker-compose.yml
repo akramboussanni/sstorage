@@ -1,0 +1,18 @@
+services:
+  sstorage:
+    image: ghcr.io/akramboussanni/sstorage:main
+    container_name: sstorage
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=file:/app/prisma/dev.db
+      - JWT_SECRET=change-this-to-a-random-secret
+      - BASE_URL=https://your-domain.com
+    volumes:
+      - sstorage_uploads:/app/uploads
+      - sstorage_db:/app/prisma
+
+volumes:
+  sstorage_uploads:
+  sstorage_db:
