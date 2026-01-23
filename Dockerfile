@@ -8,6 +8,7 @@ COPY package*.json ./
 COPY prisma ./prisma/
 
 # Install dependencies
+# Update: Install all dependencies (including dev) to ensure build works
 RUN apt-get update && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
 RUN npm ci
 
@@ -27,7 +28,8 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
-# Create non-root user
+# Install openssl for Prisma and create user
+RUN apt-get update && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
 RUN groupadd --system --gid 1001 nodejs
 RUN useradd --system --uid 1001 nextjs -g nodejs
 
@@ -35,13 +37,17 @@ RUN useradd --system --uid 1001 nextjs -g nodejs
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
-COPY --from=builder /app/prisma ./prisma
+# Copy generated client specifically to ensure it exists where expected
+COPY --from=builder /app/src/generated ./src/generated
+# Copy the docker seed script
+COPY --from=builder /app/prisma/seed-docker.js ./seed.js
 
-# Create uploads directory
-RUN mkdir -p uploads && chown nextjs:nodejs uploads
+# Copy entrypoint script
+COPY docker-entrypoint.sh ./
+RUN chmod +x docker-entrypoint.sh
 
-# Create data directory for SQLite
-RUN mkdir -p prisma && chown -R nextjs:nodejs prisma
+# Create uploads and data directories
+RUN mkdir -p uploads data prisma && chown -R nextjs:nodejs uploads data prisma src
 
 USER nextjs
 
@@ -49,5 +55,6 @@ EXPOSE 3000
 
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
+ENV DATABASE_URL="file:/app/data/dev.db"
 
-CMD ["node", "server.js"]
+ENTRYPOINT ["./docker-entrypoint.sh"]
