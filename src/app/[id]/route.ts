@@ -15,6 +15,11 @@ export async function GET(
         return NextResponse.json({ error: 'Not found' }, { status: 404 });
     }
 
+    // Construct valid URL using headers to ensure correct protocol and host behind proxies
+    const host = request.headers.get('x-forwarded-host') || request.headers.get('host');
+    const proto = request.headers.get('x-forwarded-proto') || 'http';
+    const baseUrl = `${proto}://${host}`;
+
     // Redirect to the API endpoint that serves the raw file
-    return NextResponse.redirect(new URL(`/api/media/${id}`, request.url));
+    return NextResponse.redirect(`${baseUrl}/api/media/${id}`);
 }
