@@ -17,13 +17,15 @@ model User {
 }
 
 model Media {
-  id          String   @id @default(uuid())
-  filename    String
-  originalName String
-  mimeType    String
-  size        Int
-  ip          String?
-  createdAt   DateTime @default(now())
+  id              String   @id @default(uuid())
+  filename        String
+  originalName    String
+  mimeType        String
+  size            Int
+  ip              String?
+  transcodeStatus String   @default("not_required") // pending, processing, completed, failed, not_required
+  transcodeError  String?
+  createdAt       DateTime @default(now())
 }
 
 model Settings {

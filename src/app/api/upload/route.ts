@@ -4,6 +4,7 @@ import { join } from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import { prisma } from '@/lib/db';
 import { getSession } from '@/lib/auth';
+import { startTranscodeInBackground } from '@/lib/transcode';
 
 const UPLOAD_DIR = join(process.cwd(), 'uploads');
 const MAX_SIZE = 100 * 1024 * 1024; // 100MB
@@ -66,6 +67,10 @@ export async function POST(request: NextRequest) {
         const bytes = await file.arrayBuffer();
         await writeFile(filepath, Buffer.from(bytes));
 
+        // Check if this is a video that needs transcoding
+        const isVideo = file.type.startsWith('video/');
+        const transcodeStatus = isVideo ? 'pending' : 'not_required';
+
         // Save to database
         const media = await prisma.media.create({
             data: {
@@ -75,13 +80,20 @@ export async function POST(request: NextRequest) {
                 mimeType: file.type,
                 size: file.size,
                 ip,
+                transcodeStatus,
             },
         });
+
+        // Start transcoding in background if it's a video
+        if (isVideo) {
+            startTranscodeInBackground(media.id, filename);
+        }
 
         return NextResponse.json({
             success: true,
             id: media.id,
             url: `/api/media/${media.id}`,
+            transcodeStatus,
         });
     } catch (error) {
         console.error('Upload error:', error);

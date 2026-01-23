@@ -10,7 +10,7 @@ COPY prisma ./prisma/
 COPY prisma.config.ts ./
 
 # Install dependencies
-RUN apt-get update && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y openssl ffmpeg && rm -rf /var/lib/apt/lists/*
 RUN npm ci
 
 # Generate Prisma client
@@ -32,8 +32,8 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
-# Install openssl for Prisma and create user
-RUN apt-get update && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
+# Install openssl and ffmpeg for Prisma and video transcoding, create user
+RUN apt-get update && apt-get install -y openssl ffmpeg && rm -rf /var/lib/apt/lists/*
 RUN groupadd --system --gid 1001 nodejs
 RUN useradd --system --uid 1001 nextjs -g nodejs
 

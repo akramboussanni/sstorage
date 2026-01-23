@@ -1,15 +1,20 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+
+type TranscodeStatus = 'pending' | 'processing' | 'completed' | 'failed' | 'not_required';
 
 export default function Home() {
   const [user, setUser] = useState<{ username: string; isAdmin: boolean } | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
-  const [result, setResult] = useState<{ url: string } | null>(null);
+  const [result, setResult] = useState<{ url: string; id: string; transcodeStatus: TranscodeStatus } | null>(null);
+  const [transcodeStatus, setTranscodeStatus] = useState<TranscodeStatus | null>(null);
+  const [transcodeError, setTranscodeError] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [settings, setSettings] = useState<{ allowPublicUpload: boolean } | null>(null);
   const [loading, setLoading] = useState(true);
+  const pollIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const [myUploads, setMyUploads] = useState<any[]>([]);
 
@@ -29,6 +34,48 @@ export default function Home() {
   }, []);
 
   const canUpload = user || settings?.allowPublicUpload;
+
+  // Cleanup polling on unmount
+  useEffect(() => {
+    return () => {
+      if (pollIntervalRef.current) {
+        clearInterval(pollIntervalRef.current);
+      }
+    };
+  }, []);
+
+  const startPollingTranscodeStatus = (mediaId: string) => {
+    // Clear any existing polling
+    if (pollIntervalRef.current) {
+      clearInterval(pollIntervalRef.current);
+    }
+
+    pollIntervalRef.current = setInterval(async () => {
+      try {
+        const res = await fetch(`/api/media/${mediaId}/status`);
+        const data = await res.json();
+
+        setTranscodeStatus(data.transcodeStatus);
+
+        if (data.transcodeStatus === 'failed') {
+          setTranscodeError(data.transcodeError || 'Transcoding failed');
+          clearInterval(pollIntervalRef.current!);
+          pollIntervalRef.current = null;
+        }
+
+        if (data.transcodeStatus === 'completed') {
+          clearInterval(pollIntervalRef.current!);
+          pollIntervalRef.current = null;
+          // Refresh my uploads list
+          fetch('/api/media/my').then(res => res.json()).then(data => {
+            if (Array.isArray(data)) setMyUploads(data);
+          });
+        }
+      } catch (err) {
+        console.error('Failed to poll transcode status:', err);
+      }
+    }, 2000);
+  };
 
   const handleUpload = async () => {
     if (!file) return;
@@ -52,8 +99,16 @@ export default function Home() {
         throw new Error(data.error || 'Upload failed');
       }
 
-      setResult({ url: window.location.origin + data.url });
+      const uploadResult = { url: window.location.origin + data.url, id: data.id, transcodeStatus: data.transcodeStatus };
+      setResult(uploadResult);
+      setTranscodeStatus(data.transcodeStatus);
+      setTranscodeError(null);
       setFile(null);
+
+      // If it's a video, start polling for transcode status
+      if (data.transcodeStatus === 'pending') {
+        startPollingTranscodeStatus(data.id);
+      }
 
       // Refresh my uploads
       fetch('/api/media/my').then(res => res.json()).then(data => {
@@ -198,6 +253,48 @@ export default function Home() {
               textAlign: 'center',
             }}>
               <p style={{ marginBottom: '10px', color: '#5865f2' }}>Uploaded!</p>
+
+              {/* Transcoding Status */}
+              {transcodeStatus && transcodeStatus !== 'not_required' && (
+                <div style={{
+                  marginBottom: '12px',
+                  padding: '10px',
+                  backgroundColor: '#0a0a0a',
+                  borderRadius: '6px',
+                  border: '1px solid #333',
+                }}>
+                  {(transcodeStatus === 'pending' || transcodeStatus === 'processing') && (
+                    <p style={{ color: '#faa61a', margin: 0 }}>
+                      ⏳ Transcoding video for Discord compatibility...
+                      <span style={{
+                        display: 'inline-block',
+                        marginLeft: '8px',
+                        animation: 'pulse 1.5s ease-in-out infinite',
+                      }}>
+                        {transcodeStatus === 'pending' ? '(queued)' : '(in progress)'}
+                      </span>
+                    </p>
+                  )}
+                  {transcodeStatus === 'completed' && (
+                    <p style={{ color: '#43b581', margin: 0 }}>
+                      ✅ Video transcoded successfully! Ready for Discord.
+                    </p>
+                  )}
+                  {transcodeStatus === 'failed' && (
+                    <div>
+                      <p style={{ color: '#ff5555', margin: 0 }}>
+                        ❌ Transcoding failed
+                      </p>
+                      {transcodeError && (
+                        <p style={{ color: '#888', fontSize: '0.8rem', marginTop: '4px', margin: 0 }}>
+                          {transcodeError}
+                        </p>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
+
               <input
                 type="text"
                 value={result.url}
