@@ -8,7 +8,6 @@ COPY package*.json ./
 COPY prisma ./prisma/
 
 # Install dependencies
-# Update: Install all dependencies (including dev) to ensure build works
 RUN apt-get update && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
 RUN npm ci
 
@@ -37,10 +36,10 @@ RUN useradd --system --uid 1001 nextjs -g nodejs
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
-# Copy generated client specifically to ensure it exists where expected
 COPY --from=builder /app/src/generated ./src/generated
-# Copy the docker seed script
 COPY --from=builder /app/prisma/seed-docker.js ./seed.js
+# Ensure prisma/schema.prisma is available for db push
+COPY --from=builder /app/prisma ./prisma
 
 # Copy entrypoint script
 COPY docker-entrypoint.sh ./
@@ -48,6 +47,9 @@ RUN chmod +x docker-entrypoint.sh
 
 # Create uploads and data directories
 RUN mkdir -p uploads data prisma && chown -R nextjs:nodejs uploads data prisma src
+
+# Install prisma CLI globally or in the local node_modules to ensure npx prisma works fast and offline
+RUN npm install prisma --save-exact
 
 USER nextjs
 
