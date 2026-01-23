@@ -7,6 +7,7 @@ export default function AdminPage() {
     const router = useRouter();
     const [user, setUser] = useState<{ username: string; isAdmin: boolean } | null>(null);
     const [settings, setSettings] = useState<{ allowPublicUpload: boolean } | null>(null);
+    const [mediaList, setMediaList] = useState<any[]>([]);
     const [saving, setSaving] = useState(false);
     const [loading, setLoading] = useState(true);
 
@@ -18,16 +19,22 @@ export default function AdminPage() {
                     router.push('/login');
                 } else {
                     setUser(data.user);
-                    setLoading(false);
                 }
             });
     }, [router]);
 
     useEffect(() => {
         if (user) {
-            fetch('/api/settings')
-                .then(res => res.json())
-                .then(setSettings);
+            Promise.all([
+                fetch('/api/settings').then(res => res.json()),
+                fetch('/api/admin/media').then(res => res.json())
+            ]).then(([settingsData, mediaData]) => {
+                setSettings(settingsData);
+                if (Array.isArray(mediaData)) {
+                    setMediaList(mediaData);
+                }
+                setLoading(false);
+            });
         }
     }, [user]);
 
@@ -80,6 +87,7 @@ export default function AdminPage() {
             backgroundColor: '#0a0a0a',
             color: '#fff',
             fontFamily: 'system-ui, sans-serif',
+            paddingBottom: '40px',
         }}>
             <h1 style={{ marginBottom: '40px', fontSize: '1.5rem' }}>⚙️ Admin Panel</h1>
 
@@ -87,7 +95,7 @@ export default function AdminPage() {
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '24px',
-                maxWidth: '400px',
+                maxWidth: '800px',
                 width: '100%',
                 padding: '0 20px',
             }}>
@@ -114,6 +122,77 @@ export default function AdminPage() {
                     >
                         {settings.allowPublicUpload ? 'ON' : 'OFF'}
                     </button>
+                </div>
+
+                <div style={{
+                    backgroundColor: '#1a1a1a',
+                    borderRadius: '8px',
+                    padding: '16px',
+                }}>
+                    <h2 style={{ marginBottom: '16px', fontSize: '1.2rem' }}>Uploaded Media ({mediaList.length})</h2>
+                    <div style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+                        gap: '16px',
+                    }}>
+                        {mediaList.map((media) => (
+                            <a
+                                key={media.id}
+                                href={`/${media.id}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{
+                                    display: 'block',
+                                    textDecoration: 'none',
+                                    color: 'inherit',
+                                    backgroundColor: '#2b2b2b',
+                                    borderRadius: '8px',
+                                    overflow: 'hidden',
+                                    transition: 'transform 0.2s',
+                                }}
+                            >
+                                <div style={{
+                                    aspectRatio: '16/9',
+                                    backgroundColor: '#000',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    position: 'relative',
+                                }}>
+                                    {media.mimeType.startsWith('video/') ? (
+                                        <video
+                                            src={`/api/media/${media.id}`}
+                                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                        />
+                                    ) : (
+                                        <img
+                                            src={`/api/media/${media.id}`}
+                                            alt={media.originalName}
+                                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                        />
+                                    )}
+                                    <div style={{
+                                        position: 'absolute',
+                                        bottom: 0,
+                                        left: 0,
+                                        right: 0,
+                                        padding: '4px 8px',
+                                        background: 'rgba(0,0,0,0.7)',
+                                        fontSize: '0.8rem',
+                                        whiteSpace: 'nowrap',
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                    }}>
+                                        {media.originalName}
+                                    </div>
+                                </div>
+                                <div style={{ padding: '8px', fontSize: '0.8rem', color: '#aaa' }}>
+                                    <div>{(media.size / 1024 / 1024).toFixed(2)} MB</div>
+                                    <div>{new Date(media.createdAt).toLocaleDateString()}</div>
+                                </div>
+                            </a>
+                        ))}
+                    </div>
                 </div>
 
                 <a

@@ -23,21 +23,48 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         title: media.originalName,
         openGraph: {
             title: media.originalName,
-            type: isVideo ? 'video.other' : 'website',
-            images: !isVideo ? [{ url: mediaUrl }] : undefined,
-            videos: isVideo ? [{ url: mediaUrl, type: media.mimeType }] : undefined,
+            type: 'video.other',
+            url: `${baseUrl}/${id}`,
+            siteName: 'Simple Storage',
+            images: [
+                {
+                    url: isVideo ? `${baseUrl}/api/media/${id}` : `${baseUrl}/api/media/${id}`,
+                    width: isVideo ? 1280 : undefined,
+                    height: isVideo ? 720 : undefined,
+                }
+            ],
+            videos: isVideo ? [
+                {
+                    url: mediaUrl,
+                    secureUrl: mediaUrl,
+                    type: media.mimeType,
+                    width: 1280,
+                    height: 720,
+                }
+            ] : undefined,
         },
         twitter: {
             card: isVideo ? 'player' : 'summary_large_image',
             title: media.originalName,
-            images: !isVideo ? [mediaUrl] : undefined,
+            description: media.originalName,
+            images: [mediaUrl], // Twitter/Discord often use this for the poster
+            players: isVideo ? [
+                {
+                    playerUrl: mediaUrl,
+                    streamUrl: mediaUrl,
+                    width: 1280,
+                    height: 720,
+                }
+            ] : undefined,
         },
         other: {
             ...(isVideo && {
-                'og:video': mediaUrl,
+                // Discord/Telegram sometimes look for these specifically
                 'og:video:type': media.mimeType,
                 'og:video:width': '1280',
                 'og:video:height': '720',
+                'og:video:url': mediaUrl,
+                'og:video:secure_url': mediaUrl,
             }),
         },
     };
