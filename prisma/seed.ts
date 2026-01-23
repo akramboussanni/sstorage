@@ -1,4 +1,4 @@
-import 'dotenv/config';
+
 import { hash } from 'bcryptjs';
 import { PrismaClient } from '../src/generated/prisma';
 import { PrismaLibSql } from '@prisma/adapter-libsql';
