@@ -16,6 +16,7 @@ model User {
   mustChangePassword Boolean  @default(false)
   createdAt          DateTime @default(now())
   media              Media[]
+  customMaxFileSize  BigInt? // Custom limit in bytes, overrides global setting
 }
 
 model Media {
@@ -37,9 +38,11 @@ model Settings {
   id                 String  @id @default("default")
   allowPublicUpload  Boolean @default(false)
   allowRegistration  Boolean @default(false)
+  maxFileSize        BigInt  @default(104857600) // 100MB in bytes
   defaultCompression String  @default("balanced") // none, high, balanced, small
   showNoCompression  Boolean @default(true)
   showPrivateOption  Boolean @default(true)
+  forcePrivate       Boolean @default(false) // Force all uploads to be private
   smtpHost           String?
   smtpPort           Int?
   smtpUser           String?

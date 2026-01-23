@@ -123,7 +123,8 @@ exports.Prisma.UserScalarFieldEnum = {
   password: 'password',
   isAdmin: 'isAdmin',
   mustChangePassword: 'mustChangePassword',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  customMaxFileSize: 'customMaxFileSize'
 };
 
 exports.Prisma.MediaScalarFieldEnum = {
@@ -144,9 +145,11 @@ exports.Prisma.SettingsScalarFieldEnum = {
   id: 'id',
   allowPublicUpload: 'allowPublicUpload',
   allowRegistration: 'allowRegistration',
+  maxFileSize: 'maxFileSize',
   defaultCompression: 'defaultCompression',
   showNoCompression: 'showNoCompression',
   showPrivateOption: 'showPrivateOption',
+  forcePrivate: 'forcePrivate',
   smtpHost: 'smtpHost',
   smtpPort: 'smtpPort',
   smtpUser: 'smtpUser',

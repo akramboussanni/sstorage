@@ -7,7 +7,6 @@ import { getSession } from '@/lib/auth';
 import { startTranscodeInBackground, CompressionQuality } from '@/lib/transcode';
 
 const UPLOAD_DIR = join(process.cwd(), 'uploads');
-const MAX_SIZE = 100 * 1024 * 1024; // 100MB
 
 const RATE_LIMIT_WINDOW = 10 * 1000; // 10 seconds
 const rateLimitMap = new Map<string, number>();
@@ -42,14 +41,45 @@ export async function POST(request: NextRequest) {
         const file = formData.get('file') as File;
         const qualityParam = formData.get('quality') as string | null;
         const isPrivateParam = formData.get('isPrivate') as string | null;
-        const isPrivate = isPrivateParam === 'true' && !!session; // Only logged-in users can set private
+
+        // Determine privacy: forcePrivate overrides, otherwise user choice (logged-in only)
+        const isPrivate = settings?.forcePrivate || (isPrivateParam === 'true' && !!session);
 
         if (!file) {
             return NextResponse.json({ error: 'No file provided' }, { status: 400 });
         }
 
-        if (file.size > MAX_SIZE && !session?.isAdmin) {
-            return NextResponse.json({ error: 'File too large (max 100MB)' }, { status: 400 });
+        // Determine max file size
+        // 1. User custom limit (if logged in)
+        // 2. Global setting limit
+        // 3. Fallback to 100MB
+        let maxSizeBytes = BigInt(100 * 1024 * 1024); // Default 100MB
+
+        if (session) {
+            // Fetch user specific limit
+            const user = await prisma.user.findUnique({
+                where: { id: session.id },
+                select: { customMaxFileSize: true }
+            });
+            if (user?.customMaxFileSize) {
+                maxSizeBytes = user.customMaxFileSize;
+            } else if (settings?.maxFileSize) {
+                maxSizeBytes = settings.maxFileSize;
+            }
+        } else if (settings?.maxFileSize) {
+            maxSizeBytes = settings.maxFileSize;
+        }
+
+        // Check size limit (skip for admin unless they have a specific custom limit set lower? No, admin usually bypasses, but let's stick to configured limits for consistency, or allow admin bypass)
+        // Let's allow admin to bypass global limit, but if they have a custom limit set, respect it (as a way to test).
+        // Actually, user request said "give a user bigger limit", defaulting to "admin can config max size".
+        // Let's enforce limits for everyone including admin if set, but admin usually sets the limits.
+        // Standard practice: Admin bypasses global limit? Or Admin subject to global limit?
+        // Let's enforce the calculated limit. If admin needs more, they can increase global or their own custom limit.
+
+        if (BigInt(file.size) > maxSizeBytes) {
+            const limitMB = Number(maxSizeBytes) / (1024 * 1024);
+            return NextResponse.json({ error: `File too large (max ${limitMB.toFixed(0)}MB)` }, { status: 400 });
         }
 
         // Validate mime type

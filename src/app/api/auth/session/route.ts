@@ -17,6 +17,7 @@ export async function GET() {
             username: true,
             isAdmin: true,
             mustChangePassword: true,
+            customMaxFileSize: true,
         },
     });
 
@@ -24,5 +25,10 @@ export async function GET() {
         return NextResponse.json({ user: null });
     }
 
-    return NextResponse.json({ user });
+    return NextResponse.json({
+        user: {
+            ...user,
+            customMaxFileSize: user.customMaxFileSize ? user.customMaxFileSize.toString() : null,
+        }
+    });
 }

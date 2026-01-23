@@ -15,15 +15,17 @@ export async function GET() {
                     defaultCompression: 'balanced',
                     showNoCompression: true,
                     showPrivateOption: true,
+                    forcePrivate: false,
                 },
             });
         }
 
         // Don't expose SMTP password to client
-        const { smtpPassword, ...safeSettings } = settings;
+        const { smtpPassword, maxFileSize, ...safeSettings } = settings;
 
         return NextResponse.json({
             ...safeSettings,
+            maxFileSize: maxFileSize.toString(), // Serialize BigInt to string
             smtpConfigured: !!smtpPassword,
         });
     } catch (error) {
@@ -65,6 +67,19 @@ export async function PUT(request: NextRequest) {
             updateData.showPrivateOption = body.showPrivateOption;
         }
 
+        if (typeof body.forcePrivate === 'boolean') {
+            updateData.forcePrivate = body.forcePrivate;
+        }
+
+        if (body.maxFileSize !== undefined) {
+            // Ensure it's a valid number string or number
+            try {
+                updateData.maxFileSize = BigInt(body.maxFileSize);
+            } catch (e) {
+                // Ignore invalid values
+            }
+        }
+
         // SMTP settings
         if (body.smtpHost !== undefined) {
             updateData.smtpHost = body.smtpHost || null;
@@ -96,6 +111,8 @@ export async function PUT(request: NextRequest) {
                 defaultCompression: body.defaultCompression ?? 'balanced',
                 showNoCompression: body.showNoCompression ?? true,
                 showPrivateOption: body.showPrivateOption ?? true,
+                forcePrivate: body.forcePrivate ?? false,
+                maxFileSize: body.maxFileSize ? BigInt(body.maxFileSize) : BigInt(104857600),
                 smtpHost: body.smtpHost || null,
                 smtpPort: body.smtpPort ? parseInt(body.smtpPort, 10) : null,
                 smtpUser: body.smtpUser || null,
@@ -105,10 +122,11 @@ export async function PUT(request: NextRequest) {
         });
 
         // Don't expose SMTP password in response
-        const { smtpPassword, ...safeSettings } = settings;
+        const { smtpPassword, maxFileSize, ...safeSettings } = settings;
 
         return NextResponse.json({
             ...safeSettings,
+            maxFileSize: maxFileSize.toString(),
             smtpConfigured: !!smtpPassword,
         });
     } catch (error) {

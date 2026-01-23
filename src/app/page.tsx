@@ -15,6 +15,7 @@ interface Settings {
   defaultCompression: CompressionQuality;
   showNoCompression: boolean;
   showPrivateOption: boolean;
+  forcePrivate: boolean;
 }
 
 export default function Home() {
@@ -200,7 +201,27 @@ export default function Home() {
       <Dialog state={dialog} onClose={closeDialog} />
       <Toast message={toast.message} show={toast.show} />
 
-      <h1 style={{ marginBottom: '30px', fontSize: '2rem' }}>📁 SStorage</h1>
+      <h1 style={{ marginBottom: '10px', fontSize: '2rem' }}>📁 SStorage</h1>
+
+      {/* Privacy Disclaimer */}
+      {settings && (
+        <div style={{
+          marginBottom: '20px',
+          padding: '10px 16px',
+          backgroundColor: settings.forcePrivate ? '#1a3a1a' : '#3a2a1a',
+          borderRadius: '8px',
+          border: `1px solid ${settings.forcePrivate ? '#43b581' : '#faa61a'}`,
+          fontSize: '0.85rem',
+          textAlign: 'center',
+          maxWidth: '500px',
+        }}>
+          {settings.forcePrivate ? (
+            <span>🔒 <strong>All uploads are private</strong> — hidden from admin view</span>
+          ) : (
+            <span>👁️ <strong>Uploads are visible to admin</strong> unless marked private</span>
+          )}
+        </div>
+      )}
 
       {!canUpload ? (
         <div style={{ textAlign: 'center' }}>
