@@ -11,13 +11,19 @@ export default function Home() {
   const [settings, setSettings] = useState<{ allowPublicUpload: boolean } | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const [myUploads, setMyUploads] = useState<any[]>([]);
+
   useEffect(() => {
     Promise.all([
       fetch('/api/auth/session').then(res => res.json()),
       fetch('/api/settings').then(res => res.json()),
-    ]).then(([sessionData, settingsData]) => {
+      fetch('/api/media/my').then(res => res.json()), // Fetch my uploads
+    ]).then(([sessionData, settingsData, myUploadsData]) => {
       setUser(sessionData.user);
       setSettings(settingsData);
+      if (Array.isArray(myUploadsData)) {
+        setMyUploads(myUploadsData);
+      }
       setLoading(false);
     });
   }, []);
@@ -48,10 +54,32 @@ export default function Home() {
 
       setResult({ url: window.location.origin + data.url });
       setFile(null);
+
+      // Refresh my uploads
+      fetch('/api/media/my').then(res => res.json()).then(data => {
+        if (Array.isArray(data)) setMyUploads(data);
+      });
+
     } catch (err: any) {
       setError(err.message);
     } finally {
       setUploading(false);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this file?')) return;
+
+    try {
+      const res = await fetch(`/api/media/${id}`, { method: 'DELETE' });
+      if (res.ok) {
+        setMyUploads(prev => prev.filter(m => m.id !== id));
+      } else {
+        alert('Failed to delete');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error deleting file');
     }
   };
 
@@ -76,7 +104,8 @@ export default function Home() {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      justifyContent: 'center',
+      paddingTop: '60px',
+      paddingBottom: '40px',
       backgroundColor: '#0a0a0a',
       color: '#fff',
       padding: '20px',
@@ -191,7 +220,7 @@ export default function Home() {
             <a
               href="/admin"
               style={{
-                marginTop: '20px',
+                marginTop: '10px',
                 color: '#666',
                 textDecoration: 'none',
               }}
@@ -199,6 +228,79 @@ export default function Home() {
               Admin Panel →
             </a>
           )}
+        </div>
+      )}
+
+      {/* My Uploads Section */}
+      {myUploads.length > 0 && (
+        <div style={{ marginTop: '60px', width: '100%', maxWidth: '800px' }}>
+          <h2 style={{ fontSize: '1.2rem', marginBottom: '20px', borderBottom: '1px solid #333', paddingBottom: '10px' }}>
+            My Uploads ({myUploads.length})
+          </h2>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))',
+            gap: '12px',
+          }}>
+            {myUploads.map((media) => (
+              <div key={media.id} style={{ position: 'relative' }}>
+                <a
+                  href={`/${media.id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: 'block',
+                    textDecoration: 'none',
+                    color: 'inherit',
+                    backgroundColor: '#1a1a1a',
+                    borderRadius: '8px',
+                    overflow: 'hidden',
+                    aspectRatio: '16/9',
+                  }}
+                >
+                  <div style={{
+                    width: '100%',
+                    height: '100%',
+                    backgroundColor: '#000',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                    {media.mimeType.startsWith('video/') ? (
+                      <video
+                        src={`/api/media/${media.id}`}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      />
+                    ) : (
+                      <img
+                        src={`/api/media/${media.id}`}
+                        alt={media.originalName}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      />
+                    )}
+                  </div>
+                </a>
+                <button
+                  onClick={() => handleDelete(media.id)}
+                  style={{
+                    position: 'absolute',
+                    top: '4px',
+                    right: '4px',
+                    backgroundColor: 'rgba(0,0,0,0.6)',
+                    color: '#ff5555',
+                    border: 'none',
+                    borderRadius: '4px',
+                    padding: '4px 8px',
+                    cursor: 'pointer',
+                    fontSize: '0.8rem',
+                  }}
+                  title="Delete"
+                >
+                  🗑️
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </div>

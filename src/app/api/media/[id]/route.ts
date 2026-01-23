@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
 import { prisma } from '@/lib/db';
+import { getSession } from '@/lib/auth';
 
 const UPLOAD_DIR = join(process.cwd(), 'uploads');
 
@@ -66,5 +67,46 @@ export async function GET(
     } catch (error) {
         console.error('File serve error:', error);
         return NextResponse.json({ error: 'File not found' }, { status: 404 });
+    }
+}
+
+export async function DELETE(
+    request: NextRequest,
+    { params }: { params: Promise<{ id: string }> }
+) {
+    try {
+        const { id } = await params;
+        const session = await getSession();
+        const ip = request.headers.get('x-forwarded-for') || '127.0.0.1';
+
+        const media = await prisma.media.findUnique({ where: { id } });
+
+        if (!media) {
+            return NextResponse.json({ error: 'Not found' }, { status: 404 });
+        }
+
+        const isOwner = media.ip === ip;
+        const isAdmin = session?.isAdmin;
+
+        if (!isOwner && !isAdmin) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+
+        // Delete from database
+        await prisma.media.delete({ where: { id } });
+
+        // Delete from disk
+        const filepath = join(UPLOAD_DIR, media.filename);
+        const { unlink } = await import('fs/promises');
+        try {
+            await unlink(filepath);
+        } catch (err) {
+            console.error('Failed to delete file from disk', err);
+        }
+
+        return NextResponse.json({ success: true });
+    } catch (error) {
+        console.error('Delete error:', error);
+        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
 }

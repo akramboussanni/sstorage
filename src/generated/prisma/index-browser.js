@@ -131,6 +131,7 @@ exports.Prisma.MediaScalarFieldEnum = {
   originalName: 'originalName',
   mimeType: 'mimeType',
   size: 'size',
+  ip: 'ip',
   createdAt: 'createdAt'
 };
 
@@ -142,6 +143,11 @@ exports.Prisma.SettingsScalarFieldEnum = {
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
+};
+
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
 };
 
 

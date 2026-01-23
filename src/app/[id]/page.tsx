@@ -26,13 +26,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             type: 'video.other',
             url: `${baseUrl}/${id}`,
             siteName: 'Simple Storage',
-            images: [
-                {
-                    url: isVideo ? `${baseUrl}/api/media/${id}` : `${baseUrl}/api/media/${id}`,
-                    width: isVideo ? 1280 : undefined,
-                    height: isVideo ? 720 : undefined,
-                }
-            ],
             videos: isVideo ? [
                 {
                     url: mediaUrl,
@@ -42,30 +35,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
                     height: 720,
                 }
             ] : undefined,
+            images: [
+                {
+                    url: isVideo ? mediaUrl : mediaUrl, // Use video URL as image for some previewers or fallback
+                }
+            ]
         },
         twitter: {
-            card: isVideo ? 'player' : 'summary_large_image',
+            card: 'summary_large_image',
             title: media.originalName,
             description: media.originalName,
-            images: [mediaUrl], // Twitter/Discord often use this for the poster
-            players: isVideo ? [
-                {
-                    playerUrl: mediaUrl,
-                    streamUrl: mediaUrl,
-                    width: 1280,
-                    height: 720,
-                }
-            ] : undefined,
-        },
-        other: {
-            ...(isVideo && {
-                // Discord/Telegram sometimes look for these specifically
-                'og:video:type': media.mimeType,
-                'og:video:width': '1280',
-                'og:video:height': '720',
-                'og:video:url': mediaUrl,
-                'og:video:secure_url': mediaUrl,
-            }),
+            images: [mediaUrl],
         },
     };
 }

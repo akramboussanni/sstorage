@@ -39,6 +39,9 @@ export async function POST(request: NextRequest) {
         // Create upload directory if not exists
         await mkdir(UPLOAD_DIR, { recursive: true });
 
+        // Get IP
+        const ip = request.headers.get('x-forwarded-for') || '127.0.0.1';
+
         // Generate unique filename
         const ext = file.name.split('.').pop();
         const id = uuidv4();
@@ -57,6 +60,7 @@ export async function POST(request: NextRequest) {
                 originalName: file.name,
                 mimeType: file.type,
                 size: file.size,
+                ip,
             },
         });
 

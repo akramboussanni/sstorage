@@ -136,61 +136,93 @@ export default function AdminPage() {
                         gap: '16px',
                     }}>
                         {mediaList.map((media) => (
-                            <a
-                                key={media.id}
-                                href={`/${media.id}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                style={{
-                                    display: 'block',
-                                    textDecoration: 'none',
-                                    color: 'inherit',
-                                    backgroundColor: '#2b2b2b',
-                                    borderRadius: '8px',
-                                    overflow: 'hidden',
-                                    transition: 'transform 0.2s',
-                                }}
-                            >
-                                <div style={{
-                                    aspectRatio: '16/9',
-                                    backgroundColor: '#000',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    position: 'relative',
-                                }}>
-                                    {media.mimeType.startsWith('video/') ? (
-                                        <video
-                                            src={`/api/media/${media.id}`}
-                                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                        />
-                                    ) : (
-                                        <img
-                                            src={`/api/media/${media.id}`}
-                                            alt={media.originalName}
-                                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                        />
-                                    )}
-                                    <div style={{
-                                        position: 'absolute',
-                                        bottom: 0,
-                                        left: 0,
-                                        right: 0,
-                                        padding: '4px 8px',
-                                        background: 'rgba(0,0,0,0.7)',
-                                        fontSize: '0.8rem',
-                                        whiteSpace: 'nowrap',
+                            <div key={media.id} style={{ position: 'relative' }}>
+                                <a
+                                    href={`/${media.id}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    style={{
+                                        display: 'block',
+                                        textDecoration: 'none',
+                                        color: 'inherit',
+                                        backgroundColor: '#2b2b2b',
+                                        borderRadius: '8px',
                                         overflow: 'hidden',
-                                        textOverflow: 'ellipsis',
+                                        transition: 'transform 0.2s',
+                                    }}
+                                >
+                                    <div style={{
+                                        aspectRatio: '16/9',
+                                        backgroundColor: '#000',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        position: 'relative',
                                     }}>
-                                        {media.originalName}
+                                        {media.mimeType.startsWith('video/') ? (
+                                            <video
+                                                src={`/api/media/${media.id}`}
+                                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                            />
+                                        ) : (
+                                            <img
+                                                src={`/api/media/${media.id}`}
+                                                alt={media.originalName}
+                                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                            />
+                                        )}
+                                        <div style={{
+                                            position: 'absolute',
+                                            bottom: 0,
+                                            left: 0,
+                                            right: 0,
+                                            padding: '4px 8px',
+                                            background: 'rgba(0,0,0,0.7)',
+                                            fontSize: '0.8rem',
+                                            whiteSpace: 'nowrap',
+                                            overflow: 'hidden',
+                                            textOverflow: 'ellipsis',
+                                        }}>
+                                            {media.originalName}
+                                        </div>
                                     </div>
-                                </div>
-                                <div style={{ padding: '8px', fontSize: '0.8rem', color: '#aaa' }}>
-                                    <div>{(media.size / 1024 / 1024).toFixed(2)} MB</div>
-                                    <div>{new Date(media.createdAt).toLocaleDateString()}</div>
-                                </div>
-                            </a>
+                                    <div style={{ padding: '8px', fontSize: '0.8rem', color: '#aaa' }}>
+                                        <div>{(media.size / 1024 / 1024).toFixed(2)} MB</div>
+                                        <div>{new Date(media.createdAt).toLocaleDateString()}</div>
+                                        {media.ip && <div style={{ color: '#5865f2', marginTop: '4px' }}>IP: {media.ip}</div>}
+                                    </div>
+                                </a>
+                                <button
+                                    onClick={async (e) => {
+                                        e.preventDefault();
+                                        if (!confirm('Delete this file?')) return;
+                                        try {
+                                            const res = await fetch(`/api/media/${media.id}`, { method: 'DELETE' });
+                                            if (res.ok) {
+                                                setMediaList(prev => prev.filter(m => m.id !== media.id));
+                                            } else {
+                                                alert('Failed to delete');
+                                            }
+                                        } catch (err) {
+                                            console.error(err);
+                                            alert('Error deleting');
+                                        }
+                                    }}
+                                    style={{
+                                        position: 'absolute',
+                                        top: '8px',
+                                        right: '8px',
+                                        backgroundColor: 'rgba(0,0,0,0.7)',
+                                        color: '#ff5555',
+                                        border: 'none',
+                                        borderRadius: '4px',
+                                        padding: '6px 10px',
+                                        cursor: 'pointer',
+                                    }}
+                                >
+                                    🗑️
+                                </button>
+                            </div>
                         ))}
                     </div>
                 </div>
