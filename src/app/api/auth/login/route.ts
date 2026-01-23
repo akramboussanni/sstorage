@@ -39,6 +39,7 @@ export async function POST(request: NextRequest) {
                 id: user.id,
                 username: user.username,
                 isAdmin: user.isAdmin,
+                mustChangePassword: user.mustChangePassword,
             },
         });
     } catch (error) {

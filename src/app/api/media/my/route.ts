@@ -1,12 +1,18 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
+import { getSession } from '@/lib/auth';
 
-export async function GET(request: NextRequest) {
-    const ip = request.headers.get('x-forwarded-for') || '127.0.0.1';
-
+export async function GET() {
     try {
+        const session = await getSession();
+
+        // Require authentication for my uploads
+        if (!session) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+
         const media = await prisma.media.findMany({
-            where: { ip },
+            where: { userId: session.id },
             orderBy: { createdAt: 'desc' },
         });
 

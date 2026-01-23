@@ -13,7 +13,7 @@ const adapter = new PrismaLibSql({
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
-    // Create admin user
+    // Create admin user with mustChangePassword = true
     const hashedPassword = await hash('admin123', 12);
 
     const admin = await prisma.user.upsert({
@@ -23,6 +23,7 @@ async function main() {
             username: 'admin',
             password: hashedPassword,
             isAdmin: true,
+            mustChangePassword: true, // Force password change on first login
         },
     });
 
@@ -35,6 +36,7 @@ async function main() {
         create: {
             id: 'default',
             allowPublicUpload: false,
+            allowRegistration: false,
         },
     });
 

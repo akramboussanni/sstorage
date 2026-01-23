@@ -1039,6 +1039,36 @@ export namespace Prisma {
    */
 
 
+  /**
+   * Count Type UserCountOutputType
+   */
+
+  export type UserCountOutputType = {
+    media: number
+  }
+
+  export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    media?: boolean | UserCountOutputTypeCountMediaArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserCountOutputType
+     */
+    select?: UserCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountMediaArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MediaWhereInput
+  }
+
 
   /**
    * Models
@@ -1059,6 +1089,7 @@ export namespace Prisma {
     username: string | null
     password: string | null
     isAdmin: boolean | null
+    mustChangePassword: boolean | null
     createdAt: Date | null
   }
 
@@ -1067,6 +1098,7 @@ export namespace Prisma {
     username: string | null
     password: string | null
     isAdmin: boolean | null
+    mustChangePassword: boolean | null
     createdAt: Date | null
   }
 
@@ -1075,6 +1107,7 @@ export namespace Prisma {
     username: number
     password: number
     isAdmin: number
+    mustChangePassword: number
     createdAt: number
     _all: number
   }
@@ -1085,6 +1118,7 @@ export namespace Prisma {
     username?: true
     password?: true
     isAdmin?: true
+    mustChangePassword?: true
     createdAt?: true
   }
 
@@ -1093,6 +1127,7 @@ export namespace Prisma {
     username?: true
     password?: true
     isAdmin?: true
+    mustChangePassword?: true
     createdAt?: true
   }
 
@@ -1101,6 +1136,7 @@ export namespace Prisma {
     username?: true
     password?: true
     isAdmin?: true
+    mustChangePassword?: true
     createdAt?: true
     _all?: true
   }
@@ -1182,6 +1218,7 @@ export namespace Prisma {
     username: string
     password: string
     isAdmin: boolean
+    mustChangePassword: boolean
     createdAt: Date
     _count: UserCountAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
@@ -1207,7 +1244,10 @@ export namespace Prisma {
     username?: boolean
     password?: boolean
     isAdmin?: boolean
+    mustChangePassword?: boolean
     createdAt?: boolean
+    media?: boolean | User$mediaArgs<ExtArgs>
+    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1215,6 +1255,7 @@ export namespace Prisma {
     username?: boolean
     password?: boolean
     isAdmin?: boolean
+    mustChangePassword?: boolean
     createdAt?: boolean
   }, ExtArgs["result"]["user"]>
 
@@ -1223,6 +1264,7 @@ export namespace Prisma {
     username?: boolean
     password?: boolean
     isAdmin?: boolean
+    mustChangePassword?: boolean
     createdAt?: boolean
   }, ExtArgs["result"]["user"]>
 
@@ -1231,19 +1273,29 @@ export namespace Prisma {
     username?: boolean
     password?: boolean
     isAdmin?: boolean
+    mustChangePassword?: boolean
     createdAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "username" | "password" | "isAdmin" | "createdAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "username" | "password" | "isAdmin" | "mustChangePassword" | "createdAt", ExtArgs["result"]["user"]>
+  export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    media?: boolean | User$mediaArgs<ExtArgs>
+    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type UserIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
-    objects: {}
+    objects: {
+      media: Prisma.$MediaPayload<ExtArgs>[]
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       username: string
       password: string
       isAdmin: boolean
+      mustChangePassword: boolean
       createdAt: Date
     }, ExtArgs["result"]["user"]>
     composites: {}
@@ -1639,6 +1691,7 @@ export namespace Prisma {
    */
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    media<T extends User$mediaArgs<ExtArgs> = {}>(args?: Subset<T, User$mediaArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MediaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1672,6 +1725,7 @@ export namespace Prisma {
     readonly username: FieldRef<"User", 'String'>
     readonly password: FieldRef<"User", 'String'>
     readonly isAdmin: FieldRef<"User", 'Boolean'>
+    readonly mustChangePassword: FieldRef<"User", 'Boolean'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
   }
     
@@ -1689,6 +1743,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
     /**
      * Filter, which User to fetch.
      */
@@ -1708,6 +1766,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which User to fetch.
      */
     where: UserWhereUniqueInput
@@ -1725,6 +1787,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
     /**
      * Filter, which User to fetch.
      */
@@ -1774,6 +1840,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which User to fetch.
      */
     where?: UserWhereInput
@@ -1822,6 +1892,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which Users to fetch.
      */
     where?: UserWhereInput
@@ -1864,6 +1938,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
     /**
      * The data needed to create a User.
      */
@@ -1910,6 +1988,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
     /**
      * The data needed to update a User.
      */
@@ -1977,6 +2059,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * The filter to search for the User to update in case it exists.
      */
     where: UserWhereUniqueInput
@@ -2003,6 +2089,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter which User to delete.
      */
     where: UserWhereUniqueInput
@@ -2023,6 +2113,30 @@ export namespace Prisma {
   }
 
   /**
+   * User.media
+   */
+  export type User$mediaArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Media
+     */
+    select?: MediaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Media
+     */
+    omit?: MediaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MediaInclude<ExtArgs> | null
+    where?: MediaWhereInput
+    orderBy?: MediaOrderByWithRelationInput | MediaOrderByWithRelationInput[]
+    cursor?: MediaWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MediaScalarFieldEnum | MediaScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2034,6 +2148,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
   }
 
 
@@ -2064,6 +2182,7 @@ export namespace Prisma {
     mimeType: string | null
     size: number | null
     ip: string | null
+    userId: string | null
     transcodeStatus: string | null
     transcodeError: string | null
     createdAt: Date | null
@@ -2076,6 +2195,7 @@ export namespace Prisma {
     mimeType: string | null
     size: number | null
     ip: string | null
+    userId: string | null
     transcodeStatus: string | null
     transcodeError: string | null
     createdAt: Date | null
@@ -2088,6 +2208,7 @@ export namespace Prisma {
     mimeType: number
     size: number
     ip: number
+    userId: number
     transcodeStatus: number
     transcodeError: number
     createdAt: number
@@ -2110,6 +2231,7 @@ export namespace Prisma {
     mimeType?: true
     size?: true
     ip?: true
+    userId?: true
     transcodeStatus?: true
     transcodeError?: true
     createdAt?: true
@@ -2122,6 +2244,7 @@ export namespace Prisma {
     mimeType?: true
     size?: true
     ip?: true
+    userId?: true
     transcodeStatus?: true
     transcodeError?: true
     createdAt?: true
@@ -2134,6 +2257,7 @@ export namespace Prisma {
     mimeType?: true
     size?: true
     ip?: true
+    userId?: true
     transcodeStatus?: true
     transcodeError?: true
     createdAt?: true
@@ -2233,6 +2357,7 @@ export namespace Prisma {
     mimeType: string
     size: number
     ip: string | null
+    userId: string | null
     transcodeStatus: string
     transcodeError: string | null
     createdAt: Date
@@ -2264,9 +2389,11 @@ export namespace Prisma {
     mimeType?: boolean
     size?: boolean
     ip?: boolean
+    userId?: boolean
     transcodeStatus?: boolean
     transcodeError?: boolean
     createdAt?: boolean
+    user?: boolean | Media$userArgs<ExtArgs>
   }, ExtArgs["result"]["media"]>
 
   export type MediaSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2276,9 +2403,11 @@ export namespace Prisma {
     mimeType?: boolean
     size?: boolean
     ip?: boolean
+    userId?: boolean
     transcodeStatus?: boolean
     transcodeError?: boolean
     createdAt?: boolean
+    user?: boolean | Media$userArgs<ExtArgs>
   }, ExtArgs["result"]["media"]>
 
   export type MediaSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2288,9 +2417,11 @@ export namespace Prisma {
     mimeType?: boolean
     size?: boolean
     ip?: boolean
+    userId?: boolean
     transcodeStatus?: boolean
     transcodeError?: boolean
     createdAt?: boolean
+    user?: boolean | Media$userArgs<ExtArgs>
   }, ExtArgs["result"]["media"]>
 
   export type MediaSelectScalar = {
@@ -2300,16 +2431,28 @@ export namespace Prisma {
     mimeType?: boolean
     size?: boolean
     ip?: boolean
+    userId?: boolean
     transcodeStatus?: boolean
     transcodeError?: boolean
     createdAt?: boolean
   }
 
-  export type MediaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "filename" | "originalName" | "mimeType" | "size" | "ip" | "transcodeStatus" | "transcodeError" | "createdAt", ExtArgs["result"]["media"]>
+  export type MediaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "filename" | "originalName" | "mimeType" | "size" | "ip" | "userId" | "transcodeStatus" | "transcodeError" | "createdAt", ExtArgs["result"]["media"]>
+  export type MediaInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | Media$userArgs<ExtArgs>
+  }
+  export type MediaIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | Media$userArgs<ExtArgs>
+  }
+  export type MediaIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | Media$userArgs<ExtArgs>
+  }
 
   export type $MediaPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Media"
-    objects: {}
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs> | null
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       filename: string
@@ -2317,6 +2460,7 @@ export namespace Prisma {
       mimeType: string
       size: number
       ip: string | null
+      userId: string | null
       transcodeStatus: string
       transcodeError: string | null
       createdAt: Date
@@ -2714,6 +2858,7 @@ export namespace Prisma {
    */
   export interface Prisma__MediaClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends Media$userArgs<ExtArgs> = {}>(args?: Subset<T, Media$userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2749,6 +2894,7 @@ export namespace Prisma {
     readonly mimeType: FieldRef<"Media", 'String'>
     readonly size: FieldRef<"Media", 'Int'>
     readonly ip: FieldRef<"Media", 'String'>
+    readonly userId: FieldRef<"Media", 'String'>
     readonly transcodeStatus: FieldRef<"Media", 'String'>
     readonly transcodeError: FieldRef<"Media", 'String'>
     readonly createdAt: FieldRef<"Media", 'DateTime'>
@@ -2769,6 +2915,10 @@ export namespace Prisma {
      */
     omit?: MediaOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MediaInclude<ExtArgs> | null
+    /**
      * Filter, which Media to fetch.
      */
     where: MediaWhereUniqueInput
@@ -2787,6 +2937,10 @@ export namespace Prisma {
      */
     omit?: MediaOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MediaInclude<ExtArgs> | null
+    /**
      * Filter, which Media to fetch.
      */
     where: MediaWhereUniqueInput
@@ -2804,6 +2958,10 @@ export namespace Prisma {
      * Omit specific fields from the Media
      */
     omit?: MediaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MediaInclude<ExtArgs> | null
     /**
      * Filter, which Media to fetch.
      */
@@ -2853,6 +3011,10 @@ export namespace Prisma {
      */
     omit?: MediaOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MediaInclude<ExtArgs> | null
+    /**
      * Filter, which Media to fetch.
      */
     where?: MediaWhereInput
@@ -2901,6 +3063,10 @@ export namespace Prisma {
      */
     omit?: MediaOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MediaInclude<ExtArgs> | null
+    /**
      * Filter, which Media to fetch.
      */
     where?: MediaWhereInput
@@ -2944,6 +3110,10 @@ export namespace Prisma {
      */
     omit?: MediaOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MediaInclude<ExtArgs> | null
+    /**
      * The data needed to create a Media.
      */
     data: XOR<MediaCreateInput, MediaUncheckedCreateInput>
@@ -2975,6 +3145,10 @@ export namespace Prisma {
      * The data used to create many Media.
      */
     data: MediaCreateManyInput | MediaCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MediaIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -2989,6 +3163,10 @@ export namespace Prisma {
      * Omit specific fields from the Media
      */
     omit?: MediaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MediaInclude<ExtArgs> | null
     /**
      * The data needed to update a Media.
      */
@@ -3041,6 +3219,10 @@ export namespace Prisma {
      * Limit how many Media to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MediaIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -3055,6 +3237,10 @@ export namespace Prisma {
      * Omit specific fields from the Media
      */
     omit?: MediaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MediaInclude<ExtArgs> | null
     /**
      * The filter to search for the Media to update in case it exists.
      */
@@ -3082,6 +3268,10 @@ export namespace Prisma {
      */
     omit?: MediaOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MediaInclude<ExtArgs> | null
+    /**
      * Filter which Media to delete.
      */
     where: MediaWhereUniqueInput
@@ -3102,6 +3292,25 @@ export namespace Prisma {
   }
 
   /**
+   * Media.user
+   */
+  export type Media$userArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
    * Media without action
    */
   export type MediaDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3113,6 +3322,10 @@ export namespace Prisma {
      * Omit specific fields from the Media
      */
     omit?: MediaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MediaInclude<ExtArgs> | null
   }
 
 
@@ -3122,40 +3335,94 @@ export namespace Prisma {
 
   export type AggregateSettings = {
     _count: SettingsCountAggregateOutputType | null
+    _avg: SettingsAvgAggregateOutputType | null
+    _sum: SettingsSumAggregateOutputType | null
     _min: SettingsMinAggregateOutputType | null
     _max: SettingsMaxAggregateOutputType | null
+  }
+
+  export type SettingsAvgAggregateOutputType = {
+    smtpPort: number | null
+  }
+
+  export type SettingsSumAggregateOutputType = {
+    smtpPort: number | null
   }
 
   export type SettingsMinAggregateOutputType = {
     id: string | null
     allowPublicUpload: boolean | null
+    allowRegistration: boolean | null
+    smtpHost: string | null
+    smtpPort: number | null
+    smtpUser: string | null
+    smtpPassword: string | null
+    smtpFrom: string | null
   }
 
   export type SettingsMaxAggregateOutputType = {
     id: string | null
     allowPublicUpload: boolean | null
+    allowRegistration: boolean | null
+    smtpHost: string | null
+    smtpPort: number | null
+    smtpUser: string | null
+    smtpPassword: string | null
+    smtpFrom: string | null
   }
 
   export type SettingsCountAggregateOutputType = {
     id: number
     allowPublicUpload: number
+    allowRegistration: number
+    smtpHost: number
+    smtpPort: number
+    smtpUser: number
+    smtpPassword: number
+    smtpFrom: number
     _all: number
   }
 
 
+  export type SettingsAvgAggregateInputType = {
+    smtpPort?: true
+  }
+
+  export type SettingsSumAggregateInputType = {
+    smtpPort?: true
+  }
+
   export type SettingsMinAggregateInputType = {
     id?: true
     allowPublicUpload?: true
+    allowRegistration?: true
+    smtpHost?: true
+    smtpPort?: true
+    smtpUser?: true
+    smtpPassword?: true
+    smtpFrom?: true
   }
 
   export type SettingsMaxAggregateInputType = {
     id?: true
     allowPublicUpload?: true
+    allowRegistration?: true
+    smtpHost?: true
+    smtpPort?: true
+    smtpUser?: true
+    smtpPassword?: true
+    smtpFrom?: true
   }
 
   export type SettingsCountAggregateInputType = {
     id?: true
     allowPublicUpload?: true
+    allowRegistration?: true
+    smtpHost?: true
+    smtpPort?: true
+    smtpUser?: true
+    smtpPassword?: true
+    smtpFrom?: true
     _all?: true
   }
 
@@ -3197,6 +3464,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: SettingsAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: SettingsSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: SettingsMinAggregateInputType
@@ -3227,6 +3506,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: SettingsCountAggregateInputType | true
+    _avg?: SettingsAvgAggregateInputType
+    _sum?: SettingsSumAggregateInputType
     _min?: SettingsMinAggregateInputType
     _max?: SettingsMaxAggregateInputType
   }
@@ -3234,7 +3515,15 @@ export namespace Prisma {
   export type SettingsGroupByOutputType = {
     id: string
     allowPublicUpload: boolean
+    allowRegistration: boolean
+    smtpHost: string | null
+    smtpPort: number | null
+    smtpUser: string | null
+    smtpPassword: string | null
+    smtpFrom: string | null
     _count: SettingsCountAggregateOutputType | null
+    _avg: SettingsAvgAggregateOutputType | null
+    _sum: SettingsSumAggregateOutputType | null
     _min: SettingsMinAggregateOutputType | null
     _max: SettingsMaxAggregateOutputType | null
   }
@@ -3256,24 +3545,48 @@ export namespace Prisma {
   export type SettingsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     allowPublicUpload?: boolean
+    allowRegistration?: boolean
+    smtpHost?: boolean
+    smtpPort?: boolean
+    smtpUser?: boolean
+    smtpPassword?: boolean
+    smtpFrom?: boolean
   }, ExtArgs["result"]["settings"]>
 
   export type SettingsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     allowPublicUpload?: boolean
+    allowRegistration?: boolean
+    smtpHost?: boolean
+    smtpPort?: boolean
+    smtpUser?: boolean
+    smtpPassword?: boolean
+    smtpFrom?: boolean
   }, ExtArgs["result"]["settings"]>
 
   export type SettingsSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     allowPublicUpload?: boolean
+    allowRegistration?: boolean
+    smtpHost?: boolean
+    smtpPort?: boolean
+    smtpUser?: boolean
+    smtpPassword?: boolean
+    smtpFrom?: boolean
   }, ExtArgs["result"]["settings"]>
 
   export type SettingsSelectScalar = {
     id?: boolean
     allowPublicUpload?: boolean
+    allowRegistration?: boolean
+    smtpHost?: boolean
+    smtpPort?: boolean
+    smtpUser?: boolean
+    smtpPassword?: boolean
+    smtpFrom?: boolean
   }
 
-  export type SettingsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "allowPublicUpload", ExtArgs["result"]["settings"]>
+  export type SettingsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "allowPublicUpload" | "allowRegistration" | "smtpHost" | "smtpPort" | "smtpUser" | "smtpPassword" | "smtpFrom", ExtArgs["result"]["settings"]>
 
   export type $SettingsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Settings"
@@ -3281,6 +3594,12 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       allowPublicUpload: boolean
+      allowRegistration: boolean
+      smtpHost: string | null
+      smtpPort: number | null
+      smtpUser: string | null
+      smtpPassword: string | null
+      smtpFrom: string | null
     }, ExtArgs["result"]["settings"]>
     composites: {}
   }
@@ -3706,6 +4025,12 @@ export namespace Prisma {
   interface SettingsFieldRefs {
     readonly id: FieldRef<"Settings", 'String'>
     readonly allowPublicUpload: FieldRef<"Settings", 'Boolean'>
+    readonly allowRegistration: FieldRef<"Settings", 'Boolean'>
+    readonly smtpHost: FieldRef<"Settings", 'String'>
+    readonly smtpPort: FieldRef<"Settings", 'Int'>
+    readonly smtpUser: FieldRef<"Settings", 'String'>
+    readonly smtpPassword: FieldRef<"Settings", 'String'>
+    readonly smtpFrom: FieldRef<"Settings", 'String'>
   }
     
 
@@ -4086,6 +4411,7 @@ export namespace Prisma {
     username: 'username',
     password: 'password',
     isAdmin: 'isAdmin',
+    mustChangePassword: 'mustChangePassword',
     createdAt: 'createdAt'
   };
 
@@ -4099,6 +4425,7 @@ export namespace Prisma {
     mimeType: 'mimeType',
     size: 'size',
     ip: 'ip',
+    userId: 'userId',
     transcodeStatus: 'transcodeStatus',
     transcodeError: 'transcodeError',
     createdAt: 'createdAt'
@@ -4109,7 +4436,13 @@ export namespace Prisma {
 
   export const SettingsScalarFieldEnum: {
     id: 'id',
-    allowPublicUpload: 'allowPublicUpload'
+    allowPublicUpload: 'allowPublicUpload',
+    allowRegistration: 'allowRegistration',
+    smtpHost: 'smtpHost',
+    smtpPort: 'smtpPort',
+    smtpUser: 'smtpUser',
+    smtpPassword: 'smtpPassword',
+    smtpFrom: 'smtpFrom'
   };
 
   export type SettingsScalarFieldEnum = (typeof SettingsScalarFieldEnum)[keyof typeof SettingsScalarFieldEnum]
@@ -4182,7 +4515,9 @@ export namespace Prisma {
     username?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
     isAdmin?: BoolFilter<"User"> | boolean
+    mustChangePassword?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
+    media?: MediaListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -4190,7 +4525,9 @@ export namespace Prisma {
     username?: SortOrder
     password?: SortOrder
     isAdmin?: SortOrder
+    mustChangePassword?: SortOrder
     createdAt?: SortOrder
+    media?: MediaOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -4201,7 +4538,9 @@ export namespace Prisma {
     NOT?: UserWhereInput | UserWhereInput[]
     password?: StringFilter<"User"> | string
     isAdmin?: BoolFilter<"User"> | boolean
+    mustChangePassword?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
+    media?: MediaListRelationFilter
   }, "id" | "username">
 
   export type UserOrderByWithAggregationInput = {
@@ -4209,6 +4548,7 @@ export namespace Prisma {
     username?: SortOrder
     password?: SortOrder
     isAdmin?: SortOrder
+    mustChangePassword?: SortOrder
     createdAt?: SortOrder
     _count?: UserCountOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
@@ -4223,6 +4563,7 @@ export namespace Prisma {
     username?: StringWithAggregatesFilter<"User"> | string
     password?: StringWithAggregatesFilter<"User"> | string
     isAdmin?: BoolWithAggregatesFilter<"User"> | boolean
+    mustChangePassword?: BoolWithAggregatesFilter<"User"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
   }
 
@@ -4236,9 +4577,11 @@ export namespace Prisma {
     mimeType?: StringFilter<"Media"> | string
     size?: IntFilter<"Media"> | number
     ip?: StringNullableFilter<"Media"> | string | null
+    userId?: StringNullableFilter<"Media"> | string | null
     transcodeStatus?: StringFilter<"Media"> | string
     transcodeError?: StringNullableFilter<"Media"> | string | null
     createdAt?: DateTimeFilter<"Media"> | Date | string
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
   }
 
   export type MediaOrderByWithRelationInput = {
@@ -4248,9 +4591,11 @@ export namespace Prisma {
     mimeType?: SortOrder
     size?: SortOrder
     ip?: SortOrderInput | SortOrder
+    userId?: SortOrderInput | SortOrder
     transcodeStatus?: SortOrder
     transcodeError?: SortOrderInput | SortOrder
     createdAt?: SortOrder
+    user?: UserOrderByWithRelationInput
   }
 
   export type MediaWhereUniqueInput = Prisma.AtLeast<{
@@ -4263,9 +4608,11 @@ export namespace Prisma {
     mimeType?: StringFilter<"Media"> | string
     size?: IntFilter<"Media"> | number
     ip?: StringNullableFilter<"Media"> | string | null
+    userId?: StringNullableFilter<"Media"> | string | null
     transcodeStatus?: StringFilter<"Media"> | string
     transcodeError?: StringNullableFilter<"Media"> | string | null
     createdAt?: DateTimeFilter<"Media"> | Date | string
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
   }, "id">
 
   export type MediaOrderByWithAggregationInput = {
@@ -4275,6 +4622,7 @@ export namespace Prisma {
     mimeType?: SortOrder
     size?: SortOrder
     ip?: SortOrderInput | SortOrder
+    userId?: SortOrderInput | SortOrder
     transcodeStatus?: SortOrder
     transcodeError?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -4295,6 +4643,7 @@ export namespace Prisma {
     mimeType?: StringWithAggregatesFilter<"Media"> | string
     size?: IntWithAggregatesFilter<"Media"> | number
     ip?: StringNullableWithAggregatesFilter<"Media"> | string | null
+    userId?: StringNullableWithAggregatesFilter<"Media"> | string | null
     transcodeStatus?: StringWithAggregatesFilter<"Media"> | string
     transcodeError?: StringNullableWithAggregatesFilter<"Media"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Media"> | Date | string
@@ -4306,11 +4655,23 @@ export namespace Prisma {
     NOT?: SettingsWhereInput | SettingsWhereInput[]
     id?: StringFilter<"Settings"> | string
     allowPublicUpload?: BoolFilter<"Settings"> | boolean
+    allowRegistration?: BoolFilter<"Settings"> | boolean
+    smtpHost?: StringNullableFilter<"Settings"> | string | null
+    smtpPort?: IntNullableFilter<"Settings"> | number | null
+    smtpUser?: StringNullableFilter<"Settings"> | string | null
+    smtpPassword?: StringNullableFilter<"Settings"> | string | null
+    smtpFrom?: StringNullableFilter<"Settings"> | string | null
   }
 
   export type SettingsOrderByWithRelationInput = {
     id?: SortOrder
     allowPublicUpload?: SortOrder
+    allowRegistration?: SortOrder
+    smtpHost?: SortOrderInput | SortOrder
+    smtpPort?: SortOrderInput | SortOrder
+    smtpUser?: SortOrderInput | SortOrder
+    smtpPassword?: SortOrderInput | SortOrder
+    smtpFrom?: SortOrderInput | SortOrder
   }
 
   export type SettingsWhereUniqueInput = Prisma.AtLeast<{
@@ -4319,14 +4680,28 @@ export namespace Prisma {
     OR?: SettingsWhereInput[]
     NOT?: SettingsWhereInput | SettingsWhereInput[]
     allowPublicUpload?: BoolFilter<"Settings"> | boolean
+    allowRegistration?: BoolFilter<"Settings"> | boolean
+    smtpHost?: StringNullableFilter<"Settings"> | string | null
+    smtpPort?: IntNullableFilter<"Settings"> | number | null
+    smtpUser?: StringNullableFilter<"Settings"> | string | null
+    smtpPassword?: StringNullableFilter<"Settings"> | string | null
+    smtpFrom?: StringNullableFilter<"Settings"> | string | null
   }, "id">
 
   export type SettingsOrderByWithAggregationInput = {
     id?: SortOrder
     allowPublicUpload?: SortOrder
+    allowRegistration?: SortOrder
+    smtpHost?: SortOrderInput | SortOrder
+    smtpPort?: SortOrderInput | SortOrder
+    smtpUser?: SortOrderInput | SortOrder
+    smtpPassword?: SortOrderInput | SortOrder
+    smtpFrom?: SortOrderInput | SortOrder
     _count?: SettingsCountOrderByAggregateInput
+    _avg?: SettingsAvgOrderByAggregateInput
     _max?: SettingsMaxOrderByAggregateInput
     _min?: SettingsMinOrderByAggregateInput
+    _sum?: SettingsSumOrderByAggregateInput
   }
 
   export type SettingsScalarWhereWithAggregatesInput = {
@@ -4335,6 +4710,12 @@ export namespace Prisma {
     NOT?: SettingsScalarWhereWithAggregatesInput | SettingsScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Settings"> | string
     allowPublicUpload?: BoolWithAggregatesFilter<"Settings"> | boolean
+    allowRegistration?: BoolWithAggregatesFilter<"Settings"> | boolean
+    smtpHost?: StringNullableWithAggregatesFilter<"Settings"> | string | null
+    smtpPort?: IntNullableWithAggregatesFilter<"Settings"> | number | null
+    smtpUser?: StringNullableWithAggregatesFilter<"Settings"> | string | null
+    smtpPassword?: StringNullableWithAggregatesFilter<"Settings"> | string | null
+    smtpFrom?: StringNullableWithAggregatesFilter<"Settings"> | string | null
   }
 
   export type UserCreateInput = {
@@ -4342,7 +4723,9 @@ export namespace Prisma {
     username: string
     password: string
     isAdmin?: boolean
+    mustChangePassword?: boolean
     createdAt?: Date | string
+    media?: MediaCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -4350,7 +4733,9 @@ export namespace Prisma {
     username: string
     password: string
     isAdmin?: boolean
+    mustChangePassword?: boolean
     createdAt?: Date | string
+    media?: MediaUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -4358,7 +4743,9 @@ export namespace Prisma {
     username?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    media?: MediaUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -4366,7 +4753,9 @@ export namespace Prisma {
     username?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    media?: MediaUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -4374,6 +4763,7 @@ export namespace Prisma {
     username: string
     password: string
     isAdmin?: boolean
+    mustChangePassword?: boolean
     createdAt?: Date | string
   }
 
@@ -4382,6 +4772,7 @@ export namespace Prisma {
     username?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -4390,6 +4781,7 @@ export namespace Prisma {
     username?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -4403,6 +4795,7 @@ export namespace Prisma {
     transcodeStatus?: string
     transcodeError?: string | null
     createdAt?: Date | string
+    user?: UserCreateNestedOneWithoutMediaInput
   }
 
   export type MediaUncheckedCreateInput = {
@@ -4412,6 +4805,7 @@ export namespace Prisma {
     mimeType: string
     size: number
     ip?: string | null
+    userId?: string | null
     transcodeStatus?: string
     transcodeError?: string | null
     createdAt?: Date | string
@@ -4427,6 +4821,7 @@ export namespace Prisma {
     transcodeStatus?: StringFieldUpdateOperationsInput | string
     transcodeError?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneWithoutMediaNestedInput
   }
 
   export type MediaUncheckedUpdateInput = {
@@ -4436,6 +4831,7 @@ export namespace Prisma {
     mimeType?: StringFieldUpdateOperationsInput | string
     size?: IntFieldUpdateOperationsInput | number
     ip?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
     transcodeStatus?: StringFieldUpdateOperationsInput | string
     transcodeError?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -4448,6 +4844,7 @@ export namespace Prisma {
     mimeType: string
     size: number
     ip?: string | null
+    userId?: string | null
     transcodeStatus?: string
     transcodeError?: string | null
     createdAt?: Date | string
@@ -4472,6 +4869,7 @@ export namespace Prisma {
     mimeType?: StringFieldUpdateOperationsInput | string
     size?: IntFieldUpdateOperationsInput | number
     ip?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
     transcodeStatus?: StringFieldUpdateOperationsInput | string
     transcodeError?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -4480,36 +4878,78 @@ export namespace Prisma {
   export type SettingsCreateInput = {
     id?: string
     allowPublicUpload?: boolean
+    allowRegistration?: boolean
+    smtpHost?: string | null
+    smtpPort?: number | null
+    smtpUser?: string | null
+    smtpPassword?: string | null
+    smtpFrom?: string | null
   }
 
   export type SettingsUncheckedCreateInput = {
     id?: string
     allowPublicUpload?: boolean
+    allowRegistration?: boolean
+    smtpHost?: string | null
+    smtpPort?: number | null
+    smtpUser?: string | null
+    smtpPassword?: string | null
+    smtpFrom?: string | null
   }
 
   export type SettingsUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     allowPublicUpload?: BoolFieldUpdateOperationsInput | boolean
+    allowRegistration?: BoolFieldUpdateOperationsInput | boolean
+    smtpHost?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpPort?: NullableIntFieldUpdateOperationsInput | number | null
+    smtpUser?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpPassword?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpFrom?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type SettingsUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     allowPublicUpload?: BoolFieldUpdateOperationsInput | boolean
+    allowRegistration?: BoolFieldUpdateOperationsInput | boolean
+    smtpHost?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpPort?: NullableIntFieldUpdateOperationsInput | number | null
+    smtpUser?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpPassword?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpFrom?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type SettingsCreateManyInput = {
     id?: string
     allowPublicUpload?: boolean
+    allowRegistration?: boolean
+    smtpHost?: string | null
+    smtpPort?: number | null
+    smtpUser?: string | null
+    smtpPassword?: string | null
+    smtpFrom?: string | null
   }
 
   export type SettingsUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     allowPublicUpload?: BoolFieldUpdateOperationsInput | boolean
+    allowRegistration?: BoolFieldUpdateOperationsInput | boolean
+    smtpHost?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpPort?: NullableIntFieldUpdateOperationsInput | number | null
+    smtpUser?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpPassword?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpFrom?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type SettingsUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     allowPublicUpload?: BoolFieldUpdateOperationsInput | boolean
+    allowRegistration?: BoolFieldUpdateOperationsInput | boolean
+    smtpHost?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpPort?: NullableIntFieldUpdateOperationsInput | number | null
+    smtpUser?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpPassword?: NullableStringFieldUpdateOperationsInput | string | null
+    smtpFrom?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -4542,11 +4982,22 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type MediaListRelationFilter = {
+    every?: MediaWhereInput
+    some?: MediaWhereInput
+    none?: MediaWhereInput
+  }
+
+  export type MediaOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type UserCountOrderByAggregateInput = {
     id?: SortOrder
     username?: SortOrder
     password?: SortOrder
     isAdmin?: SortOrder
+    mustChangePassword?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -4555,6 +5006,7 @@ export namespace Prisma {
     username?: SortOrder
     password?: SortOrder
     isAdmin?: SortOrder
+    mustChangePassword?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -4563,6 +5015,7 @@ export namespace Prisma {
     username?: SortOrder
     password?: SortOrder
     isAdmin?: SortOrder
+    mustChangePassword?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -4630,6 +5083,11 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
+  export type UserNullableScalarRelationFilter = {
+    is?: UserWhereInput | null
+    isNot?: UserWhereInput | null
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -4642,6 +5100,7 @@ export namespace Prisma {
     mimeType?: SortOrder
     size?: SortOrder
     ip?: SortOrder
+    userId?: SortOrder
     transcodeStatus?: SortOrder
     transcodeError?: SortOrder
     createdAt?: SortOrder
@@ -4658,6 +5117,7 @@ export namespace Prisma {
     mimeType?: SortOrder
     size?: SortOrder
     ip?: SortOrder
+    userId?: SortOrder
     transcodeStatus?: SortOrder
     transcodeError?: SortOrder
     createdAt?: SortOrder
@@ -4670,6 +5130,7 @@ export namespace Prisma {
     mimeType?: SortOrder
     size?: SortOrder
     ip?: SortOrder
+    userId?: SortOrder
     transcodeStatus?: SortOrder
     transcodeError?: SortOrder
     createdAt?: SortOrder
@@ -4712,19 +5173,86 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
   export type SettingsCountOrderByAggregateInput = {
     id?: SortOrder
     allowPublicUpload?: SortOrder
+    allowRegistration?: SortOrder
+    smtpHost?: SortOrder
+    smtpPort?: SortOrder
+    smtpUser?: SortOrder
+    smtpPassword?: SortOrder
+    smtpFrom?: SortOrder
+  }
+
+  export type SettingsAvgOrderByAggregateInput = {
+    smtpPort?: SortOrder
   }
 
   export type SettingsMaxOrderByAggregateInput = {
     id?: SortOrder
     allowPublicUpload?: SortOrder
+    allowRegistration?: SortOrder
+    smtpHost?: SortOrder
+    smtpPort?: SortOrder
+    smtpUser?: SortOrder
+    smtpPassword?: SortOrder
+    smtpFrom?: SortOrder
   }
 
   export type SettingsMinOrderByAggregateInput = {
     id?: SortOrder
     allowPublicUpload?: SortOrder
+    allowRegistration?: SortOrder
+    smtpHost?: SortOrder
+    smtpPort?: SortOrder
+    smtpUser?: SortOrder
+    smtpPassword?: SortOrder
+    smtpFrom?: SortOrder
+  }
+
+  export type SettingsSumOrderByAggregateInput = {
+    smtpPort?: SortOrder
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type MediaCreateNestedManyWithoutUserInput = {
+    create?: XOR<MediaCreateWithoutUserInput, MediaUncheckedCreateWithoutUserInput> | MediaCreateWithoutUserInput[] | MediaUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: MediaCreateOrConnectWithoutUserInput | MediaCreateOrConnectWithoutUserInput[]
+    createMany?: MediaCreateManyUserInputEnvelope
+    connect?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
+  }
+
+  export type MediaUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<MediaCreateWithoutUserInput, MediaUncheckedCreateWithoutUserInput> | MediaCreateWithoutUserInput[] | MediaUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: MediaCreateOrConnectWithoutUserInput | MediaCreateOrConnectWithoutUserInput[]
+    createMany?: MediaCreateManyUserInputEnvelope
+    connect?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -4739,6 +5267,40 @@ export namespace Prisma {
     set?: Date | string
   }
 
+  export type MediaUpdateManyWithoutUserNestedInput = {
+    create?: XOR<MediaCreateWithoutUserInput, MediaUncheckedCreateWithoutUserInput> | MediaCreateWithoutUserInput[] | MediaUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: MediaCreateOrConnectWithoutUserInput | MediaCreateOrConnectWithoutUserInput[]
+    upsert?: MediaUpsertWithWhereUniqueWithoutUserInput | MediaUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: MediaCreateManyUserInputEnvelope
+    set?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
+    disconnect?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
+    delete?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
+    connect?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
+    update?: MediaUpdateWithWhereUniqueWithoutUserInput | MediaUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: MediaUpdateManyWithWhereWithoutUserInput | MediaUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: MediaScalarWhereInput | MediaScalarWhereInput[]
+  }
+
+  export type MediaUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<MediaCreateWithoutUserInput, MediaUncheckedCreateWithoutUserInput> | MediaCreateWithoutUserInput[] | MediaUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: MediaCreateOrConnectWithoutUserInput | MediaCreateOrConnectWithoutUserInput[]
+    upsert?: MediaUpsertWithWhereUniqueWithoutUserInput | MediaUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: MediaCreateManyUserInputEnvelope
+    set?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
+    disconnect?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
+    delete?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
+    connect?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
+    update?: MediaUpdateWithWhereUniqueWithoutUserInput | MediaUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: MediaUpdateManyWithWhereWithoutUserInput | MediaUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: MediaScalarWhereInput | MediaScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutMediaInput = {
+    create?: XOR<UserCreateWithoutMediaInput, UserUncheckedCreateWithoutMediaInput>
+    connectOrCreate?: UserCreateOrConnectWithoutMediaInput
+    connect?: UserWhereUniqueInput
+  }
+
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -4749,6 +5311,24 @@ export namespace Prisma {
 
   export type NullableStringFieldUpdateOperationsInput = {
     set?: string | null
+  }
+
+  export type UserUpdateOneWithoutMediaNestedInput = {
+    create?: XOR<UserCreateWithoutMediaInput, UserUncheckedCreateWithoutMediaInput>
+    connectOrCreate?: UserCreateOrConnectWithoutMediaInput
+    upsert?: UserUpsertWithoutMediaInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutMediaInput, UserUpdateWithoutMediaInput>, UserUncheckedUpdateWithoutMediaInput>
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -4898,6 +5478,198 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type MediaCreateWithoutUserInput = {
+    id?: string
+    filename: string
+    originalName: string
+    mimeType: string
+    size: number
+    ip?: string | null
+    transcodeStatus?: string
+    transcodeError?: string | null
+    createdAt?: Date | string
+  }
+
+  export type MediaUncheckedCreateWithoutUserInput = {
+    id?: string
+    filename: string
+    originalName: string
+    mimeType: string
+    size: number
+    ip?: string | null
+    transcodeStatus?: string
+    transcodeError?: string | null
+    createdAt?: Date | string
+  }
+
+  export type MediaCreateOrConnectWithoutUserInput = {
+    where: MediaWhereUniqueInput
+    create: XOR<MediaCreateWithoutUserInput, MediaUncheckedCreateWithoutUserInput>
+  }
+
+  export type MediaCreateManyUserInputEnvelope = {
+    data: MediaCreateManyUserInput | MediaCreateManyUserInput[]
+  }
+
+  export type MediaUpsertWithWhereUniqueWithoutUserInput = {
+    where: MediaWhereUniqueInput
+    update: XOR<MediaUpdateWithoutUserInput, MediaUncheckedUpdateWithoutUserInput>
+    create: XOR<MediaCreateWithoutUserInput, MediaUncheckedCreateWithoutUserInput>
+  }
+
+  export type MediaUpdateWithWhereUniqueWithoutUserInput = {
+    where: MediaWhereUniqueInput
+    data: XOR<MediaUpdateWithoutUserInput, MediaUncheckedUpdateWithoutUserInput>
+  }
+
+  export type MediaUpdateManyWithWhereWithoutUserInput = {
+    where: MediaScalarWhereInput
+    data: XOR<MediaUpdateManyMutationInput, MediaUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type MediaScalarWhereInput = {
+    AND?: MediaScalarWhereInput | MediaScalarWhereInput[]
+    OR?: MediaScalarWhereInput[]
+    NOT?: MediaScalarWhereInput | MediaScalarWhereInput[]
+    id?: StringFilter<"Media"> | string
+    filename?: StringFilter<"Media"> | string
+    originalName?: StringFilter<"Media"> | string
+    mimeType?: StringFilter<"Media"> | string
+    size?: IntFilter<"Media"> | number
+    ip?: StringNullableFilter<"Media"> | string | null
+    userId?: StringNullableFilter<"Media"> | string | null
+    transcodeStatus?: StringFilter<"Media"> | string
+    transcodeError?: StringNullableFilter<"Media"> | string | null
+    createdAt?: DateTimeFilter<"Media"> | Date | string
+  }
+
+  export type UserCreateWithoutMediaInput = {
+    id?: string
+    username: string
+    password: string
+    isAdmin?: boolean
+    mustChangePassword?: boolean
+    createdAt?: Date | string
+  }
+
+  export type UserUncheckedCreateWithoutMediaInput = {
+    id?: string
+    username: string
+    password: string
+    isAdmin?: boolean
+    mustChangePassword?: boolean
+    createdAt?: Date | string
+  }
+
+  export type UserCreateOrConnectWithoutMediaInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutMediaInput, UserUncheckedCreateWithoutMediaInput>
+  }
+
+  export type UserUpsertWithoutMediaInput = {
+    update: XOR<UserUpdateWithoutMediaInput, UserUncheckedUpdateWithoutMediaInput>
+    create: XOR<UserCreateWithoutMediaInput, UserUncheckedCreateWithoutMediaInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutMediaInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutMediaInput, UserUncheckedUpdateWithoutMediaInput>
+  }
+
+  export type UserUpdateWithoutMediaInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    isAdmin?: BoolFieldUpdateOperationsInput | boolean
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserUncheckedUpdateWithoutMediaInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    isAdmin?: BoolFieldUpdateOperationsInput | boolean
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MediaCreateManyUserInput = {
+    id?: string
+    filename: string
+    originalName: string
+    mimeType: string
+    size: number
+    ip?: string | null
+    transcodeStatus?: string
+    transcodeError?: string | null
+    createdAt?: Date | string
+  }
+
+  export type MediaUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    filename?: StringFieldUpdateOperationsInput | string
+    originalName?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
+    size?: IntFieldUpdateOperationsInput | number
+    ip?: NullableStringFieldUpdateOperationsInput | string | null
+    transcodeStatus?: StringFieldUpdateOperationsInput | string
+    transcodeError?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MediaUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    filename?: StringFieldUpdateOperationsInput | string
+    originalName?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
+    size?: IntFieldUpdateOperationsInput | number
+    ip?: NullableStringFieldUpdateOperationsInput | string | null
+    transcodeStatus?: StringFieldUpdateOperationsInput | string
+    transcodeError?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MediaUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    filename?: StringFieldUpdateOperationsInput | string
+    originalName?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
+    size?: IntFieldUpdateOperationsInput | number
+    ip?: NullableStringFieldUpdateOperationsInput | string | null
+    transcodeStatus?: StringFieldUpdateOperationsInput | string
+    transcodeError?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

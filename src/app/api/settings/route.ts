@@ -8,11 +8,21 @@ export async function GET() {
 
         if (!settings) {
             settings = await prisma.settings.create({
-                data: { id: 'default', allowPublicUpload: false },
+                data: {
+                    id: 'default',
+                    allowPublicUpload: false,
+                    allowRegistration: false,
+                },
             });
         }
 
-        return NextResponse.json(settings);
+        // Don't expose SMTP password to client
+        const { smtpPassword, ...safeSettings } = settings;
+
+        return NextResponse.json({
+            ...safeSettings,
+            smtpConfigured: !!smtpPassword,
+        });
     } catch (error) {
         console.error('Settings error:', error);
         return NextResponse.json({ error: 'Failed to get settings' }, { status: 500 });
@@ -29,13 +39,60 @@ export async function PUT(request: NextRequest) {
 
         const body = await request.json();
 
+        // Build update object with only provided fields
+        const updateData: Record<string, unknown> = {};
+
+        if (typeof body.allowPublicUpload === 'boolean') {
+            updateData.allowPublicUpload = body.allowPublicUpload;
+        }
+
+        if (typeof body.allowRegistration === 'boolean') {
+            updateData.allowRegistration = body.allowRegistration;
+        }
+
+        // SMTP settings
+        if (body.smtpHost !== undefined) {
+            updateData.smtpHost = body.smtpHost || null;
+        }
+
+        if (body.smtpPort !== undefined) {
+            updateData.smtpPort = body.smtpPort ? parseInt(body.smtpPort, 10) : null;
+        }
+
+        if (body.smtpUser !== undefined) {
+            updateData.smtpUser = body.smtpUser || null;
+        }
+
+        if (body.smtpPassword !== undefined) {
+            updateData.smtpPassword = body.smtpPassword || null;
+        }
+
+        if (body.smtpFrom !== undefined) {
+            updateData.smtpFrom = body.smtpFrom || null;
+        }
+
         const settings = await prisma.settings.upsert({
             where: { id: 'default' },
-            update: { allowPublicUpload: body.allowPublicUpload },
-            create: { id: 'default', allowPublicUpload: body.allowPublicUpload },
+            update: updateData,
+            create: {
+                id: 'default',
+                allowPublicUpload: body.allowPublicUpload ?? false,
+                allowRegistration: body.allowRegistration ?? false,
+                smtpHost: body.smtpHost || null,
+                smtpPort: body.smtpPort ? parseInt(body.smtpPort, 10) : null,
+                smtpUser: body.smtpUser || null,
+                smtpPassword: body.smtpPassword || null,
+                smtpFrom: body.smtpFrom || null,
+            },
         });
 
-        return NextResponse.json(settings);
+        // Don't expose SMTP password in response
+        const { smtpPassword, ...safeSettings } = settings;
+
+        return NextResponse.json({
+            ...safeSettings,
+            smtpConfigured: !!smtpPassword,
+        });
     } catch (error) {
         console.error('Settings error:', error);
         return NextResponse.json({ error: 'Failed to update settings' }, { status: 500 });

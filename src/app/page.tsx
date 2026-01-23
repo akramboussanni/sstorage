@@ -1,18 +1,20 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 
 type TranscodeStatus = 'pending' | 'processing' | 'completed' | 'failed' | 'not_required';
 
 export default function Home() {
-  const [user, setUser] = useState<{ username: string; isAdmin: boolean } | null>(null);
+  const router = useRouter();
+  const [user, setUser] = useState<{ username: string; isAdmin: boolean; mustChangePassword?: boolean } | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const [result, setResult] = useState<{ url: string; id: string; transcodeStatus: TranscodeStatus } | null>(null);
   const [transcodeStatus, setTranscodeStatus] = useState<TranscodeStatus | null>(null);
   const [transcodeError, setTranscodeError] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [settings, setSettings] = useState<{ allowPublicUpload: boolean } | null>(null);
+  const [settings, setSettings] = useState<{ allowPublicUpload: boolean; allowRegistration?: boolean } | null>(null);
   const [loading, setLoading] = useState(true);
   const pollIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -22,16 +24,28 @@ export default function Home() {
     Promise.all([
       fetch('/api/auth/session').then(res => res.json()),
       fetch('/api/settings').then(res => res.json()),
-      fetch('/api/media/my').then(res => res.json()), // Fetch my uploads
-    ]).then(([sessionData, settingsData, myUploadsData]) => {
+    ]).then(([sessionData, settingsData]) => {
+      // Check if user must change password
+      if (sessionData.user?.mustChangePassword) {
+        router.push('/change-password');
+        return;
+      }
+
       setUser(sessionData.user);
       setSettings(settingsData);
-      if (Array.isArray(myUploadsData)) {
-        setMyUploads(myUploadsData);
+
+      // Only fetch my uploads if user is logged in
+      if (sessionData.user) {
+        fetch('/api/media/my').then(res => res.json()).then(myUploadsData => {
+          if (Array.isArray(myUploadsData)) {
+            setMyUploads(myUploadsData);
+          }
+        });
       }
+
       setLoading(false);
     });
-  }, []);
+  }, [router]);
 
   const canUpload = user || settings?.allowPublicUpload;
 
@@ -314,34 +328,52 @@ export default function Home() {
           )}
 
           {user ? (
-            <a
-              href="/admin"
-              style={{
-                marginTop: '10px',
-                color: '#666',
-                textDecoration: 'none',
-              }}
-            >
-              Admin Panel →
-            </a>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', marginTop: '10px' }}>
+              <span style={{ color: '#888', fontSize: '0.9rem' }}>
+                Logged in as <strong style={{ color: '#5865f2' }}>{user.username}</strong>
+              </span>
+              <div style={{ display: 'flex', gap: '16px' }}>
+                {user.isAdmin && (
+                  <a href="/admin" style={{ color: '#5865f2', textDecoration: 'none', fontSize: '0.9rem' }}>
+                    Admin Panel
+                  </a>
+                )}
+                <a href="/change-password" style={{ color: '#666', textDecoration: 'none', fontSize: '0.9rem' }}>
+                  Change Password
+                </a>
+              </div>
+            </div>
           ) : (
-            <a
-              href="/login"
-              style={{
-                marginTop: '10px',
-                color: '#666',
-                textDecoration: 'none',
-                fontSize: '0.9rem',
-              }}
-            >
-              Admin Login →
-            </a>
+            <div style={{ display: 'flex', gap: '16px', marginTop: '10px' }}>
+              <a
+                href="/login"
+                style={{
+                  color: '#5865f2',
+                  textDecoration: 'none',
+                  fontSize: '0.9rem',
+                }}
+              >
+                Login
+              </a>
+              {settings?.allowRegistration && (
+                <a
+                  href="/register"
+                  style={{
+                    color: '#666',
+                    textDecoration: 'none',
+                    fontSize: '0.9rem',
+                  }}
+                >
+                  Register
+                </a>
+              )}
+            </div>
           )}
         </div>
       )}
 
-      {/* My Uploads Section */}
-      {myUploads.length > 0 && (
+      {/* My Uploads Section - Only shown for logged-in users */}
+      {user && myUploads.length > 0 && (
         <div style={{ marginTop: '60px', width: '100%', maxWidth: '800px' }}>
           <h2 style={{ fontSize: '1.2rem', marginBottom: '20px', borderBottom: '1px solid #333', paddingBottom: '10px' }}>
             My Uploads ({myUploads.length})

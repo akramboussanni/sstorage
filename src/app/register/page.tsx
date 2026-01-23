@@ -3,12 +3,14 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
-export default function LoginPage() {
+export default function RegisterPage() {
     const router = useRouter();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const [checkingSettings, setCheckingSettings] = useState(true);
     const [registrationEnabled, setRegistrationEnabled] = useState(false);
 
     useEffect(() => {
@@ -16,6 +18,10 @@ export default function LoginPage() {
             .then(res => res.json())
             .then(data => {
                 setRegistrationEnabled(data.allowRegistration);
+                setCheckingSettings(false);
+            })
+            .catch(() => {
+                setCheckingSettings(false);
             });
     }, []);
 
@@ -24,8 +30,14 @@ export default function LoginPage() {
         setLoading(true);
         setError('');
 
+        if (password !== confirmPassword) {
+            setError('Passwords do not match');
+            setLoading(false);
+            return;
+        }
+
         try {
-            const res = await fetch('/api/auth/login', {
+            const res = await fetch('/api/auth/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password }),
@@ -34,16 +46,63 @@ export default function LoginPage() {
             const data = await res.json();
 
             if (!res.ok) {
-                setError(data.error || 'Login failed');
+                setError(data.error || 'Registration failed');
                 setLoading(false);
             } else {
                 router.push('/');
             }
         } catch {
-            setError('Login failed');
+            setError('Registration failed');
             setLoading(false);
         }
     };
+
+    if (checkingSettings) {
+        return (
+            <div style={{
+                minHeight: '100vh',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: '#0a0a0a',
+                color: '#fff',
+            }}>
+                Loading...
+            </div>
+        );
+    }
+
+    if (!registrationEnabled) {
+        return (
+            <div style={{
+                minHeight: '100vh',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: '#0a0a0a',
+                color: '#fff',
+                fontFamily: 'system-ui, sans-serif',
+            }}>
+                <h1 style={{ marginBottom: '20px', fontSize: '1.5rem' }}>🚫 Registration Disabled</h1>
+                <p style={{ color: '#888', marginBottom: '20px' }}>
+                    Public registration is currently disabled.
+                </p>
+                <a
+                    href="/login"
+                    style={{
+                        padding: '12px 24px',
+                        backgroundColor: '#5865f2',
+                        color: '#fff',
+                        borderRadius: '8px',
+                        textDecoration: 'none',
+                    }}
+                >
+                    Go to Login
+                </a>
+            </div>
+        );
+    }
 
     return (
         <div style={{
@@ -56,7 +115,7 @@ export default function LoginPage() {
             color: '#fff',
             fontFamily: 'system-ui, sans-serif',
         }}>
-            <h1 style={{ marginBottom: '30px', fontSize: '1.5rem' }}>🔐 Login</h1>
+            <h1 style={{ marginBottom: '30px', fontSize: '1.5rem' }}>📝 Register</h1>
 
             <form
                 onSubmit={handleSubmit}
@@ -97,6 +156,20 @@ export default function LoginPage() {
                         fontSize: '1rem',
                     }}
                 />
+                <input
+                    type="password"
+                    placeholder="Confirm Password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    style={{
+                        padding: '12px',
+                        backgroundColor: '#1a1a1a',
+                        color: '#fff',
+                        border: '1px solid #333',
+                        borderRadius: '8px',
+                        fontSize: '1rem',
+                    }}
+                />
 
                 {error && <p style={{ color: '#ff5555', textAlign: 'center' }}>{error}</p>}
 
@@ -113,11 +186,11 @@ export default function LoginPage() {
                         fontSize: '1rem',
                     }}
                 >
-                    {loading ? 'Logging in...' : 'Login'}
+                    {loading ? 'Creating account...' : 'Register'}
                 </button>
 
                 <a
-                    href="/"
+                    href="/login"
                     style={{
                         textAlign: 'center',
                         color: '#666',
@@ -125,21 +198,8 @@ export default function LoginPage() {
                         marginTop: '10px',
                     }}
                 >
-                    ← Back
+                    Already have an account? Login
                 </a>
-
-                {registrationEnabled && (
-                    <a
-                        href="/register"
-                        style={{
-                            textAlign: 'center',
-                            color: '#5865f2',
-                            textDecoration: 'none',
-                        }}
-                    >
-                        Don't have an account? Register
-                    </a>
-                )}
             </form>
         </div>
     );

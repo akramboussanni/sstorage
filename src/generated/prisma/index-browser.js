@@ -122,6 +122,7 @@ exports.Prisma.UserScalarFieldEnum = {
   username: 'username',
   password: 'password',
   isAdmin: 'isAdmin',
+  mustChangePassword: 'mustChangePassword',
   createdAt: 'createdAt'
 };
 
@@ -132,6 +133,7 @@ exports.Prisma.MediaScalarFieldEnum = {
   mimeType: 'mimeType',
   size: 'size',
   ip: 'ip',
+  userId: 'userId',
   transcodeStatus: 'transcodeStatus',
   transcodeError: 'transcodeError',
   createdAt: 'createdAt'
@@ -139,7 +141,13 @@ exports.Prisma.MediaScalarFieldEnum = {
 
 exports.Prisma.SettingsScalarFieldEnum = {
   id: 'id',
-  allowPublicUpload: 'allowPublicUpload'
+  allowPublicUpload: 'allowPublicUpload',
+  allowRegistration: 'allowRegistration',
+  smtpHost: 'smtpHost',
+  smtpPort: 'smtpPort',
+  smtpUser: 'smtpUser',
+  smtpPassword: 'smtpPassword',
+  smtpFrom: 'smtpFrom'
 };
 
 exports.Prisma.SortOrder = {

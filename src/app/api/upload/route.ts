@@ -80,6 +80,7 @@ export async function POST(request: NextRequest) {
                 mimeType: file.type,
                 size: file.size,
                 ip,
+                userId: session?.id || null,
                 transcodeStatus,
             },
         });

@@ -9,11 +9,13 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  username  String   @unique
-  password  String
-  isAdmin   Boolean  @default(false)
-  createdAt DateTime @default(now())
+  id                 String   @id @default(uuid())
+  username           String   @unique
+  password           String
+  isAdmin            Boolean  @default(false)
+  mustChangePassword Boolean  @default(false)
+  createdAt          DateTime @default(now())
+  media              Media[]
 }
 
 model Media {
@@ -23,12 +25,20 @@ model Media {
   mimeType        String
   size            Int
   ip              String?
+  userId          String?
+  user            User?    @relation(fields: [userId], references: [id])
   transcodeStatus String   @default("not_required") // pending, processing, completed, failed, not_required
   transcodeError  String?
   createdAt       DateTime @default(now())
 }
 
 model Settings {
-  id              String  @id @default("default")
+  id                String  @id @default("default")
   allowPublicUpload Boolean @default(false)
+  allowRegistration Boolean @default(false)
+  smtpHost          String?
+  smtpPort          Int?
+  smtpUser          String?
+  smtpPassword      String?
+  smtpFrom          String?
 }

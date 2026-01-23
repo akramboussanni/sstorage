@@ -95,6 +95,7 @@ exports.Prisma.UserScalarFieldEnum = {
   username: 'username',
   password: 'password',
   isAdmin: 'isAdmin',
+  mustChangePassword: 'mustChangePassword',
   createdAt: 'createdAt'
 };
 
@@ -105,6 +106,7 @@ exports.Prisma.MediaScalarFieldEnum = {
   mimeType: 'mimeType',
   size: 'size',
   ip: 'ip',
+  userId: 'userId',
   transcodeStatus: 'transcodeStatus',
   transcodeError: 'transcodeError',
   createdAt: 'createdAt'
@@ -112,7 +114,13 @@ exports.Prisma.MediaScalarFieldEnum = {
 
 exports.Prisma.SettingsScalarFieldEnum = {
   id: 'id',
-  allowPublicUpload: 'allowPublicUpload'
+  allowPublicUpload: 'allowPublicUpload',
+  allowRegistration: 'allowRegistration',
+  smtpHost: 'smtpHost',
+  smtpPort: 'smtpPort',
+  smtpUser: 'smtpUser',
+  smtpPassword: 'smtpPassword',
+  smtpFrom: 'smtpFrom'
 };
 
 exports.Prisma.SortOrder = {
@@ -141,10 +149,10 @@ const config = {
   "clientVersion": "7.3.0",
   "engineVersion": "9d6ad21cbbceab97458517b147a6a09ff43aa735",
   "activeProvider": "sqlite",
-  "inlineSchema": "generator client {\n  provider        = \"prisma-client-js\"\n  previewFeatures = [\"driverAdapters\"]\n  output          = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"sqlite\"\n}\n\nmodel User {\n  id        String   @id @default(uuid())\n  username  String   @unique\n  password  String\n  isAdmin   Boolean  @default(false)\n  createdAt DateTime @default(now())\n}\n\nmodel Media {\n  id              String   @id @default(uuid())\n  filename        String\n  originalName    String\n  mimeType        String\n  size            Int\n  ip              String?\n  transcodeStatus String   @default(\"not_required\") // pending, processing, completed, failed, not_required\n  transcodeError  String?\n  createdAt       DateTime @default(now())\n}\n\nmodel Settings {\n  id                String  @id @default(\"default\")\n  allowPublicUpload Boolean @default(false)\n}\n"
+  "inlineSchema": "generator client {\n  provider        = \"prisma-client-js\"\n  previewFeatures = [\"driverAdapters\"]\n  output          = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"sqlite\"\n}\n\nmodel User {\n  id                 String   @id @default(uuid())\n  username           String   @unique\n  password           String\n  isAdmin            Boolean  @default(false)\n  mustChangePassword Boolean  @default(false)\n  createdAt          DateTime @default(now())\n  media              Media[]\n}\n\nmodel Media {\n  id              String   @id @default(uuid())\n  filename        String\n  originalName    String\n  mimeType        String\n  size            Int\n  ip              String?\n  userId          String?\n  user            User?    @relation(fields: [userId], references: [id])\n  transcodeStatus String   @default(\"not_required\") // pending, processing, completed, failed, not_required\n  transcodeError  String?\n  createdAt       DateTime @default(now())\n}\n\nmodel Settings {\n  id                String  @id @default(\"default\")\n  allowPublicUpload Boolean @default(false)\n  allowRegistration Boolean @default(false)\n  smtpHost          String?\n  smtpPort          Int?\n  smtpUser          String?\n  smtpPassword      String?\n  smtpFrom          String?\n}\n"
 }
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"username\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"isAdmin\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Media\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"filename\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"originalName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"mimeType\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"size\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"ip\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"transcodeStatus\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"transcodeError\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Settings\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"allowPublicUpload\",\"kind\":\"scalar\",\"type\":\"Boolean\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"username\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"isAdmin\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"mustChangePassword\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"media\",\"kind\":\"object\",\"type\":\"Media\",\"relationName\":\"MediaToUser\"}],\"dbName\":null},\"Media\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"filename\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"originalName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"mimeType\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"size\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"ip\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"MediaToUser\"},{\"name\":\"transcodeStatus\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"transcodeError\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Settings\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"allowPublicUpload\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"allowRegistration\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"smtpHost\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"smtpPort\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"smtpUser\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"smtpPassword\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"smtpFrom\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.compilerWasm = {
       getRuntime: async () => require('./query_compiler_fast_bg.js'),

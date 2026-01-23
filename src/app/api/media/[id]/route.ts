@@ -77,7 +77,6 @@ export async function DELETE(
     try {
         const { id } = await params;
         const session = await getSession();
-        const ip = request.headers.get('x-forwarded-for') || '127.0.0.1';
 
         const media = await prisma.media.findUnique({ where: { id } });
 
@@ -85,7 +84,8 @@ export async function DELETE(
             return NextResponse.json({ error: 'Not found' }, { status: 404 });
         }
 
-        const isOwner = media.ip === ip;
+        // Check ownership by userId or admin status
+        const isOwner = session && media.userId === session.id;
         const isAdmin = session?.isAdmin;
 
         if (!isOwner && !isAdmin) {
