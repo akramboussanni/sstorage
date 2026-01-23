@@ -16,7 +16,7 @@ echo "Pushing database schema..."
 npx prisma db push
 
 echo "Running database seed..."
-node /app/seed.js
+npx prisma db seed
 
 echo "Database initialized."
 
