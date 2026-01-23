@@ -3,8 +3,12 @@ import { hash } from 'bcryptjs';
 import { PrismaClient } from '../src/generated/prisma';
 import { PrismaLibSql } from '@prisma/adapter-libsql';
 
+if (!process.env.DATABASE_URL) {
+    throw new Error('DATABASE_URL is not defined');
+}
+
 const adapter = new PrismaLibSql({
-    url: process.env.DATABASE_URL!,
+    url: process.env.DATABASE_URL,
 });
 const prisma = new PrismaClient({ adapter });
 
