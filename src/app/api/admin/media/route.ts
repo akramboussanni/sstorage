@@ -10,7 +10,14 @@ export async function GET(request: NextRequest) {
     }
 
     try {
+        // Exclude private uploads from other users
         const media = await prisma.media.findMany({
+            where: {
+                OR: [
+                    { isPrivate: false },
+                    { userId: session.id }, // Admin can see their own private uploads
+                ],
+            },
             orderBy: { createdAt: 'desc' },
         });
 

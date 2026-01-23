@@ -4,13 +4,15 @@ import { join } from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import { prisma } from '@/lib/db';
 import { getSession } from '@/lib/auth';
-import { startTranscodeInBackground } from '@/lib/transcode';
+import { startTranscodeInBackground, CompressionQuality } from '@/lib/transcode';
 
 const UPLOAD_DIR = join(process.cwd(), 'uploads');
 const MAX_SIZE = 100 * 1024 * 1024; // 100MB
 
 const RATE_LIMIT_WINDOW = 10 * 1000; // 10 seconds
 const rateLimitMap = new Map<string, number>();
+
+const VALID_QUALITIES: CompressionQuality[] = ['none', 'high', 'balanced', 'small'];
 
 export async function POST(request: NextRequest) {
     try {
@@ -38,6 +40,9 @@ export async function POST(request: NextRequest) {
 
         const formData = await request.formData();
         const file = formData.get('file') as File;
+        const qualityParam = formData.get('quality') as string | null;
+        const isPrivateParam = formData.get('isPrivate') as string | null;
+        const isPrivate = isPrivateParam === 'true' && !!session; // Only logged-in users can set private
 
         if (!file) {
             return NextResponse.json({ error: 'No file provided' }, { status: 400 });
@@ -52,6 +57,12 @@ export async function POST(request: NextRequest) {
         const isAllowed = allowedTypes.some(type => file.type.startsWith(type));
         if (!isAllowed) {
             return NextResponse.json({ error: 'Invalid file type' }, { status: 400 });
+        }
+
+        // Validate and parse quality parameter
+        let quality: CompressionQuality = 'balanced'; // Default
+        if (qualityParam && VALID_QUALITIES.includes(qualityParam as CompressionQuality)) {
+            quality = qualityParam as CompressionQuality;
         }
 
         // Create upload directory if not exists
@@ -69,7 +80,9 @@ export async function POST(request: NextRequest) {
 
         // Check if this is a video that needs transcoding
         const isVideo = file.type.startsWith('video/');
-        const transcodeStatus = isVideo ? 'pending' : 'not_required';
+        // If quality is 'none', skip transcoding entirely
+        const shouldTranscode = isVideo && quality !== 'none';
+        const transcodeStatus = shouldTranscode ? 'pending' : 'not_required';
 
         // Save to database
         const media = await prisma.media.create({
@@ -81,13 +94,14 @@ export async function POST(request: NextRequest) {
                 size: file.size,
                 ip,
                 userId: session?.id || null,
+                isPrivate,
                 transcodeStatus,
             },
         });
 
-        // Start transcoding in background if it's a video
-        if (isVideo) {
-            startTranscodeInBackground(media.id, filename);
+        // Start transcoding in background if it's a video and quality is not 'none'
+        if (shouldTranscode) {
+            startTranscodeInBackground(media.id, filename, quality);
         }
 
         return NextResponse.json({
@@ -95,6 +109,7 @@ export async function POST(request: NextRequest) {
             id: media.id,
             url: `/api/media/${media.id}`,
             transcodeStatus,
+            quality: isVideo ? quality : null,
         });
     } catch (error) {
         console.error('Upload error:', error);

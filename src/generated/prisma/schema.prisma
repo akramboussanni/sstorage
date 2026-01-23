@@ -27,6 +27,7 @@ model Media {
   ip              String?
   userId          String?
   user            User?    @relation(fields: [userId], references: [id])
+  isPrivate       Boolean  @default(false)
   transcodeStatus String   @default("not_required") // pending, processing, completed, failed, not_required
   transcodeError  String?
   createdAt       DateTime @default(now())

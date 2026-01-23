@@ -134,6 +134,7 @@ exports.Prisma.MediaScalarFieldEnum = {
   size: 'size',
   ip: 'ip',
   userId: 'userId',
+  isPrivate: 'isPrivate',
   transcodeStatus: 'transcodeStatus',
   transcodeError: 'transcodeError',
   createdAt: 'createdAt'

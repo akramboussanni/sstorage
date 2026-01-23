@@ -2,6 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { Dialog, useDialog } from '@/components/Dialog';
+import { MediaCard, MediaItem, spinnerStyles } from '@/components/MediaCard';
+import { Toast, useToast } from '@/components/Toast';
 
 interface User {
     id: string;
@@ -21,15 +24,26 @@ interface Settings {
     smtpConfigured: boolean;
 }
 
+const inputStyle: React.CSSProperties = {
+    padding: '12px',
+    backgroundColor: '#2b2b2b',
+    color: '#fff',
+    border: '1px solid #333',
+    borderRadius: '6px',
+    fontSize: '0.9rem',
+};
+
 export default function AdminPage() {
     const router = useRouter();
     const [user, setUser] = useState<{ username: string; isAdmin: boolean } | null>(null);
     const [settings, setSettings] = useState<Settings | null>(null);
-    const [mediaList, setMediaList] = useState<any[]>([]);
+    const [mediaList, setMediaList] = useState<MediaItem[]>([]);
     const [users, setUsers] = useState<User[]>([]);
     const [saving, setSaving] = useState(false);
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState<'media' | 'settings' | 'users'>('media');
+    const { dialog, showDialog, closeDialog } = useDialog();
+    const { toast, showToast } = useToast();
 
     // SMTP form state
     const [smtpHost, setSmtpHost] = useState('');
@@ -66,12 +80,8 @@ export default function AdminPage() {
                 setSmtpPort(settingsData.smtpPort?.toString() || '');
                 setSmtpUser(settingsData.smtpUser || '');
                 setSmtpFrom(settingsData.smtpFrom || '');
-                if (Array.isArray(mediaData)) {
-                    setMediaList(mediaData);
-                }
-                if (Array.isArray(usersData)) {
-                    setUsers(usersData);
-                }
+                if (Array.isArray(mediaData)) setMediaList(mediaData);
+                if (Array.isArray(usersData)) setUsers(usersData);
                 setLoading(false);
             });
         }
@@ -79,7 +89,6 @@ export default function AdminPage() {
 
     const toggleSetting = async (key: 'allowPublicUpload' | 'allowRegistration') => {
         if (!settings) return;
-
         setSaving(true);
         try {
             const res = await fetch('/api/settings', {
@@ -113,7 +122,7 @@ export default function AdminPage() {
             });
             const data = await res.json();
             setSettings(data);
-            setSmtpPassword(''); // Clear password field after save
+            setSmtpPassword('');
             setSmtpMessage('SMTP settings saved!');
         } catch (err) {
             setSmtpMessage('Failed to save SMTP settings');
@@ -122,21 +131,40 @@ export default function AdminPage() {
         }
     };
 
-    const deleteUser = async (userId: string) => {
-        if (!confirm('Are you sure you want to delete this user?')) return;
-
-        try {
-            const res = await fetch(`/api/admin/users?id=${userId}`, { method: 'DELETE' });
-            if (res.ok) {
-                setUsers(prev => prev.filter(u => u.id !== userId));
-            } else {
-                const data = await res.json();
-                alert(data.error || 'Failed to delete user');
+    const deleteUser = (userId: string) => {
+        showDialog('Delete User', 'Are you sure you want to delete this user?', 'confirm', async () => {
+            try {
+                const res = await fetch(`/api/admin/users?id=${userId}`, { method: 'DELETE' });
+                if (res.ok) {
+                    setUsers(prev => prev.filter(u => u.id !== userId));
+                } else {
+                    const data = await res.json();
+                    showDialog('Error', data.error || 'Failed to delete user');
+                }
+            } catch (err) {
+                showDialog('Error', 'Error deleting user');
             }
-        } catch (err) {
-            console.error(err);
-            alert('Error deleting user');
-        }
+        });
+    };
+
+    const deleteMedia = (mediaId: string) => {
+        showDialog('Delete File', 'Are you sure you want to delete this file?', 'confirm', async () => {
+            try {
+                const res = await fetch(`/api/media/${mediaId}`, { method: 'DELETE' });
+                if (res.ok) {
+                    setMediaList(prev => prev.filter(m => m.id !== mediaId));
+                } else {
+                    showDialog('Error', 'Failed to delete file');
+                }
+            } catch (err) {
+                showDialog('Error', 'Error deleting file');
+            }
+        });
+    };
+
+    const copyToClipboard = async (url: string) => {
+        await navigator.clipboard.writeText(url);
+        showToast('Link copied!');
     };
 
     const handleLogout = async () => {
@@ -171,14 +199,13 @@ export default function AdminPage() {
             fontFamily: 'system-ui, sans-serif',
             paddingBottom: '40px',
         }}>
+            <Dialog state={dialog} onClose={closeDialog} />
+            <Toast message={toast.message} show={toast.show} />
+
             <h1 style={{ marginBottom: '20px', fontSize: '1.5rem' }}>⚙️ Admin Panel</h1>
 
             {/* Tab Navigation */}
-            <div style={{
-                display: 'flex',
-                gap: '8px',
-                marginBottom: '24px',
-            }}>
+            <div style={{ display: 'flex', gap: '8px', marginBottom: '24px' }}>
                 {(['media', 'settings', 'users'] as const).map(tab => (
                     <button
                         key={tab}
@@ -209,7 +236,6 @@ export default function AdminPage() {
                 {/* Settings Tab */}
                 {activeTab === 'settings' && (
                     <>
-                        {/* Toggles */}
                         <div style={{
                             display: 'flex',
                             flexDirection: 'column',
@@ -220,121 +246,56 @@ export default function AdminPage() {
                         }}>
                             <h3 style={{ margin: 0, marginBottom: '8px' }}>General Settings</h3>
 
-                            <div style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'space-between',
-                            }}>
-                                <span>Allow Public Upload</span>
-                                <button
-                                    onClick={() => toggleSetting('allowPublicUpload')}
-                                    disabled={saving}
-                                    style={{
-                                        padding: '8px 16px',
-                                        backgroundColor: settings.allowPublicUpload ? '#43b581' : '#333',
-                                        color: '#fff',
-                                        border: 'none',
-                                        borderRadius: '4px',
-                                        cursor: 'pointer',
-                                    }}
-                                >
-                                    {settings.allowPublicUpload ? 'ON' : 'OFF'}
-                                </button>
-                            </div>
-
-                            <div style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'space-between',
-                            }}>
-                                <span>Allow Registration</span>
-                                <button
-                                    onClick={() => toggleSetting('allowRegistration')}
-                                    disabled={saving}
-                                    style={{
-                                        padding: '8px 16px',
-                                        backgroundColor: settings.allowRegistration ? '#43b581' : '#333',
-                                        color: '#fff',
-                                        border: 'none',
-                                        borderRadius: '4px',
-                                        cursor: 'pointer',
-                                    }}
-                                >
-                                    {settings.allowRegistration ? 'ON' : 'OFF'}
-                                </button>
-                            </div>
+                            {(['allowPublicUpload', 'allowRegistration'] as const).map(key => (
+                                <div key={key} style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'space-between',
+                                }}>
+                                    <span>{key === 'allowPublicUpload' ? 'Allow Public Upload' : 'Allow Registration'}</span>
+                                    <button
+                                        onClick={() => toggleSetting(key)}
+                                        disabled={saving}
+                                        style={{
+                                            padding: '8px 16px',
+                                            backgroundColor: settings[key] ? '#43b581' : '#333',
+                                            color: '#fff',
+                                            border: 'none',
+                                            borderRadius: '4px',
+                                            cursor: 'pointer',
+                                        }}
+                                    >
+                                        {settings[key] ? 'ON' : 'OFF'}
+                                    </button>
+                                </div>
+                            ))}
                         </div>
 
-                        {/* SMTP Configuration */}
-                        <div style={{
-                            backgroundColor: '#1a1a1a',
-                            borderRadius: '8px',
-                            padding: '16px',
-                        }}>
+                        <div style={{ backgroundColor: '#1a1a1a', borderRadius: '8px', padding: '16px' }}>
                             <h3 style={{ margin: 0, marginBottom: '16px' }}>
                                 SMTP Configuration
                                 {settings.smtpConfigured && (
-                                    <span style={{ color: '#43b581', fontSize: '0.8rem', marginLeft: '8px' }}>
-                                        ✓ Configured
-                                    </span>
+                                    <span style={{ color: '#43b581', fontSize: '0.8rem', marginLeft: '8px' }}>✓ Configured</span>
                                 )}
                             </h3>
 
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                                <input
-                                    type="text"
-                                    placeholder="SMTP Host (e.g., smtp.gmail.com)"
-                                    value={smtpHost}
-                                    onChange={(e) => setSmtpHost(e.target.value)}
-                                    style={inputStyle}
-                                />
-                                <input
-                                    type="number"
-                                    placeholder="SMTP Port (e.g., 587)"
-                                    value={smtpPort}
-                                    onChange={(e) => setSmtpPort(e.target.value)}
-                                    style={inputStyle}
-                                />
-                                <input
-                                    type="text"
-                                    placeholder="SMTP Username"
-                                    value={smtpUser}
-                                    onChange={(e) => setSmtpUser(e.target.value)}
-                                    style={inputStyle}
-                                />
-                                <input
-                                    type="password"
-                                    placeholder="SMTP Password (leave blank to keep current)"
-                                    value={smtpPassword}
-                                    onChange={(e) => setSmtpPassword(e.target.value)}
-                                    style={inputStyle}
-                                />
-                                <input
-                                    type="email"
-                                    placeholder="From Email Address"
-                                    value={smtpFrom}
-                                    onChange={(e) => setSmtpFrom(e.target.value)}
-                                    style={inputStyle}
-                                />
+                                <input type="text" placeholder="SMTP Host" value={smtpHost} onChange={(e) => setSmtpHost(e.target.value)} style={inputStyle} />
+                                <input type="number" placeholder="SMTP Port" value={smtpPort} onChange={(e) => setSmtpPort(e.target.value)} style={inputStyle} />
+                                <input type="text" placeholder="SMTP Username" value={smtpUser} onChange={(e) => setSmtpUser(e.target.value)} style={inputStyle} />
+                                <input type="password" placeholder="SMTP Password" value={smtpPassword} onChange={(e) => setSmtpPassword(e.target.value)} style={inputStyle} />
+                                <input type="email" placeholder="From Email Address" value={smtpFrom} onChange={(e) => setSmtpFrom(e.target.value)} style={inputStyle} />
 
-                                {smtpMessage && (
-                                    <p style={{ color: smtpMessage.includes('Failed') ? '#ff5555' : '#43b581', margin: 0 }}>
-                                        {smtpMessage}
-                                    </p>
-                                )}
+                                {smtpMessage && <p style={{ color: smtpMessage.includes('Failed') ? '#ff5555' : '#43b581', margin: 0 }}>{smtpMessage}</p>}
 
-                                <button
-                                    onClick={saveSmtpSettings}
-                                    disabled={smtpSaving}
-                                    style={{
-                                        padding: '12px',
-                                        backgroundColor: '#5865f2',
-                                        color: '#fff',
-                                        border: 'none',
-                                        borderRadius: '8px',
-                                        cursor: smtpSaving ? 'not-allowed' : 'pointer',
-                                    }}
-                                >
+                                <button onClick={saveSmtpSettings} disabled={smtpSaving} style={{
+                                    padding: '12px',
+                                    backgroundColor: '#5865f2',
+                                    color: '#fff',
+                                    border: 'none',
+                                    borderRadius: '8px',
+                                    cursor: smtpSaving ? 'not-allowed' : 'pointer',
+                                }}>
                                     {smtpSaving ? 'Saving...' : 'Save SMTP Settings'}
                                 </button>
                             </div>
@@ -344,48 +305,36 @@ export default function AdminPage() {
 
                 {/* Users Tab */}
                 {activeTab === 'users' && (
-                    <div style={{
-                        backgroundColor: '#1a1a1a',
-                        borderRadius: '8px',
-                        padding: '16px',
-                    }}>
+                    <div style={{ backgroundColor: '#1a1a1a', borderRadius: '8px', padding: '16px' }}>
                         <h3 style={{ margin: 0, marginBottom: '16px' }}>Users ({users.length})</h3>
-
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                             {users.map(u => (
-                                <div
-                                    key={u.id}
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'space-between',
-                                        padding: '12px',
-                                        backgroundColor: '#2b2b2b',
-                                        borderRadius: '6px',
-                                    }}
-                                >
+                                <div key={u.id} style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'space-between',
+                                    padding: '12px',
+                                    backgroundColor: '#2b2b2b',
+                                    borderRadius: '6px',
+                                }}>
                                     <div>
                                         <strong style={{ color: u.isAdmin ? '#faa61a' : '#fff' }}>
-                                            {u.username}
-                                            {u.isAdmin && ' 👑'}
+                                            {u.username}{u.isAdmin && ' 👑'}
                                         </strong>
                                         <div style={{ fontSize: '0.8rem', color: '#888' }}>
                                             {u._count.media} uploads • Joined {new Date(u.createdAt).toLocaleDateString()}
                                         </div>
                                     </div>
                                     {!u.isAdmin && (
-                                        <button
-                                            onClick={() => deleteUser(u.id)}
-                                            style={{
-                                                padding: '6px 12px',
-                                                backgroundColor: 'transparent',
-                                                color: '#ff5555',
-                                                border: '1px solid #ff5555',
-                                                borderRadius: '4px',
-                                                cursor: 'pointer',
-                                                fontSize: '0.8rem',
-                                            }}
-                                        >
+                                        <button onClick={() => deleteUser(u.id)} style={{
+                                            padding: '6px 12px',
+                                            backgroundColor: 'transparent',
+                                            color: '#ff5555',
+                                            border: '1px solid #ff5555',
+                                            borderRadius: '4px',
+                                            cursor: 'pointer',
+                                            fontSize: '0.8rem',
+                                        }}>
                                             Delete
                                         </button>
                                     )}
@@ -397,11 +346,7 @@ export default function AdminPage() {
 
                 {/* Media Tab */}
                 {activeTab === 'media' && (
-                    <div style={{
-                        backgroundColor: '#1a1a1a',
-                        borderRadius: '8px',
-                        padding: '16px',
-                    }}>
+                    <div style={{ backgroundColor: '#1a1a1a', borderRadius: '8px', padding: '16px' }}>
                         <h2 style={{ marginBottom: '16px', fontSize: '1.2rem' }}>Uploaded Media ({mediaList.length})</h2>
                         <div style={{
                             display: 'grid',
@@ -409,132 +354,36 @@ export default function AdminPage() {
                             gap: '16px',
                         }}>
                             {mediaList.map((media) => (
-                                <div key={media.id} style={{ position: 'relative' }}>
-                                    <a
-                                        href={`/${media.id}`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        style={{
-                                            display: 'block',
-                                            textDecoration: 'none',
-                                            color: 'inherit',
-                                            backgroundColor: '#2b2b2b',
-                                            borderRadius: '8px',
-                                            overflow: 'hidden',
-                                            transition: 'transform 0.2s',
-                                        }}
-                                    >
-                                        <div style={{
-                                            aspectRatio: '16/9',
-                                            backgroundColor: '#000',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            position: 'relative',
-                                        }}>
-                                            {media.mimeType.startsWith('video/') ? (
-                                                <video
-                                                    src={`/api/media/${media.id}`}
-                                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                                />
-                                            ) : (
-                                                <img
-                                                    src={`/api/media/${media.id}`}
-                                                    alt={media.originalName}
-                                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                                />
-                                            )}
-                                            <div style={{
-                                                position: 'absolute',
-                                                bottom: 0,
-                                                left: 0,
-                                                right: 0,
-                                                padding: '4px 8px',
-                                                background: 'rgba(0,0,0,0.7)',
-                                                fontSize: '0.8rem',
-                                                whiteSpace: 'nowrap',
-                                                overflow: 'hidden',
-                                                textOverflow: 'ellipsis',
-                                            }}>
-                                                {media.originalName}
-                                            </div>
-                                        </div>
-                                        <div style={{ padding: '8px', fontSize: '0.8rem', color: '#aaa' }}>
-                                            <div>{(media.size / 1024 / 1024).toFixed(2)} MB</div>
-                                            <div>{new Date(media.createdAt).toLocaleDateString()}</div>
-                                            {media.ip && <div style={{ color: '#5865f2', marginTop: '4px' }}>IP: {media.ip}</div>}
-                                        </div>
-                                    </a>
-                                    <button
-                                        onClick={async (e) => {
-                                            e.preventDefault();
-                                            if (!confirm('Delete this file?')) return;
-                                            try {
-                                                const res = await fetch(`/api/media/${media.id}`, { method: 'DELETE' });
-                                                if (res.ok) {
-                                                    setMediaList(prev => prev.filter(m => m.id !== media.id));
-                                                } else {
-                                                    alert('Failed to delete');
-                                                }
-                                            } catch (err) {
-                                                console.error(err);
-                                                alert('Error deleting');
-                                            }
-                                        }}
-                                        style={{
-                                            position: 'absolute',
-                                            top: '8px',
-                                            right: '8px',
-                                            backgroundColor: 'rgba(0,0,0,0.7)',
-                                            color: '#ff5555',
-                                            border: 'none',
-                                            borderRadius: '4px',
-                                            padding: '6px 10px',
-                                            cursor: 'pointer',
-                                        }}
-                                    >
-                                        🗑️
-                                    </button>
-                                </div>
+                                <MediaCard
+                                    key={media.id}
+                                    media={media}
+                                    onDelete={deleteMedia}
+                                    onCopyLink={copyToClipboard}
+                                    showPrivateBadge={true}
+                                    showIp={true}
+                                />
                             ))}
                         </div>
                     </div>
                 )}
 
-                <a
-                    href="/"
-                    style={{
-                        textAlign: 'center',
-                        color: '#5865f2',
-                        textDecoration: 'none',
-                    }}
-                >
+                <a href="/" style={{ textAlign: 'center', color: '#5865f2', textDecoration: 'none' }}>
                     ← Back to Upload
                 </a>
 
-                <button
-                    onClick={handleLogout}
-                    style={{
-                        padding: '12px',
-                        backgroundColor: 'transparent',
-                        color: '#ff5555',
-                        border: '1px solid #ff5555',
-                        borderRadius: '8px',
-                        cursor: 'pointer',
-                    }}
-                >
+                <button onClick={handleLogout} style={{
+                    padding: '12px',
+                    backgroundColor: 'transparent',
+                    color: '#ff5555',
+                    border: '1px solid #ff5555',
+                    borderRadius: '8px',
+                    cursor: 'pointer',
+                }}>
                     Sign Out
                 </button>
             </div>
+
+            <style>{spinnerStyles}</style>
         </div>
     );
 }
-
-const inputStyle: React.CSSProperties = {
-    padding: '12px',
-    backgroundColor: '#2b2b2b',
-    color: '#fff',
-    border: '1px solid #333',
-    borderRadius: '6px',
-    fontSize: '0.9rem',
-};
