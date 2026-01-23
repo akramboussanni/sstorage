@@ -8,6 +8,9 @@ import { getSession } from '@/lib/auth';
 const UPLOAD_DIR = join(process.cwd(), 'uploads');
 const MAX_SIZE = 100 * 1024 * 1024; // 100MB
 
+const RATE_LIMIT_WINDOW = 10 * 1000; // 10 seconds
+const rateLimitMap = new Map<string, number>();
+
 export async function POST(request: NextRequest) {
     try {
         // Check if public upload is allowed or user is logged in
@@ -16,6 +19,20 @@ export async function POST(request: NextRequest) {
 
         if (!settings?.allowPublicUpload && !session) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+
+        // Rate Limit Check
+        const forwardedFor = request.headers.get('x-forwarded-for');
+        const ip = forwardedFor ? forwardedFor.split(',')[0].trim() : '127.0.0.1';
+
+        if (!session) { // Only rate limit non-logged in users (or everyone if desired, usually guests)
+            const now = Date.now();
+            const lastUpload = rateLimitMap.get(ip);
+
+            if (lastUpload && now - lastUpload < RATE_LIMIT_WINDOW) {
+                return NextResponse.json({ error: 'Rate limit exceeded. Try again in a few seconds.' }, { status: 429 });
+            }
+            rateLimitMap.set(ip, now);
         }
 
         const formData = await request.formData();
@@ -38,10 +55,6 @@ export async function POST(request: NextRequest) {
 
         // Create upload directory if not exists
         await mkdir(UPLOAD_DIR, { recursive: true });
-
-        // Get IP
-        const forwardedFor = request.headers.get('x-forwarded-for');
-        const ip = forwardedFor ? forwardedFor.split(',')[0].trim() : '127.0.0.1';
 
         // Generate unique filename
         const ext = file.name.split('.').pop();

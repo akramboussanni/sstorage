@@ -216,7 +216,7 @@ export default function Home() {
             </div>
           )}
 
-          {user && (
+          {user ? (
             <a
               href="/admin"
               style={{
@@ -226,6 +226,18 @@ export default function Home() {
               }}
             >
               Admin Panel →
+            </a>
+          ) : (
+            <a
+              href="/login"
+              style={{
+                marginTop: '10px',
+                color: '#666',
+                textDecoration: 'none',
+                fontSize: '0.9rem',
+              }}
+            >
+              Admin Login →
             </a>
           )}
         </div>
