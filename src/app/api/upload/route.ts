@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'No file provided' }, { status: 400 });
         }
 
-        if (file.size > MAX_SIZE) {
+        if (file.size > MAX_SIZE && !session?.isAdmin) {
             return NextResponse.json({ error: 'File too large (max 100MB)' }, { status: 400 });
         }
 
@@ -40,7 +40,8 @@ export async function POST(request: NextRequest) {
         await mkdir(UPLOAD_DIR, { recursive: true });
 
         // Get IP
-        const ip = request.headers.get('x-forwarded-for') || '127.0.0.1';
+        const forwardedFor = request.headers.get('x-forwarded-for');
+        const ip = forwardedFor ? forwardedFor.split(',')[0].trim() : '127.0.0.1';
 
         // Generate unique filename
         const ext = file.name.split('.').pop();
@@ -67,7 +68,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({
             success: true,
             id: media.id,
-            url: `/${media.id}`,
+            url: `/api/media/${media.id}`,
         });
     } catch (error) {
         console.error('Upload error:', error);
