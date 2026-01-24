@@ -1,37 +1,46 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SStorage
 
-## Getting Started
+A self-hosted media storage and sharing application developed with Next.js. Supports image and video uploads with built-in transcoding, user management, and privacy controls.
 
-First, run the development server:
+![Home Dashboard](static/home.png)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Core Functionality
+- **File Uploads**: Supports images and videos with drag-and-drop interface.
+- **Video Processing**: Automatic transcoding using FFmpeg.
+- **Compression**: Configurable video compression levels (Original, High, Balanced, Small).
+- **Direct access**: Files are served directly (e.g., for embedding in Discord).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### User System
+- **Accounts**: User registration and login.
+- **My Uploads**: Users can manage their own uploaded files.
+- **Privacy**: Option to mark uploads as private (hidden from admin view).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Admin Panel
+- **Dashboard**: View system stats and recent uploads.
+- **File Management**: View and delete any user's files (unless private).
+- **User Management**: Create, edit, and delete users. Set custom storage limits per user.
+- **Configuration**:
+  - Toggle public uploads and user registration.
+  - Set global file size limits.
+  - Configure SMTP for emails.
+  - Set default compression rules.
+  - "Force Private" mode to hide all user uploads from admins by default.
 
-## Learn More
+![Admin Panel](static/admin.png)
 
-To learn more about Next.js, take a look at the following resources:
+## Deployment with Docker Compose
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This repository includes a `docker-compose.yml` file configured to use the pre-built image. Then you can just run `docker-compose up -d` and it runs at port 3000 by default.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Default Login
+On first launch, an admin account is created automatically:
+- **Username**: `admin`
+- **Password**: `admin123`
 
-## Deploy on Vercel
+You will be required to change this password immediately upon logging in.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Configuration
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-.
+All configuration is managed through the web interface in the Admin Panel settings page. Settings are persisted in the database.
