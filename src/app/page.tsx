@@ -206,19 +206,16 @@ export default function Home() {
       {/* Privacy Disclaimer */}
       {settings && (
         <div style={{
-          marginBottom: '20px',
-          padding: '10px 16px',
-          backgroundColor: settings.forcePrivate ? '#1a3a1a' : '#3a2a1a',
-          borderRadius: '8px',
-          border: `1px solid ${settings.forcePrivate ? '#43b581' : '#faa61a'}`,
-          fontSize: '0.85rem',
+          marginBottom: '16px',
+          color: '#666',
+          fontSize: '0.8rem',
           textAlign: 'center',
           maxWidth: '500px',
         }}>
           {settings.forcePrivate ? (
-            <span>🔒 <strong>All uploads are private</strong> — hidden from admin view</span>
+            'All uploads are private — hidden from admin view'
           ) : (
-            <span>👁️ <strong>Uploads are visible to admin</strong> unless marked private</span>
+            'Uploads are visible to admin unless marked private'
           )}
         </div>
       )}
