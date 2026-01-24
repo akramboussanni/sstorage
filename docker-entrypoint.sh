@@ -13,6 +13,7 @@ echo "Database URL: $DATABASE_URL"
 # Using --accept-data-loss is risky in prod but necessary if schema changes are destructive in dev.
 # Since this is "sstorage" (likely personal/dev), we prioritize it working.
 echo "Pushing database schema..."
+npx prisma generate
 npx prisma db push
 
 echo "Running database seed..."

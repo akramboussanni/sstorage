@@ -80,6 +80,11 @@ export async function PUT(request: NextRequest) {
             }
         }
 
+        if (body.rateLimitWindow !== undefined) {
+            const val = parseInt(body.rateLimitWindow, 10);
+            if (!isNaN(val)) updateData.rateLimitWindow = val;
+        }
+
         // SMTP settings
         if (body.smtpHost !== undefined) {
             updateData.smtpHost = body.smtpHost || null;
@@ -113,6 +118,7 @@ export async function PUT(request: NextRequest) {
                 showPrivateOption: body.showPrivateOption ?? true,
                 forcePrivate: body.forcePrivate ?? false,
                 maxFileSize: body.maxFileSize ? BigInt(body.maxFileSize) : BigInt(104857600),
+                rateLimitWindow: body.rateLimitWindow !== undefined ? parseInt(body.rateLimitWindow, 10) : 10,
                 smtpHost: body.smtpHost || null,
                 smtpPort: body.smtpPort ? parseInt(body.smtpPort, 10) : null,
                 smtpUser: body.smtpUser || null,

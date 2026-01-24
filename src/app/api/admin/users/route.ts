@@ -68,6 +68,7 @@ export async function POST(request: NextRequest) {
                 password: hashedPassword,
                 mustChangePassword: true, // Force change on first login
                 customMaxFileSize: customMaxFileSize ? BigInt(customMaxFileSize) : null,
+                customRateLimitWindow: body.customRateLimitWindow ? parseInt(body.customRateLimitWindow, 10) : null,
             },
         });
 
@@ -78,6 +79,7 @@ export async function POST(request: NextRequest) {
                 username: user.username,
                 isAdmin: user.isAdmin,
                 customMaxFileSize: user.customMaxFileSize?.toString(),
+                customRateLimitWindow: user.customRateLimitWindow,
             }
         });
     } catch (error) {
@@ -105,6 +107,7 @@ export async function PUT(request: NextRequest) {
             where: { id },
             data: {
                 customMaxFileSize: customMaxFileSize ? BigInt(customMaxFileSize) : null,
+                customRateLimitWindow: body.customRateLimitWindow !== undefined ? (body.customRateLimitWindow ? parseInt(body.customRateLimitWindow, 10) : null) : undefined,
             },
         });
 
@@ -113,6 +116,7 @@ export async function PUT(request: NextRequest) {
             user: {
                 id: user.id,
                 customMaxFileSize: user.customMaxFileSize?.toString(),
+                customRateLimitWindow: user.customRateLimitWindow,
             }
         });
 

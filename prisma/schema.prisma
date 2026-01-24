@@ -16,7 +16,8 @@ model User {
   mustChangePassword Boolean  @default(false)
   createdAt          DateTime @default(now())
   media              Media[]
-  customMaxFileSize  BigInt?  // Custom limit in bytes, overrides global setting
+  customMaxFileSize   BigInt?  // Custom limit in bytes, overrides global setting
+  customRateLimitWindow Int?   // Custom cooldown in seconds
 }
 
 model Media {
@@ -39,6 +40,7 @@ model Settings {
   allowPublicUpload    Boolean @default(false)
   allowRegistration    Boolean @default(false)
   maxFileSize          BigInt  @default(104857600) // 100MB in bytes
+  rateLimitWindow      Int     @default(10) // Cooldown in seconds
   defaultCompression   String  @default("balanced") // none, high, balanced, small
   showNoCompression    Boolean @default(true)
   showPrivateOption    Boolean @default(true)

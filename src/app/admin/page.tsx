@@ -12,6 +12,7 @@ interface User {
     isAdmin: boolean;
     createdAt: string;
     customMaxFileSize?: string; // Serialized BigInt
+    customRateLimitWindow?: number;
     _count: { media: number };
 }
 
@@ -23,6 +24,7 @@ interface Settings {
     showPrivateOption: boolean;
     forcePrivate: boolean;
     maxFileSize: string; // Serialized BigInt
+    rateLimitWindow: number;
     smtpHost: string | null;
     smtpPort: number | null;
     smtpUser: string | null;
@@ -61,16 +63,19 @@ function UserModal({
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [customLimit, setCustomLimit] = useState('');
+    const [customCooldown, setCustomCooldown] = useState('');
     const [saving, setSaving] = useState(false);
 
     useEffect(() => {
         if (editUser) {
             setUsername(editUser.username);
             setCustomLimit(editUser.customMaxFileSize ? (Number(editUser.customMaxFileSize) / (1024 * 1024)).toString() : '');
+            setCustomCooldown(editUser.customRateLimitWindow ? editUser.customRateLimitWindow.toString() : '');
         } else {
             setUsername('');
             setPassword('');
             setCustomLimit('');
+            setCustomCooldown('');
         }
     }, [editUser, isOpen]);
 
@@ -81,7 +86,7 @@ function UserModal({
         setSaving(true);
         // Convert MB to bytes for API
         const limitBytes = customLimit ? (BigInt(Math.floor(parseFloat(customLimit) * 1024 * 1024))).toString() : null;
-        await onSave({ username, password, customMaxFileSize: limitBytes });
+        await onSave({ username, password, customMaxFileSize: limitBytes, customRateLimitWindow: customCooldown || null });
         setSaving(false);
         onClose();
     };
@@ -137,6 +142,21 @@ function UserModal({
                     />
                 </div>
 
+                <div>
+                    <label style={{ display: 'block', marginBottom: '8px', fontSize: '0.9rem' }}>
+                        Custom Cooldown (Seconds)
+                        <span style={{ color: '#888', marginLeft: '8px' }}>(Leave empty for default)</span>
+                    </label>
+                    <input
+                        type="number"
+                        min="0"
+                        value={customCooldown}
+                        onChange={e => setCustomCooldown(e.target.value)}
+                        placeholder="e.g. 5"
+                        style={{ ...inputStyle, width: '100%' }}
+                    />
+                </div>
+
                 <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', marginTop: '8px' }}>
                     <button type="button" onClick={onClose} style={{
                         padding: '10px 20px', backgroundColor: '#333', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer'
@@ -170,6 +190,7 @@ export default function AdminPage() {
 
     // Global Max Size State
     const [globalMaxSizeMB, setGlobalMaxSizeMB] = useState('');
+    const [globalRateLimit, setGlobalRateLimit] = useState('');
 
     // SMTP form state
     const [smtpHost, setSmtpHost] = useState('');
@@ -209,6 +230,7 @@ export default function AdminPage() {
                 if (settingsData.maxFileSize) {
                     setGlobalMaxSizeMB((Number(settingsData.maxFileSize) / (1024 * 1024)).toFixed(0));
                 }
+                setGlobalRateLimit(settingsData.rateLimitWindow?.toString() || '10');
 
                 if (Array.isArray(mediaData)) setMediaList(mediaData);
                 if (Array.isArray(usersData)) setUsers(usersData);
@@ -252,22 +274,28 @@ export default function AdminPage() {
         }
     };
 
-    const saveGlobalMaxSize = async () => {
-        if (!globalMaxSizeMB) return;
+    const saveGlobalSettings = async () => {
         setSaving(true);
         try {
-            const bytes = BigInt(Math.floor(parseFloat(globalMaxSizeMB) * 1024 * 1024)).toString();
+            const body: any = {};
+            if (globalMaxSizeMB) {
+                body.maxFileSize = BigInt(Math.floor(parseFloat(globalMaxSizeMB) * 1024 * 1024)).toString();
+            }
+            if (globalRateLimit) {
+                body.rateLimitWindow = globalRateLimit;
+            }
+
             const res = await fetch('/api/settings', {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ maxFileSize: bytes }),
+                body: JSON.stringify(body),
             });
             const data = await res.json();
             setSettings(data);
-            showToast('Max file size updated');
+            showToast('Global settings updated');
         } catch (err) {
             console.error(err);
-            showDialog('Error', 'Failed to update max file size');
+            showDialog('Error', 'Failed to update settings');
         } finally {
             setSaving(false);
         }
@@ -419,25 +447,38 @@ export default function AdminPage() {
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', backgroundColor: '#1a1a1a', borderRadius: '8px', padding: '16px' }}>
                             <h3 style={{ margin: 0, marginBottom: '8px' }}>General Settings</h3>
 
-                            <div style={{ marginBottom: '16px' }}>
-                                <label style={{ display: 'block', marginBottom: '8px', color: '#888' }}>
-                                    Global Max File Size (MB)
-                                </label>
-                                <div style={{ display: 'flex', gap: '8px' }}>
+                            <div style={{ marginBottom: '16px', display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+                                <div>
+                                    <label style={{ display: 'block', marginBottom: '8px', color: '#888' }}>
+                                        Global Max File Size (MB)
+                                    </label>
                                     <input
                                         type="number"
                                         value={globalMaxSizeMB}
                                         onChange={e => setGlobalMaxSizeMB(e.target.value)}
-                                        style={{ ...inputStyle, width: '120px' }}
+                                        style={{ ...inputStyle, width: '150px' }}
                                     />
+                                </div>
+                                <div>
+                                    <label style={{ display: 'block', marginBottom: '8px', color: '#888' }}>
+                                        Global Cooldown (Seconds)
+                                    </label>
+                                    <input
+                                        type="number"
+                                        value={globalRateLimit}
+                                        onChange={e => setGlobalRateLimit(e.target.value)}
+                                        style={{ ...inputStyle, width: '150px' }}
+                                    />
+                                </div>
+                                <div style={{ display: 'flex', alignItems: 'flex-end' }}>
                                     <button
-                                        onClick={saveGlobalMaxSize}
+                                        onClick={saveGlobalSettings}
                                         disabled={saving}
                                         style={{
-                                            padding: '0 16px', backgroundColor: '#5865f2', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer'
+                                            padding: '10px 24px', backgroundColor: '#5865f2', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer', height: '42px'
                                         }}
                                     >
-                                        Save
+                                        Save Changes
                                     </button>
                                 </div>
                             </div>
@@ -505,6 +546,11 @@ export default function AdminPage() {
                                             {u.customMaxFileSize && (
                                                 <span style={{ fontSize: '0.75rem', backgroundColor: '#5865f2', padding: '2px 6px', borderRadius: '4px' }}>
                                                     Limit: {(Number(u.customMaxFileSize) / (1024 * 1024)).toFixed(0)}MB
+                                                </span>
+                                            )}
+                                            {u.customRateLimitWindow && (
+                                                <span style={{ fontSize: '0.75rem', backgroundColor: '#43b581', padding: '2px 6px', borderRadius: '4px' }}>
+                                                    {u.customRateLimitWindow}s Cooldown
                                                 </span>
                                             )}
                                         </div>

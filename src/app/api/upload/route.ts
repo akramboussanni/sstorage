@@ -27,15 +27,15 @@ export async function POST(request: NextRequest) {
         const forwardedFor = request.headers.get('x-forwarded-for');
         const ip = forwardedFor ? forwardedFor.split(',')[0].trim() : '127.0.0.1';
 
-        if (!session) { // Only rate limit non-logged in users (or everyone if desired, usually guests)
-            const now = Date.now();
-            const lastUpload = rateLimitMap.get(ip);
+        // Use User ID for logged-in users, IP for guests
+        const rateLimitKey = session ? `user:${session.id}` : `ip:${ip}`;
+        const now = Date.now();
+        const lastUpload = rateLimitMap.get(rateLimitKey);
 
-            if (lastUpload && now - lastUpload < RATE_LIMIT_WINDOW) {
-                return NextResponse.json({ error: 'Rate limit exceeded. Try again in a few seconds.' }, { status: 429 });
-            }
-            rateLimitMap.set(ip, now);
+        if (lastUpload && now - lastUpload < RATE_LIMIT_WINDOW) {
+            return NextResponse.json({ error: 'Rate limit exceeded. Try again in a few seconds.' }, { status: 429 });
         }
+        rateLimitMap.set(rateLimitKey, now);
 
         const formData = await request.formData();
         const file = formData.get('file') as File;

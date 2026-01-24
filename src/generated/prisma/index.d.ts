@@ -1088,10 +1088,12 @@ export namespace Prisma {
 
   export type UserAvgAggregateOutputType = {
     customMaxFileSize: number | null
+    customRateLimitWindow: number | null
   }
 
   export type UserSumAggregateOutputType = {
     customMaxFileSize: bigint | null
+    customRateLimitWindow: number | null
   }
 
   export type UserMinAggregateOutputType = {
@@ -1102,6 +1104,7 @@ export namespace Prisma {
     mustChangePassword: boolean | null
     createdAt: Date | null
     customMaxFileSize: bigint | null
+    customRateLimitWindow: number | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -1112,6 +1115,7 @@ export namespace Prisma {
     mustChangePassword: boolean | null
     createdAt: Date | null
     customMaxFileSize: bigint | null
+    customRateLimitWindow: number | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -1122,16 +1126,19 @@ export namespace Prisma {
     mustChangePassword: number
     createdAt: number
     customMaxFileSize: number
+    customRateLimitWindow: number
     _all: number
   }
 
 
   export type UserAvgAggregateInputType = {
     customMaxFileSize?: true
+    customRateLimitWindow?: true
   }
 
   export type UserSumAggregateInputType = {
     customMaxFileSize?: true
+    customRateLimitWindow?: true
   }
 
   export type UserMinAggregateInputType = {
@@ -1142,6 +1149,7 @@ export namespace Prisma {
     mustChangePassword?: true
     createdAt?: true
     customMaxFileSize?: true
+    customRateLimitWindow?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -1152,6 +1160,7 @@ export namespace Prisma {
     mustChangePassword?: true
     createdAt?: true
     customMaxFileSize?: true
+    customRateLimitWindow?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -1162,6 +1171,7 @@ export namespace Prisma {
     mustChangePassword?: true
     createdAt?: true
     customMaxFileSize?: true
+    customRateLimitWindow?: true
     _all?: true
   }
 
@@ -1259,6 +1269,7 @@ export namespace Prisma {
     mustChangePassword: boolean
     createdAt: Date
     customMaxFileSize: bigint | null
+    customRateLimitWindow: number | null
     _count: UserCountAggregateOutputType | null
     _avg: UserAvgAggregateOutputType | null
     _sum: UserSumAggregateOutputType | null
@@ -1288,6 +1299,7 @@ export namespace Prisma {
     mustChangePassword?: boolean
     createdAt?: boolean
     customMaxFileSize?: boolean
+    customRateLimitWindow?: boolean
     media?: boolean | User$mediaArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
@@ -1300,6 +1312,7 @@ export namespace Prisma {
     mustChangePassword?: boolean
     createdAt?: boolean
     customMaxFileSize?: boolean
+    customRateLimitWindow?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1310,6 +1323,7 @@ export namespace Prisma {
     mustChangePassword?: boolean
     createdAt?: boolean
     customMaxFileSize?: boolean
+    customRateLimitWindow?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -1320,9 +1334,10 @@ export namespace Prisma {
     mustChangePassword?: boolean
     createdAt?: boolean
     customMaxFileSize?: boolean
+    customRateLimitWindow?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "username" | "password" | "isAdmin" | "mustChangePassword" | "createdAt" | "customMaxFileSize", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "username" | "password" | "isAdmin" | "mustChangePassword" | "createdAt" | "customMaxFileSize" | "customRateLimitWindow", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     media?: boolean | User$mediaArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -1343,6 +1358,7 @@ export namespace Prisma {
       mustChangePassword: boolean
       createdAt: Date
       customMaxFileSize: bigint | null
+      customRateLimitWindow: number | null
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -1774,6 +1790,7 @@ export namespace Prisma {
     readonly mustChangePassword: FieldRef<"User", 'Boolean'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly customMaxFileSize: FieldRef<"User", 'BigInt'>
+    readonly customRateLimitWindow: FieldRef<"User", 'Int'>
   }
     
 
@@ -3403,11 +3420,13 @@ export namespace Prisma {
 
   export type SettingsAvgAggregateOutputType = {
     maxFileSize: number | null
+    rateLimitWindow: number | null
     smtpPort: number | null
   }
 
   export type SettingsSumAggregateOutputType = {
     maxFileSize: bigint | null
+    rateLimitWindow: number | null
     smtpPort: number | null
   }
 
@@ -3416,6 +3435,7 @@ export namespace Prisma {
     allowPublicUpload: boolean | null
     allowRegistration: boolean | null
     maxFileSize: bigint | null
+    rateLimitWindow: number | null
     defaultCompression: string | null
     showNoCompression: boolean | null
     showPrivateOption: boolean | null
@@ -3432,6 +3452,7 @@ export namespace Prisma {
     allowPublicUpload: boolean | null
     allowRegistration: boolean | null
     maxFileSize: bigint | null
+    rateLimitWindow: number | null
     defaultCompression: string | null
     showNoCompression: boolean | null
     showPrivateOption: boolean | null
@@ -3448,6 +3469,7 @@ export namespace Prisma {
     allowPublicUpload: number
     allowRegistration: number
     maxFileSize: number
+    rateLimitWindow: number
     defaultCompression: number
     showNoCompression: number
     showPrivateOption: number
@@ -3463,11 +3485,13 @@ export namespace Prisma {
 
   export type SettingsAvgAggregateInputType = {
     maxFileSize?: true
+    rateLimitWindow?: true
     smtpPort?: true
   }
 
   export type SettingsSumAggregateInputType = {
     maxFileSize?: true
+    rateLimitWindow?: true
     smtpPort?: true
   }
 
@@ -3476,6 +3500,7 @@ export namespace Prisma {
     allowPublicUpload?: true
     allowRegistration?: true
     maxFileSize?: true
+    rateLimitWindow?: true
     defaultCompression?: true
     showNoCompression?: true
     showPrivateOption?: true
@@ -3492,6 +3517,7 @@ export namespace Prisma {
     allowPublicUpload?: true
     allowRegistration?: true
     maxFileSize?: true
+    rateLimitWindow?: true
     defaultCompression?: true
     showNoCompression?: true
     showPrivateOption?: true
@@ -3508,6 +3534,7 @@ export namespace Prisma {
     allowPublicUpload?: true
     allowRegistration?: true
     maxFileSize?: true
+    rateLimitWindow?: true
     defaultCompression?: true
     showNoCompression?: true
     showPrivateOption?: true
@@ -3611,6 +3638,7 @@ export namespace Prisma {
     allowPublicUpload: boolean
     allowRegistration: boolean
     maxFileSize: bigint
+    rateLimitWindow: number
     defaultCompression: string
     showNoCompression: boolean
     showPrivateOption: boolean
@@ -3646,6 +3674,7 @@ export namespace Prisma {
     allowPublicUpload?: boolean
     allowRegistration?: boolean
     maxFileSize?: boolean
+    rateLimitWindow?: boolean
     defaultCompression?: boolean
     showNoCompression?: boolean
     showPrivateOption?: boolean
@@ -3662,6 +3691,7 @@ export namespace Prisma {
     allowPublicUpload?: boolean
     allowRegistration?: boolean
     maxFileSize?: boolean
+    rateLimitWindow?: boolean
     defaultCompression?: boolean
     showNoCompression?: boolean
     showPrivateOption?: boolean
@@ -3678,6 +3708,7 @@ export namespace Prisma {
     allowPublicUpload?: boolean
     allowRegistration?: boolean
     maxFileSize?: boolean
+    rateLimitWindow?: boolean
     defaultCompression?: boolean
     showNoCompression?: boolean
     showPrivateOption?: boolean
@@ -3694,6 +3725,7 @@ export namespace Prisma {
     allowPublicUpload?: boolean
     allowRegistration?: boolean
     maxFileSize?: boolean
+    rateLimitWindow?: boolean
     defaultCompression?: boolean
     showNoCompression?: boolean
     showPrivateOption?: boolean
@@ -3705,7 +3737,7 @@ export namespace Prisma {
     smtpFrom?: boolean
   }
 
-  export type SettingsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "allowPublicUpload" | "allowRegistration" | "maxFileSize" | "defaultCompression" | "showNoCompression" | "showPrivateOption" | "forcePrivate" | "smtpHost" | "smtpPort" | "smtpUser" | "smtpPassword" | "smtpFrom", ExtArgs["result"]["settings"]>
+  export type SettingsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "allowPublicUpload" | "allowRegistration" | "maxFileSize" | "rateLimitWindow" | "defaultCompression" | "showNoCompression" | "showPrivateOption" | "forcePrivate" | "smtpHost" | "smtpPort" | "smtpUser" | "smtpPassword" | "smtpFrom", ExtArgs["result"]["settings"]>
 
   export type $SettingsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Settings"
@@ -3715,6 +3747,7 @@ export namespace Prisma {
       allowPublicUpload: boolean
       allowRegistration: boolean
       maxFileSize: bigint
+      rateLimitWindow: number
       defaultCompression: string
       showNoCompression: boolean
       showPrivateOption: boolean
@@ -4151,6 +4184,7 @@ export namespace Prisma {
     readonly allowPublicUpload: FieldRef<"Settings", 'Boolean'>
     readonly allowRegistration: FieldRef<"Settings", 'Boolean'>
     readonly maxFileSize: FieldRef<"Settings", 'BigInt'>
+    readonly rateLimitWindow: FieldRef<"Settings", 'Int'>
     readonly defaultCompression: FieldRef<"Settings", 'String'>
     readonly showNoCompression: FieldRef<"Settings", 'Boolean'>
     readonly showPrivateOption: FieldRef<"Settings", 'Boolean'>
@@ -4542,7 +4576,8 @@ export namespace Prisma {
     isAdmin: 'isAdmin',
     mustChangePassword: 'mustChangePassword',
     createdAt: 'createdAt',
-    customMaxFileSize: 'customMaxFileSize'
+    customMaxFileSize: 'customMaxFileSize',
+    customRateLimitWindow: 'customRateLimitWindow'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -4570,6 +4605,7 @@ export namespace Prisma {
     allowPublicUpload: 'allowPublicUpload',
     allowRegistration: 'allowRegistration',
     maxFileSize: 'maxFileSize',
+    rateLimitWindow: 'rateLimitWindow',
     defaultCompression: 'defaultCompression',
     showNoCompression: 'showNoCompression',
     showPrivateOption: 'showPrivateOption',
@@ -4661,6 +4697,7 @@ export namespace Prisma {
     mustChangePassword?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
     customMaxFileSize?: BigIntNullableFilter<"User"> | bigint | number | null
+    customRateLimitWindow?: IntNullableFilter<"User"> | number | null
     media?: MediaListRelationFilter
   }
 
@@ -4672,6 +4709,7 @@ export namespace Prisma {
     mustChangePassword?: SortOrder
     createdAt?: SortOrder
     customMaxFileSize?: SortOrderInput | SortOrder
+    customRateLimitWindow?: SortOrderInput | SortOrder
     media?: MediaOrderByRelationAggregateInput
   }
 
@@ -4686,6 +4724,7 @@ export namespace Prisma {
     mustChangePassword?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
     customMaxFileSize?: BigIntNullableFilter<"User"> | bigint | number | null
+    customRateLimitWindow?: IntNullableFilter<"User"> | number | null
     media?: MediaListRelationFilter
   }, "id" | "username">
 
@@ -4697,6 +4736,7 @@ export namespace Prisma {
     mustChangePassword?: SortOrder
     createdAt?: SortOrder
     customMaxFileSize?: SortOrderInput | SortOrder
+    customRateLimitWindow?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
     _avg?: UserAvgOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
@@ -4715,6 +4755,7 @@ export namespace Prisma {
     mustChangePassword?: BoolWithAggregatesFilter<"User"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     customMaxFileSize?: BigIntNullableWithAggregatesFilter<"User"> | bigint | number | null
+    customRateLimitWindow?: IntNullableWithAggregatesFilter<"User"> | number | null
   }
 
   export type MediaWhereInput = {
@@ -4812,6 +4853,7 @@ export namespace Prisma {
     allowPublicUpload?: BoolFilter<"Settings"> | boolean
     allowRegistration?: BoolFilter<"Settings"> | boolean
     maxFileSize?: BigIntFilter<"Settings"> | bigint | number
+    rateLimitWindow?: IntFilter<"Settings"> | number
     defaultCompression?: StringFilter<"Settings"> | string
     showNoCompression?: BoolFilter<"Settings"> | boolean
     showPrivateOption?: BoolFilter<"Settings"> | boolean
@@ -4828,6 +4870,7 @@ export namespace Prisma {
     allowPublicUpload?: SortOrder
     allowRegistration?: SortOrder
     maxFileSize?: SortOrder
+    rateLimitWindow?: SortOrder
     defaultCompression?: SortOrder
     showNoCompression?: SortOrder
     showPrivateOption?: SortOrder
@@ -4847,6 +4890,7 @@ export namespace Prisma {
     allowPublicUpload?: BoolFilter<"Settings"> | boolean
     allowRegistration?: BoolFilter<"Settings"> | boolean
     maxFileSize?: BigIntFilter<"Settings"> | bigint | number
+    rateLimitWindow?: IntFilter<"Settings"> | number
     defaultCompression?: StringFilter<"Settings"> | string
     showNoCompression?: BoolFilter<"Settings"> | boolean
     showPrivateOption?: BoolFilter<"Settings"> | boolean
@@ -4863,6 +4907,7 @@ export namespace Prisma {
     allowPublicUpload?: SortOrder
     allowRegistration?: SortOrder
     maxFileSize?: SortOrder
+    rateLimitWindow?: SortOrder
     defaultCompression?: SortOrder
     showNoCompression?: SortOrder
     showPrivateOption?: SortOrder
@@ -4887,6 +4932,7 @@ export namespace Prisma {
     allowPublicUpload?: BoolWithAggregatesFilter<"Settings"> | boolean
     allowRegistration?: BoolWithAggregatesFilter<"Settings"> | boolean
     maxFileSize?: BigIntWithAggregatesFilter<"Settings"> | bigint | number
+    rateLimitWindow?: IntWithAggregatesFilter<"Settings"> | number
     defaultCompression?: StringWithAggregatesFilter<"Settings"> | string
     showNoCompression?: BoolWithAggregatesFilter<"Settings"> | boolean
     showPrivateOption?: BoolWithAggregatesFilter<"Settings"> | boolean
@@ -4906,6 +4952,7 @@ export namespace Prisma {
     mustChangePassword?: boolean
     createdAt?: Date | string
     customMaxFileSize?: bigint | number | null
+    customRateLimitWindow?: number | null
     media?: MediaCreateNestedManyWithoutUserInput
   }
 
@@ -4917,6 +4964,7 @@ export namespace Prisma {
     mustChangePassword?: boolean
     createdAt?: Date | string
     customMaxFileSize?: bigint | number | null
+    customRateLimitWindow?: number | null
     media?: MediaUncheckedCreateNestedManyWithoutUserInput
   }
 
@@ -4928,6 +4976,7 @@ export namespace Prisma {
     mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     customMaxFileSize?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    customRateLimitWindow?: NullableIntFieldUpdateOperationsInput | number | null
     media?: MediaUpdateManyWithoutUserNestedInput
   }
 
@@ -4939,6 +4988,7 @@ export namespace Prisma {
     mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     customMaxFileSize?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    customRateLimitWindow?: NullableIntFieldUpdateOperationsInput | number | null
     media?: MediaUncheckedUpdateManyWithoutUserNestedInput
   }
 
@@ -4950,6 +5000,7 @@ export namespace Prisma {
     mustChangePassword?: boolean
     createdAt?: Date | string
     customMaxFileSize?: bigint | number | null
+    customRateLimitWindow?: number | null
   }
 
   export type UserUpdateManyMutationInput = {
@@ -4960,6 +5011,7 @@ export namespace Prisma {
     mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     customMaxFileSize?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    customRateLimitWindow?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -4970,6 +5022,7 @@ export namespace Prisma {
     mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     customMaxFileSize?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    customRateLimitWindow?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type MediaCreateInput = {
@@ -5074,6 +5127,7 @@ export namespace Prisma {
     allowPublicUpload?: boolean
     allowRegistration?: boolean
     maxFileSize?: bigint | number
+    rateLimitWindow?: number
     defaultCompression?: string
     showNoCompression?: boolean
     showPrivateOption?: boolean
@@ -5090,6 +5144,7 @@ export namespace Prisma {
     allowPublicUpload?: boolean
     allowRegistration?: boolean
     maxFileSize?: bigint | number
+    rateLimitWindow?: number
     defaultCompression?: string
     showNoCompression?: boolean
     showPrivateOption?: boolean
@@ -5106,6 +5161,7 @@ export namespace Prisma {
     allowPublicUpload?: BoolFieldUpdateOperationsInput | boolean
     allowRegistration?: BoolFieldUpdateOperationsInput | boolean
     maxFileSize?: BigIntFieldUpdateOperationsInput | bigint | number
+    rateLimitWindow?: IntFieldUpdateOperationsInput | number
     defaultCompression?: StringFieldUpdateOperationsInput | string
     showNoCompression?: BoolFieldUpdateOperationsInput | boolean
     showPrivateOption?: BoolFieldUpdateOperationsInput | boolean
@@ -5122,6 +5178,7 @@ export namespace Prisma {
     allowPublicUpload?: BoolFieldUpdateOperationsInput | boolean
     allowRegistration?: BoolFieldUpdateOperationsInput | boolean
     maxFileSize?: BigIntFieldUpdateOperationsInput | bigint | number
+    rateLimitWindow?: IntFieldUpdateOperationsInput | number
     defaultCompression?: StringFieldUpdateOperationsInput | string
     showNoCompression?: BoolFieldUpdateOperationsInput | boolean
     showPrivateOption?: BoolFieldUpdateOperationsInput | boolean
@@ -5138,6 +5195,7 @@ export namespace Prisma {
     allowPublicUpload?: boolean
     allowRegistration?: boolean
     maxFileSize?: bigint | number
+    rateLimitWindow?: number
     defaultCompression?: string
     showNoCompression?: boolean
     showPrivateOption?: boolean
@@ -5154,6 +5212,7 @@ export namespace Prisma {
     allowPublicUpload?: BoolFieldUpdateOperationsInput | boolean
     allowRegistration?: BoolFieldUpdateOperationsInput | boolean
     maxFileSize?: BigIntFieldUpdateOperationsInput | bigint | number
+    rateLimitWindow?: IntFieldUpdateOperationsInput | number
     defaultCompression?: StringFieldUpdateOperationsInput | string
     showNoCompression?: BoolFieldUpdateOperationsInput | boolean
     showPrivateOption?: BoolFieldUpdateOperationsInput | boolean
@@ -5170,6 +5229,7 @@ export namespace Prisma {
     allowPublicUpload?: BoolFieldUpdateOperationsInput | boolean
     allowRegistration?: BoolFieldUpdateOperationsInput | boolean
     maxFileSize?: BigIntFieldUpdateOperationsInput | bigint | number
+    rateLimitWindow?: IntFieldUpdateOperationsInput | number
     defaultCompression?: StringFieldUpdateOperationsInput | string
     showNoCompression?: BoolFieldUpdateOperationsInput | boolean
     showPrivateOption?: BoolFieldUpdateOperationsInput | boolean
@@ -5222,6 +5282,17 @@ export namespace Prisma {
     not?: NestedBigIntNullableFilter<$PrismaModel> | bigint | number | null
   }
 
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
   export type MediaListRelationFilter = {
     every?: MediaWhereInput
     some?: MediaWhereInput
@@ -5245,10 +5316,12 @@ export namespace Prisma {
     mustChangePassword?: SortOrder
     createdAt?: SortOrder
     customMaxFileSize?: SortOrder
+    customRateLimitWindow?: SortOrder
   }
 
   export type UserAvgOrderByAggregateInput = {
     customMaxFileSize?: SortOrder
+    customRateLimitWindow?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -5259,6 +5332,7 @@ export namespace Prisma {
     mustChangePassword?: SortOrder
     createdAt?: SortOrder
     customMaxFileSize?: SortOrder
+    customRateLimitWindow?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -5269,10 +5343,12 @@ export namespace Prisma {
     mustChangePassword?: SortOrder
     createdAt?: SortOrder
     customMaxFileSize?: SortOrder
+    customRateLimitWindow?: SortOrder
   }
 
   export type UserSumOrderByAggregateInput = {
     customMaxFileSize?: SortOrder
+    customRateLimitWindow?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -5328,6 +5404,22 @@ export namespace Prisma {
     _sum?: NestedBigIntNullableFilter<$PrismaModel>
     _min?: NestedBigIntNullableFilter<$PrismaModel>
     _max?: NestedBigIntNullableFilter<$PrismaModel>
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -5454,22 +5546,12 @@ export namespace Prisma {
     not?: NestedBigIntFilter<$PrismaModel> | bigint | number
   }
 
-  export type IntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
   export type SettingsCountOrderByAggregateInput = {
     id?: SortOrder
     allowPublicUpload?: SortOrder
     allowRegistration?: SortOrder
     maxFileSize?: SortOrder
+    rateLimitWindow?: SortOrder
     defaultCompression?: SortOrder
     showNoCompression?: SortOrder
     showPrivateOption?: SortOrder
@@ -5483,6 +5565,7 @@ export namespace Prisma {
 
   export type SettingsAvgOrderByAggregateInput = {
     maxFileSize?: SortOrder
+    rateLimitWindow?: SortOrder
     smtpPort?: SortOrder
   }
 
@@ -5491,6 +5574,7 @@ export namespace Prisma {
     allowPublicUpload?: SortOrder
     allowRegistration?: SortOrder
     maxFileSize?: SortOrder
+    rateLimitWindow?: SortOrder
     defaultCompression?: SortOrder
     showNoCompression?: SortOrder
     showPrivateOption?: SortOrder
@@ -5507,6 +5591,7 @@ export namespace Prisma {
     allowPublicUpload?: SortOrder
     allowRegistration?: SortOrder
     maxFileSize?: SortOrder
+    rateLimitWindow?: SortOrder
     defaultCompression?: SortOrder
     showNoCompression?: SortOrder
     showPrivateOption?: SortOrder
@@ -5520,6 +5605,7 @@ export namespace Prisma {
 
   export type SettingsSumOrderByAggregateInput = {
     maxFileSize?: SortOrder
+    rateLimitWindow?: SortOrder
     smtpPort?: SortOrder
   }
 
@@ -5537,22 +5623,6 @@ export namespace Prisma {
     _sum?: NestedBigIntFilter<$PrismaModel>
     _min?: NestedBigIntFilter<$PrismaModel>
     _max?: NestedBigIntFilter<$PrismaModel>
-  }
-
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type MediaCreateNestedManyWithoutUserInput = {
@@ -5587,6 +5657,14 @@ export namespace Prisma {
     decrement?: bigint | number
     multiply?: bigint | number
     divide?: bigint | number
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type MediaUpdateManyWithoutUserNestedInput = {
@@ -5653,14 +5731,6 @@ export namespace Prisma {
     divide?: bigint | number
   }
 
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
-  }
-
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[]
@@ -5700,6 +5770,17 @@ export namespace Prisma {
     gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
     gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
     not?: NestedBigIntNullableFilter<$PrismaModel> | bigint | number | null
+  }
+
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
@@ -5768,17 +5849,6 @@ export namespace Prisma {
     _max?: NestedBigIntNullableFilter<$PrismaModel>
   }
 
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
   export type NestedFloatNullableFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel> | null
     in?: number[] | null
@@ -5788,6 +5858,22 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type NestedStringNullableFilter<$PrismaModel = never> = {
@@ -5875,22 +5961,6 @@ export namespace Prisma {
     _max?: NestedBigIntFilter<$PrismaModel>
   }
 
-  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
   export type MediaCreateWithoutUserInput = {
     id?: string
     filename: string
@@ -5967,6 +6037,7 @@ export namespace Prisma {
     mustChangePassword?: boolean
     createdAt?: Date | string
     customMaxFileSize?: bigint | number | null
+    customRateLimitWindow?: number | null
   }
 
   export type UserUncheckedCreateWithoutMediaInput = {
@@ -5977,6 +6048,7 @@ export namespace Prisma {
     mustChangePassword?: boolean
     createdAt?: Date | string
     customMaxFileSize?: bigint | number | null
+    customRateLimitWindow?: number | null
   }
 
   export type UserCreateOrConnectWithoutMediaInput = {
@@ -6003,6 +6075,7 @@ export namespace Prisma {
     mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     customMaxFileSize?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    customRateLimitWindow?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type UserUncheckedUpdateWithoutMediaInput = {
@@ -6013,6 +6086,7 @@ export namespace Prisma {
     mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     customMaxFileSize?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    customRateLimitWindow?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type MediaCreateManyUserInput = {
