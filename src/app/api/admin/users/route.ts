@@ -138,18 +138,36 @@ export async function DELETE(request: NextRequest) {
             return NextResponse.json({ error: 'User ID required' }, { status: 400 });
         }
 
-        // Prevent deleting yourself
-        if (userId === session.id) {
-            return NextResponse.json({ error: 'Cannot delete yourself' }, { status: 400 });
-        }
-
         // Check if user exists
         const user = await prisma.user.findUnique({ where: { id: userId } });
         if (!user) {
             return NextResponse.json({ error: 'User not found' }, { status: 404 });
         }
 
-        // Delete user (media will remain but userId will be null due to optional relation)
+        // 1. Get all media files for this user
+        const mediaFiles = await prisma.media.findMany({
+            where: { userId: userId },
+            select: { filename: true }
+        });
+
+        // 2. Delete files from disk
+        const UPLOAD_DIR = (await import('path')).join(process.cwd(), 'uploads');
+        const { unlink } = await import('fs/promises');
+
+        for (const media of mediaFiles) {
+            try {
+                const filepath = (await import('path')).join(UPLOAD_DIR, media.filename);
+                await unlink(filepath);
+            } catch (err) {
+                console.error(`Failed to delete file for media ${media.filename}:`, err);
+                // Continue deleting other files even if one fails
+            }
+        }
+
+        // 3. Delete media records (this might be handled by cascade if configured, but let's be explicit)
+        await prisma.media.deleteMany({ where: { userId: userId } });
+
+        // 4. Delete user
         await prisma.user.delete({ where: { id: userId } });
 
         return NextResponse.json({ success: true });

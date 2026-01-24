@@ -154,7 +154,7 @@ function UserModal({
 
 export default function AdminPage() {
     const router = useRouter();
-    const [user, setUser] = useState<{ username: string; isAdmin: boolean } | null>(null);
+    const [user, setUser] = useState<{ id: string; username: string; isAdmin: boolean } | null>(null);
     const [settings, setSettings] = useState<Settings | null>(null);
     const [mediaList, setMediaList] = useState<MediaItem[]>([]);
     const [users, setUsers] = useState<User[]>([]);
@@ -302,11 +302,17 @@ export default function AdminPage() {
     };
 
     const deleteUser = (userId: string) => {
-        showDialog('Delete User', 'Are you sure you want to delete this user?', 'confirm', async () => {
+        showDialog('Delete User', 'Are you sure? This will PERMANENTLY DELETE the user and ALL their uploaded files from the server. This action cannot be undone.', 'confirm', async () => {
             try {
                 const res = await fetch(`/api/admin/users?id=${userId}`, { method: 'DELETE' });
                 if (res.ok) {
-                    setUsers(prev => prev.filter(u => u.id !== userId));
+                    if (userId === user?.id) {
+                        // User deleted themselves
+                        await fetch('/api/auth/logout', { method: 'POST' });
+                        router.push('/');
+                    } else {
+                        setUsers(prev => prev.filter(u => u.id !== userId));
+                    }
                 } else {
                     const data = await res.json();
                     showDialog('Error', data.error || 'Failed to delete user');
@@ -506,16 +512,14 @@ export default function AdminPage() {
                                             {u._count.media} uploads • Joined {new Date(u.createdAt).toLocaleDateString()}
                                         </div>
                                     </div>
-                                    {!u.isAdmin && (
-                                        <div style={{ display: 'flex', gap: '8px' }}>
-                                            <button onClick={() => { setEditingUser(u); setIsUserModalOpen(true); }} style={{ padding: '6px 12px', backgroundColor: '#333', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.8rem' }}>
-                                                Edit
-                                            </button>
-                                            <button onClick={() => deleteUser(u.id)} style={{ padding: '6px 12px', backgroundColor: 'transparent', color: '#ff5555', border: '1px solid #ff5555', borderRadius: '4px', cursor: 'pointer', fontSize: '0.8rem' }}>
-                                                Delete
-                                            </button>
-                                        </div>
-                                    )}
+                                    <div style={{ display: 'flex', gap: '8px' }}>
+                                        <button onClick={() => { setEditingUser(u); setIsUserModalOpen(true); }} style={{ padding: '6px 12px', backgroundColor: '#333', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.8rem' }}>
+                                            Edit
+                                        </button>
+                                        <button onClick={() => deleteUser(u.id)} style={{ padding: '6px 12px', backgroundColor: 'transparent', color: '#ff5555', border: '1px solid #ff5555', borderRadius: '4px', cursor: 'pointer', fontSize: '0.8rem' }}>
+                                            Delete
+                                        </button>
+                                    </div>
                                 </div>
                             ))}
                         </div>
