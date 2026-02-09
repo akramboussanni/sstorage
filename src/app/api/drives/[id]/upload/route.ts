@@ -19,9 +19,6 @@ export async function POST(
     try {
         const { id } = await params;
         const session = await getSession();
-        if (!session) {
-            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-        }
 
         const drive = await prisma.drive.findUnique({ where: { id } });
         if (!drive) {
@@ -29,15 +26,16 @@ export async function POST(
         }
 
         // Check if user can edit
-        const canEdit = drive.ownerId === session.id || 
-            (await prisma.driveAccess.findUnique({
+        const canEdit = (session && drive.ownerId === session.id) || 
+            (session && (await prisma.driveAccess.findUnique({
                 where: {
                     driveId_userId: {
                         driveId: id,
                         userId: session.id
                     }
                 }
-            }))?.role === 'EDITOR';
+            }))?.role === 'EDITOR') ||
+            (drive.isPublic && drive.publicRole === 'EDITOR');
 
         if (!canEdit) {
             return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
@@ -86,7 +84,7 @@ export async function POST(
                 originalName: file.name,
                 mimeType: file.type,
                 size: buffer.length,
-                userId: session.id,
+                userId: session?.id || null,
                 driveId: id,
                 folderId: folderId || null,
                 transcodeStatus: shouldTranscode ? 'pending' : 'not_required',

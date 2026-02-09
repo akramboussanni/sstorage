@@ -39,7 +39,7 @@ export async function GET(
 
         return NextResponse.json({
             ...drive,
-            canEdit: session && (drive.ownerId === session.id || drive.access.some(a => a.userId === session.id && a.role === 'EDITOR')),
+            canEdit: (session && (drive.ownerId === session.id || drive.access.some(a => a.userId === session.id && a.role === 'EDITOR'))) || (drive.isPublic && drive.publicRole === 'EDITOR'),
             isOwner: session && drive.ownerId === session.id,
             publicAccess: drive.isPublic ? drive.publicRole : null,
         });

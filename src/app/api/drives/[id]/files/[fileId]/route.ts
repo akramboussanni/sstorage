@@ -9,7 +9,6 @@ export async function DELETE(
     try {
         const { id, fileId } = await params;
         const session = await getSession();
-        if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
         const drive = await prisma.drive.findUnique({ where: { id } });
         if (!drive) return NextResponse.json({ error: 'Drive not found' }, { status: 404 });
@@ -24,15 +23,16 @@ export async function DELETE(
         }
 
         // Check if user can edit
-        const canEdit = drive.ownerId === session.id || 
-            (await prisma.driveAccess.findUnique({
+        const canEdit = (session && drive.ownerId === session.id) || 
+            (session && (await prisma.driveAccess.findUnique({
                 where: {
                     driveId_userId: {
                         driveId: id,
                         userId: session.id
                     }
                 }
-            }))?.role === 'EDITOR';
+            }))?.role === 'EDITOR') ||
+            (drive.isPublic && drive.publicRole === 'EDITOR');
 
         if (!canEdit) {
             return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
@@ -66,7 +66,6 @@ export async function PATCH(
     try {
         const { id, fileId } = await params;
         const session = await getSession();
-        if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
         const drive = await prisma.drive.findUnique({ where: { id } });
         if (!drive) return NextResponse.json({ error: 'Drive not found' }, { status: 404 });
@@ -77,15 +76,16 @@ export async function PATCH(
         }
 
         // Check if user can edit
-        const canEdit = drive.ownerId === session.id || 
-            (await prisma.driveAccess.findUnique({
+        const canEdit = (session && drive.ownerId === session.id) || 
+            (session && (await prisma.driveAccess.findUnique({
                 where: {
                     driveId_userId: {
                         driveId: id,
                         userId: session.id
                     }
                 }
-            }))?.role === 'EDITOR';
+            }))?.role === 'EDITOR') ||
+            (drive.isPublic && drive.publicRole === 'EDITOR');
 
         if (!canEdit) {
             return NextResponse.json({ error: 'Forbidden' }, { status: 403 });

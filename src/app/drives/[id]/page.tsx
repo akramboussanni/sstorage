@@ -1045,7 +1045,7 @@ export default function DrivePage() {
       try {
         if (item.type === "file") {
           const res = await fetch(`/api/drives/${driveId}/files/${item.id}`, {
-            method: type === "cut" ? "PATCH" : "POST",
+            method: "PATCH",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               action: type === "cut" ? "move" : "copy",
@@ -1055,7 +1055,7 @@ export default function DrivePage() {
           if (res.ok) successCount++;
         } else if (item.type === "folder") {
           const res = await fetch(`/api/drives/${driveId}/folders/${item.id}`, {
-            method: type === "cut" ? "PATCH" : "POST",
+            method: "PATCH",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               action: type === "cut" ? "move" : "copy",
