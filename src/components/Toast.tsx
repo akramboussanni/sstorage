@@ -5,9 +5,10 @@ import { useState, useCallback } from 'react';
 interface ToastProps {
     message: string;
     show: boolean;
+    type?: 'success' | 'error';
 }
 
-export function Toast({ message, show }: ToastProps) {
+export function Toast({ message, show, type = 'success' }: ToastProps) {
     if (!show) return null;
 
     return (
@@ -16,7 +17,7 @@ export function Toast({ message, show }: ToastProps) {
             bottom: '20px',
             left: '50%',
             transform: 'translateX(-50%)',
-            backgroundColor: '#43b581',
+            backgroundColor: type === 'error' ? '#f04747' : '#43b581',
             color: '#fff',
             padding: '12px 24px',
             borderRadius: '8px',
@@ -29,12 +30,26 @@ export function Toast({ message, show }: ToastProps) {
 }
 
 export function useToast() {
-    const [toast, setToast] = useState({ show: false, message: '' });
+    const [toast, setToast] = useState<{ show: boolean, message: string, type: 'success' | 'error' }>({
+        show: false,
+        message: '',
+        type: 'success'
+    });
 
-    const showToast = useCallback((message: string, duration: number = 2000) => {
-        setToast({ show: true, message });
-        setTimeout(() => setToast({ show: false, message: '' }), duration);
+    const showToast = useCallback((message: string, durationOrType: number | 'success' | 'error' = 2000) => {
+        let duration = 2000;
+        let type: 'success' | 'error' = 'success';
+
+        if (typeof durationOrType === 'string') {
+            type = durationOrType;
+        } else {
+            duration = durationOrType;
+        }
+
+        setToast({ show: true, message, type });
+        setTimeout(() => setToast({ show: false, message: '', type: 'success' }), duration);
     }, []);
 
     return { toast, showToast };
 }
+

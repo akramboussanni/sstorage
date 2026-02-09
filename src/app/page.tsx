@@ -6,6 +6,7 @@ import { Dialog, useDialog } from '@/components/Dialog';
 import { Toast, useToast } from '@/components/Toast';
 import { MediaCard, MediaItem, spinnerStyles } from '@/components/MediaCard';
 import { UserPanel } from '@/components/UserPanel';
+import { DriveCard } from '@/components/DriveCard';
 
 type CompressionQuality = 'none' | 'high' | 'balanced' | 'small';
 
@@ -30,6 +31,7 @@ export default function Home() {
   const [settings, setSettings] = useState<Settings | null>(null);
   const [loading, setLoading] = useState(true);
   const [myUploads, setMyUploads] = useState<MediaItem[]>([]);
+  const [drives, setDrives] = useState<any[]>([]);
   const { dialog, showDialog, closeDialog } = useDialog();
   const { toast, showToast } = useToast();
   const pollIntervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -45,6 +47,9 @@ export default function Home() {
     if (user) {
       fetch('/api/media/my').then(res => res.json()).then(data => {
         if (Array.isArray(data)) setMyUploads(data);
+      });
+      fetch('/api/drives').then(res => res.json()).then(data => {
+        if (Array.isArray(data)) setDrives(data);
       });
     }
   }, [user]);
@@ -66,8 +71,12 @@ export default function Home() {
       setUser(sessionData.user);
       setSettings(settingsData);
       if (sessionData.user) {
-        fetch('/api/media/my').then(res => res.json()).then(myUploadsData => {
+        Promise.all([
+          fetch('/api/media/my').then(res => res.json()),
+          fetch('/api/drives').then(res => res.json()),
+        ]).then(([myUploadsData, drivesData]) => {
           if (Array.isArray(myUploadsData)) setMyUploads(myUploadsData);
+          if (Array.isArray(drivesData)) setDrives(drivesData);
         });
       }
       setLoading(false);
@@ -116,36 +125,89 @@ export default function Home() {
     setError(null);
 
     try {
-      const formData = new FormData();
-      formData.append('file', file);
+      const CHUNK_SIZE = 50 * 1024 * 1024; // 50MB
 
-      // Use noCompression checkbox or default compression from admin settings
-      if (isVideo) {
-        const quality = noCompression ? 'none' : (settings?.defaultCompression || 'balanced');
-        formData.append('quality', quality);
-      }
+      if (file.size > CHUNK_SIZE) {
+        const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
+        const uploadId = crypto.randomUUID();
 
-      if (user && isPrivate) {
-        formData.append('isPrivate', 'true');
-      }
+        for (let i = 0; i < totalChunks; i++) {
+          const start = i * CHUNK_SIZE;
+          const end = Math.min(start + CHUNK_SIZE, file.size);
+          const chunk = file.slice(start, end);
 
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData,
-      });
+          const formData = new FormData();
+          formData.append('file', chunk, file.name);
 
-      const data = await res.json();
+          // Use noCompression checkbox or default compression from admin settings
+          if (isVideo) {
+            const quality = noCompression ? 'none' : (settings?.defaultCompression || 'balanced');
+            formData.append('quality', quality);
+          }
 
-      if (!res.ok) {
-        throw new Error(data.error || 'Upload failed');
-      }
+          if (user && isPrivate) {
+            formData.append('isPrivate', 'true');
+          }
 
-      setFile(null);
-      setNoCompression(false);
-      refreshUploads();
+          const params = new URLSearchParams({
+            chunkIndex: i.toString(),
+            totalChunks: totalChunks.toString(),
+            uploadId
+          });
 
-      if (data.transcodeStatus === 'pending') {
-        setLastUploadId(data.id);
+          const res = await fetch(`/api/upload?${params.toString()}`, {
+            method: 'POST',
+            body: formData,
+          });
+
+          const data = await res.json();
+
+          if (!res.ok) {
+            throw new Error(data.error || 'Upload failed');
+          }
+
+          if (i === totalChunks - 1) {
+            setFile(null);
+            setNoCompression(false);
+            refreshUploads();
+
+            if (data.transcodeStatus === 'pending') {
+              setLastUploadId(data.id);
+            }
+          }
+        }
+      } else {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        // Use noCompression checkbox or default compression from admin settings
+        if (isVideo) {
+          const quality = noCompression ? 'none' : (settings?.defaultCompression || 'balanced');
+          formData.append('quality', quality);
+        }
+
+        if (user && isPrivate) {
+          formData.append('isPrivate', 'true');
+        }
+
+        const res = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData,
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.error || 'Upload failed');
+        }
+
+        setFile(null);
+        setNoCompression(false);
+        refreshUploads();
+
+        if (data.transcodeStatus === 'pending') {
+          setLastUploadId(data.id);
+        }
       }
 
     } catch (err: any) {
@@ -166,6 +228,24 @@ export default function Home() {
         }
       } catch (err) {
         showDialog('Error', 'Error deleting file');
+      }
+    });
+  };
+
+  const handleCreateDrive = () => {
+    const name = prompt('Enter drive name:');
+    if (!name) return;
+
+    fetch('/api/drives', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, description: '' })
+    }).then(res => res.json()).then(data => {
+      if (data.id) {
+        showToast('Drive created!');
+        refreshUploads();
+      } else {
+        showToast(data.error || 'Failed to create drive', 'error');
       }
     });
   };
@@ -199,7 +279,7 @@ export default function Home() {
       fontFamily: 'system-ui, sans-serif',
     }}>
       <Dialog state={dialog} onClose={closeDialog} />
-      <Toast message={toast.message} show={toast.show} />
+      <Toast message={toast.message} show={toast.show} type={toast.type} />
 
       <h1 style={{ marginBottom: '10px', fontSize: '2rem' }}>📁 SStorage</h1>
 
@@ -265,14 +345,13 @@ export default function Home() {
           >
             <input
               type="file"
-              accept="image/*,video/*"
               onChange={(e) => setFile(e.target.files?.[0] || null)}
               style={{ display: 'none' }}
             />
             {file ? (
               <span style={{ color: '#5865f2' }}>{file.name}</span>
             ) : (
-              <span style={{ color: '#666' }}>Click to select image, GIF, or video</span>
+              <span style={{ color: '#666' }}>Click to select any file</span>
             )}
           </label>
 
@@ -389,7 +468,46 @@ export default function Home() {
         </div>
       )}
 
+      {/* My Drives Section */}
+      {user && (
+        <div style={{ marginTop: '60px', width: '100%', maxWidth: '800px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', borderBottom: '1px solid #333', paddingBottom: '10px' }}>
+            <h2 style={{ fontSize: '1.2rem', margin: 0 }}>
+              My Drives ({drives.length})
+            </h2>
+            <button
+              onClick={handleCreateDrive}
+              style={{
+                backgroundColor: '#1a1a1a',
+                color: '#fff',
+                border: '1px solid #333',
+                padding: '4px 12px',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontSize: '0.8rem'
+              }}
+            >
+              + Create Drive
+            </button>
+          </div>
+          {drives.length === 0 ? (
+            <p style={{ color: '#666', textAlign: 'center', padding: '20px' }}>No drives created yet</p>
+          ) : (
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
+              gap: '16px',
+            }}>
+              {drives.map((drive) => (
+                <DriveCard key={drive.id} drive={drive} />
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
       <style>{spinnerStyles}</style>
     </div>
   );
 }
+

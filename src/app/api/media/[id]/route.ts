@@ -88,7 +88,30 @@ export async function DELETE(
         const isOwner = session && media.userId === session.id;
         const isAdmin = session?.isAdmin;
 
-        if (!isOwner && !isAdmin) {
+        let canDelete = isOwner || isAdmin;
+
+        // If not owner/admin, check if it's in a drive where the user has editor access
+        if (!canDelete && session && media.driveId) {
+            const driveAccess = await prisma.driveAccess.findUnique({
+                where: {
+                    driveId_userId: {
+                        driveId: media.driveId,
+                        userId: session.id
+                    }
+                }
+            });
+            if (driveAccess?.role === 'EDITOR') {
+                canDelete = true;
+            } else {
+                // Also check if user is the drive owner
+                const drive = await prisma.drive.findUnique({ where: { id: media.driveId } });
+                if (drive?.ownerId === session.id) {
+                    canDelete = true;
+                }
+            }
+        }
+
+        if (!canDelete) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 

@@ -57,12 +57,26 @@ export function MediaCard({ media, onDelete, onCopyLink, showPrivateBadge = true
                             src={`/api/media/${media.id}`}
                             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                         />
-                    ) : (
+                    ) : media.mimeType.startsWith('image/') ? (
                         <img
                             src={`/api/media/${media.id}`}
                             alt={media.originalName}
                             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                         />
+                    ) : (
+                        <div style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '8px',
+                            color: '#888',
+                        }}>
+                            <div style={{ fontSize: '3rem' }}>📄</div>
+                            <div style={{ fontSize: '0.8rem', fontWeight: 'bold' }}>
+                                {media.originalName.split('.').pop()?.toUpperCase() || 'FILE'}
+                            </div>
+                        </div>
                     )}
 
                     {/* Transcoding overlay */}

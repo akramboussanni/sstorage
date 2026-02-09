@@ -24,6 +24,16 @@ export type User = $Result.DefaultSelection<Prisma.$UserPayload>
  */
 export type Media = $Result.DefaultSelection<Prisma.$MediaPayload>
 /**
+ * Model Drive
+ * 
+ */
+export type Drive = $Result.DefaultSelection<Prisma.$DrivePayload>
+/**
+ * Model DriveAccess
+ * 
+ */
+export type DriveAccess = $Result.DefaultSelection<Prisma.$DriveAccessPayload>
+/**
  * Model Settings
  * 
  */
@@ -165,6 +175,26 @@ export class PrismaClient<
     * ```
     */
   get media(): Prisma.MediaDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.drive`: Exposes CRUD operations for the **Drive** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Drives
+    * const drives = await prisma.drive.findMany()
+    * ```
+    */
+  get drive(): Prisma.DriveDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.driveAccess`: Exposes CRUD operations for the **DriveAccess** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more DriveAccesses
+    * const driveAccesses = await prisma.driveAccess.findMany()
+    * ```
+    */
+  get driveAccess(): Prisma.DriveAccessDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.settings`: Exposes CRUD operations for the **Settings** model.
@@ -611,6 +641,8 @@ export namespace Prisma {
   export const ModelName: {
     User: 'User',
     Media: 'Media',
+    Drive: 'Drive',
+    DriveAccess: 'DriveAccess',
     Settings: 'Settings'
   };
 
@@ -627,7 +659,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "media" | "settings"
+      modelProps: "user" | "media" | "drive" | "driveAccess" | "settings"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -776,6 +808,154 @@ export namespace Prisma {
           count: {
             args: Prisma.MediaCountArgs<ExtArgs>
             result: $Utils.Optional<MediaCountAggregateOutputType> | number
+          }
+        }
+      }
+      Drive: {
+        payload: Prisma.$DrivePayload<ExtArgs>
+        fields: Prisma.DriveFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.DriveFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DrivePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.DriveFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DrivePayload>
+          }
+          findFirst: {
+            args: Prisma.DriveFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DrivePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.DriveFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DrivePayload>
+          }
+          findMany: {
+            args: Prisma.DriveFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DrivePayload>[]
+          }
+          create: {
+            args: Prisma.DriveCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DrivePayload>
+          }
+          createMany: {
+            args: Prisma.DriveCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.DriveCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DrivePayload>[]
+          }
+          delete: {
+            args: Prisma.DriveDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DrivePayload>
+          }
+          update: {
+            args: Prisma.DriveUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DrivePayload>
+          }
+          deleteMany: {
+            args: Prisma.DriveDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.DriveUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.DriveUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DrivePayload>[]
+          }
+          upsert: {
+            args: Prisma.DriveUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DrivePayload>
+          }
+          aggregate: {
+            args: Prisma.DriveAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateDrive>
+          }
+          groupBy: {
+            args: Prisma.DriveGroupByArgs<ExtArgs>
+            result: $Utils.Optional<DriveGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.DriveCountArgs<ExtArgs>
+            result: $Utils.Optional<DriveCountAggregateOutputType> | number
+          }
+        }
+      }
+      DriveAccess: {
+        payload: Prisma.$DriveAccessPayload<ExtArgs>
+        fields: Prisma.DriveAccessFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.DriveAccessFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DriveAccessPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.DriveAccessFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DriveAccessPayload>
+          }
+          findFirst: {
+            args: Prisma.DriveAccessFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DriveAccessPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.DriveAccessFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DriveAccessPayload>
+          }
+          findMany: {
+            args: Prisma.DriveAccessFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DriveAccessPayload>[]
+          }
+          create: {
+            args: Prisma.DriveAccessCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DriveAccessPayload>
+          }
+          createMany: {
+            args: Prisma.DriveAccessCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.DriveAccessCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DriveAccessPayload>[]
+          }
+          delete: {
+            args: Prisma.DriveAccessDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DriveAccessPayload>
+          }
+          update: {
+            args: Prisma.DriveAccessUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DriveAccessPayload>
+          }
+          deleteMany: {
+            args: Prisma.DriveAccessDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.DriveAccessUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.DriveAccessUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DriveAccessPayload>[]
+          }
+          upsert: {
+            args: Prisma.DriveAccessUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DriveAccessPayload>
+          }
+          aggregate: {
+            args: Prisma.DriveAccessAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateDriveAccess>
+          }
+          groupBy: {
+            args: Prisma.DriveAccessGroupByArgs<ExtArgs>
+            result: $Utils.Optional<DriveAccessGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.DriveAccessCountArgs<ExtArgs>
+            result: $Utils.Optional<DriveAccessCountAggregateOutputType> | number
           }
         }
       }
@@ -963,6 +1143,8 @@ export namespace Prisma {
   export type GlobalOmitConfig = {
     user?: UserOmit
     media?: MediaOmit
+    drive?: DriveOmit
+    driveAccess?: DriveAccessOmit
     settings?: SettingsOmit
   }
 
@@ -1045,10 +1227,14 @@ export namespace Prisma {
 
   export type UserCountOutputType = {
     media: number
+    ownedDrives: number
+    driveAccess: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     media?: boolean | UserCountOutputTypeCountMediaArgs
+    ownedDrives?: boolean | UserCountOutputTypeCountOwnedDrivesArgs
+    driveAccess?: boolean | UserCountOutputTypeCountDriveAccessArgs
   }
 
   // Custom InputTypes
@@ -1067,6 +1253,60 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountMediaArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: MediaWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountOwnedDrivesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DriveWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountDriveAccessArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DriveAccessWhereInput
+  }
+
+
+  /**
+   * Count Type DriveCountOutputType
+   */
+
+  export type DriveCountOutputType = {
+    files: number
+    access: number
+  }
+
+  export type DriveCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    files?: boolean | DriveCountOutputTypeCountFilesArgs
+    access?: boolean | DriveCountOutputTypeCountAccessArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * DriveCountOutputType without action
+   */
+  export type DriveCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DriveCountOutputType
+     */
+    select?: DriveCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * DriveCountOutputType without action
+   */
+  export type DriveCountOutputTypeCountFilesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MediaWhereInput
+  }
+
+  /**
+   * DriveCountOutputType without action
+   */
+  export type DriveCountOutputTypeCountAccessArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DriveAccessWhereInput
   }
 
 
@@ -1301,6 +1541,8 @@ export namespace Prisma {
     customMaxFileSize?: boolean
     customRateLimitWindow?: boolean
     media?: boolean | User$mediaArgs<ExtArgs>
+    ownedDrives?: boolean | User$ownedDrivesArgs<ExtArgs>
+    driveAccess?: boolean | User$driveAccessArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -1340,6 +1582,8 @@ export namespace Prisma {
   export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "username" | "password" | "isAdmin" | "mustChangePassword" | "createdAt" | "customMaxFileSize" | "customRateLimitWindow", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     media?: boolean | User$mediaArgs<ExtArgs>
+    ownedDrives?: boolean | User$ownedDrivesArgs<ExtArgs>
+    driveAccess?: boolean | User$driveAccessArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -1349,6 +1593,8 @@ export namespace Prisma {
     name: "User"
     objects: {
       media: Prisma.$MediaPayload<ExtArgs>[]
+      ownedDrives: Prisma.$DrivePayload<ExtArgs>[]
+      driveAccess: Prisma.$DriveAccessPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -1754,6 +2000,8 @@ export namespace Prisma {
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     media<T extends User$mediaArgs<ExtArgs> = {}>(args?: Subset<T, User$mediaArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MediaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    ownedDrives<T extends User$ownedDrivesArgs<ExtArgs> = {}>(args?: Subset<T, User$ownedDrivesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DrivePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    driveAccess<T extends User$driveAccessArgs<ExtArgs> = {}>(args?: Subset<T, User$driveAccessArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DriveAccessPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2201,6 +2449,54 @@ export namespace Prisma {
   }
 
   /**
+   * User.ownedDrives
+   */
+  export type User$ownedDrivesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Drive
+     */
+    select?: DriveSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Drive
+     */
+    omit?: DriveOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DriveInclude<ExtArgs> | null
+    where?: DriveWhereInput
+    orderBy?: DriveOrderByWithRelationInput | DriveOrderByWithRelationInput[]
+    cursor?: DriveWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DriveScalarFieldEnum | DriveScalarFieldEnum[]
+  }
+
+  /**
+   * User.driveAccess
+   */
+  export type User$driveAccessArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DriveAccess
+     */
+    select?: DriveAccessSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DriveAccess
+     */
+    omit?: DriveAccessOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DriveAccessInclude<ExtArgs> | null
+    where?: DriveAccessWhereInput
+    orderBy?: DriveAccessOrderByWithRelationInput | DriveAccessOrderByWithRelationInput[]
+    cursor?: DriveAccessWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DriveAccessScalarFieldEnum | DriveAccessScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2251,6 +2547,7 @@ export namespace Prisma {
     transcodeStatus: string | null
     transcodeError: string | null
     createdAt: Date | null
+    driveId: string | null
   }
 
   export type MediaMaxAggregateOutputType = {
@@ -2265,6 +2562,7 @@ export namespace Prisma {
     transcodeStatus: string | null
     transcodeError: string | null
     createdAt: Date | null
+    driveId: string | null
   }
 
   export type MediaCountAggregateOutputType = {
@@ -2279,6 +2577,7 @@ export namespace Prisma {
     transcodeStatus: number
     transcodeError: number
     createdAt: number
+    driveId: number
     _all: number
   }
 
@@ -2303,6 +2602,7 @@ export namespace Prisma {
     transcodeStatus?: true
     transcodeError?: true
     createdAt?: true
+    driveId?: true
   }
 
   export type MediaMaxAggregateInputType = {
@@ -2317,6 +2617,7 @@ export namespace Prisma {
     transcodeStatus?: true
     transcodeError?: true
     createdAt?: true
+    driveId?: true
   }
 
   export type MediaCountAggregateInputType = {
@@ -2331,6 +2632,7 @@ export namespace Prisma {
     transcodeStatus?: true
     transcodeError?: true
     createdAt?: true
+    driveId?: true
     _all?: true
   }
 
@@ -2432,6 +2734,7 @@ export namespace Prisma {
     transcodeStatus: string
     transcodeError: string | null
     createdAt: Date
+    driveId: string | null
     _count: MediaCountAggregateOutputType | null
     _avg: MediaAvgAggregateOutputType | null
     _sum: MediaSumAggregateOutputType | null
@@ -2465,7 +2768,9 @@ export namespace Prisma {
     transcodeStatus?: boolean
     transcodeError?: boolean
     createdAt?: boolean
+    driveId?: boolean
     user?: boolean | Media$userArgs<ExtArgs>
+    drive?: boolean | Media$driveArgs<ExtArgs>
   }, ExtArgs["result"]["media"]>
 
   export type MediaSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2480,7 +2785,9 @@ export namespace Prisma {
     transcodeStatus?: boolean
     transcodeError?: boolean
     createdAt?: boolean
+    driveId?: boolean
     user?: boolean | Media$userArgs<ExtArgs>
+    drive?: boolean | Media$driveArgs<ExtArgs>
   }, ExtArgs["result"]["media"]>
 
   export type MediaSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2495,7 +2802,9 @@ export namespace Prisma {
     transcodeStatus?: boolean
     transcodeError?: boolean
     createdAt?: boolean
+    driveId?: boolean
     user?: boolean | Media$userArgs<ExtArgs>
+    drive?: boolean | Media$driveArgs<ExtArgs>
   }, ExtArgs["result"]["media"]>
 
   export type MediaSelectScalar = {
@@ -2510,23 +2819,28 @@ export namespace Prisma {
     transcodeStatus?: boolean
     transcodeError?: boolean
     createdAt?: boolean
+    driveId?: boolean
   }
 
-  export type MediaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "filename" | "originalName" | "mimeType" | "size" | "ip" | "userId" | "isPrivate" | "transcodeStatus" | "transcodeError" | "createdAt", ExtArgs["result"]["media"]>
+  export type MediaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "filename" | "originalName" | "mimeType" | "size" | "ip" | "userId" | "isPrivate" | "transcodeStatus" | "transcodeError" | "createdAt" | "driveId", ExtArgs["result"]["media"]>
   export type MediaInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | Media$userArgs<ExtArgs>
+    drive?: boolean | Media$driveArgs<ExtArgs>
   }
   export type MediaIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | Media$userArgs<ExtArgs>
+    drive?: boolean | Media$driveArgs<ExtArgs>
   }
   export type MediaIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | Media$userArgs<ExtArgs>
+    drive?: boolean | Media$driveArgs<ExtArgs>
   }
 
   export type $MediaPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Media"
     objects: {
       user: Prisma.$UserPayload<ExtArgs> | null
+      drive: Prisma.$DrivePayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2540,6 +2854,7 @@ export namespace Prisma {
       transcodeStatus: string
       transcodeError: string | null
       createdAt: Date
+      driveId: string | null
     }, ExtArgs["result"]["media"]>
     composites: {}
   }
@@ -2935,6 +3250,7 @@ export namespace Prisma {
   export interface Prisma__MediaClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     user<T extends Media$userArgs<ExtArgs> = {}>(args?: Subset<T, Media$userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    drive<T extends Media$driveArgs<ExtArgs> = {}>(args?: Subset<T, Media$driveArgs<ExtArgs>>): Prisma__DriveClient<$Result.GetResult<Prisma.$DrivePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2975,6 +3291,7 @@ export namespace Prisma {
     readonly transcodeStatus: FieldRef<"Media", 'String'>
     readonly transcodeError: FieldRef<"Media", 'String'>
     readonly createdAt: FieldRef<"Media", 'DateTime'>
+    readonly driveId: FieldRef<"Media", 'String'>
   }
     
 
@@ -3388,6 +3705,25 @@ export namespace Prisma {
   }
 
   /**
+   * Media.drive
+   */
+  export type Media$driveArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Drive
+     */
+    select?: DriveSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Drive
+     */
+    omit?: DriveOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DriveInclude<ExtArgs> | null
+    where?: DriveWhereInput
+  }
+
+  /**
    * Media without action
    */
   export type MediaDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3403,6 +3739,2223 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: MediaInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Drive
+   */
+
+  export type AggregateDrive = {
+    _count: DriveCountAggregateOutputType | null
+    _min: DriveMinAggregateOutputType | null
+    _max: DriveMaxAggregateOutputType | null
+  }
+
+  export type DriveMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    description: string | null
+    ownerId: string | null
+    isPublic: boolean | null
+    publicRole: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type DriveMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    description: string | null
+    ownerId: string | null
+    isPublic: boolean | null
+    publicRole: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type DriveCountAggregateOutputType = {
+    id: number
+    name: number
+    description: number
+    ownerId: number
+    isPublic: number
+    publicRole: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type DriveMinAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    ownerId?: true
+    isPublic?: true
+    publicRole?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type DriveMaxAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    ownerId?: true
+    isPublic?: true
+    publicRole?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type DriveCountAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    ownerId?: true
+    isPublic?: true
+    publicRole?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type DriveAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Drive to aggregate.
+     */
+    where?: DriveWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Drives to fetch.
+     */
+    orderBy?: DriveOrderByWithRelationInput | DriveOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: DriveWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Drives from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Drives.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Drives
+    **/
+    _count?: true | DriveCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: DriveMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: DriveMaxAggregateInputType
+  }
+
+  export type GetDriveAggregateType<T extends DriveAggregateArgs> = {
+        [P in keyof T & keyof AggregateDrive]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDrive[P]>
+      : GetScalarType<T[P], AggregateDrive[P]>
+  }
+
+
+
+
+  export type DriveGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DriveWhereInput
+    orderBy?: DriveOrderByWithAggregationInput | DriveOrderByWithAggregationInput[]
+    by: DriveScalarFieldEnum[] | DriveScalarFieldEnum
+    having?: DriveScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: DriveCountAggregateInputType | true
+    _min?: DriveMinAggregateInputType
+    _max?: DriveMaxAggregateInputType
+  }
+
+  export type DriveGroupByOutputType = {
+    id: string
+    name: string
+    description: string | null
+    ownerId: string
+    isPublic: boolean
+    publicRole: string
+    createdAt: Date
+    updatedAt: Date
+    _count: DriveCountAggregateOutputType | null
+    _min: DriveMinAggregateOutputType | null
+    _max: DriveMaxAggregateOutputType | null
+  }
+
+  type GetDriveGroupByPayload<T extends DriveGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<DriveGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof DriveGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], DriveGroupByOutputType[P]>
+            : GetScalarType<T[P], DriveGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type DriveSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    ownerId?: boolean
+    isPublic?: boolean
+    publicRole?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    owner?: boolean | UserDefaultArgs<ExtArgs>
+    files?: boolean | Drive$filesArgs<ExtArgs>
+    access?: boolean | Drive$accessArgs<ExtArgs>
+    _count?: boolean | DriveCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["drive"]>
+
+  export type DriveSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    ownerId?: boolean
+    isPublic?: boolean
+    publicRole?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    owner?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["drive"]>
+
+  export type DriveSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    ownerId?: boolean
+    isPublic?: boolean
+    publicRole?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    owner?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["drive"]>
+
+  export type DriveSelectScalar = {
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    ownerId?: boolean
+    isPublic?: boolean
+    publicRole?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type DriveOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "ownerId" | "isPublic" | "publicRole" | "createdAt" | "updatedAt", ExtArgs["result"]["drive"]>
+  export type DriveInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    owner?: boolean | UserDefaultArgs<ExtArgs>
+    files?: boolean | Drive$filesArgs<ExtArgs>
+    access?: boolean | Drive$accessArgs<ExtArgs>
+    _count?: boolean | DriveCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type DriveIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    owner?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type DriveIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    owner?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $DrivePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Drive"
+    objects: {
+      owner: Prisma.$UserPayload<ExtArgs>
+      files: Prisma.$MediaPayload<ExtArgs>[]
+      access: Prisma.$DriveAccessPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      description: string | null
+      ownerId: string
+      isPublic: boolean
+      publicRole: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["drive"]>
+    composites: {}
+  }
+
+  type DriveGetPayload<S extends boolean | null | undefined | DriveDefaultArgs> = $Result.GetResult<Prisma.$DrivePayload, S>
+
+  type DriveCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<DriveFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: DriveCountAggregateInputType | true
+    }
+
+  export interface DriveDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Drive'], meta: { name: 'Drive' } }
+    /**
+     * Find zero or one Drive that matches the filter.
+     * @param {DriveFindUniqueArgs} args - Arguments to find a Drive
+     * @example
+     * // Get one Drive
+     * const drive = await prisma.drive.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends DriveFindUniqueArgs>(args: SelectSubset<T, DriveFindUniqueArgs<ExtArgs>>): Prisma__DriveClient<$Result.GetResult<Prisma.$DrivePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Drive that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {DriveFindUniqueOrThrowArgs} args - Arguments to find a Drive
+     * @example
+     * // Get one Drive
+     * const drive = await prisma.drive.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends DriveFindUniqueOrThrowArgs>(args: SelectSubset<T, DriveFindUniqueOrThrowArgs<ExtArgs>>): Prisma__DriveClient<$Result.GetResult<Prisma.$DrivePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Drive that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DriveFindFirstArgs} args - Arguments to find a Drive
+     * @example
+     * // Get one Drive
+     * const drive = await prisma.drive.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends DriveFindFirstArgs>(args?: SelectSubset<T, DriveFindFirstArgs<ExtArgs>>): Prisma__DriveClient<$Result.GetResult<Prisma.$DrivePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Drive that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DriveFindFirstOrThrowArgs} args - Arguments to find a Drive
+     * @example
+     * // Get one Drive
+     * const drive = await prisma.drive.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends DriveFindFirstOrThrowArgs>(args?: SelectSubset<T, DriveFindFirstOrThrowArgs<ExtArgs>>): Prisma__DriveClient<$Result.GetResult<Prisma.$DrivePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Drives that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DriveFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Drives
+     * const drives = await prisma.drive.findMany()
+     * 
+     * // Get first 10 Drives
+     * const drives = await prisma.drive.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const driveWithIdOnly = await prisma.drive.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends DriveFindManyArgs>(args?: SelectSubset<T, DriveFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DrivePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Drive.
+     * @param {DriveCreateArgs} args - Arguments to create a Drive.
+     * @example
+     * // Create one Drive
+     * const Drive = await prisma.drive.create({
+     *   data: {
+     *     // ... data to create a Drive
+     *   }
+     * })
+     * 
+     */
+    create<T extends DriveCreateArgs>(args: SelectSubset<T, DriveCreateArgs<ExtArgs>>): Prisma__DriveClient<$Result.GetResult<Prisma.$DrivePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Drives.
+     * @param {DriveCreateManyArgs} args - Arguments to create many Drives.
+     * @example
+     * // Create many Drives
+     * const drive = await prisma.drive.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends DriveCreateManyArgs>(args?: SelectSubset<T, DriveCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Drives and returns the data saved in the database.
+     * @param {DriveCreateManyAndReturnArgs} args - Arguments to create many Drives.
+     * @example
+     * // Create many Drives
+     * const drive = await prisma.drive.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Drives and only return the `id`
+     * const driveWithIdOnly = await prisma.drive.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends DriveCreateManyAndReturnArgs>(args?: SelectSubset<T, DriveCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DrivePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Drive.
+     * @param {DriveDeleteArgs} args - Arguments to delete one Drive.
+     * @example
+     * // Delete one Drive
+     * const Drive = await prisma.drive.delete({
+     *   where: {
+     *     // ... filter to delete one Drive
+     *   }
+     * })
+     * 
+     */
+    delete<T extends DriveDeleteArgs>(args: SelectSubset<T, DriveDeleteArgs<ExtArgs>>): Prisma__DriveClient<$Result.GetResult<Prisma.$DrivePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Drive.
+     * @param {DriveUpdateArgs} args - Arguments to update one Drive.
+     * @example
+     * // Update one Drive
+     * const drive = await prisma.drive.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends DriveUpdateArgs>(args: SelectSubset<T, DriveUpdateArgs<ExtArgs>>): Prisma__DriveClient<$Result.GetResult<Prisma.$DrivePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Drives.
+     * @param {DriveDeleteManyArgs} args - Arguments to filter Drives to delete.
+     * @example
+     * // Delete a few Drives
+     * const { count } = await prisma.drive.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends DriveDeleteManyArgs>(args?: SelectSubset<T, DriveDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Drives.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DriveUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Drives
+     * const drive = await prisma.drive.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends DriveUpdateManyArgs>(args: SelectSubset<T, DriveUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Drives and returns the data updated in the database.
+     * @param {DriveUpdateManyAndReturnArgs} args - Arguments to update many Drives.
+     * @example
+     * // Update many Drives
+     * const drive = await prisma.drive.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Drives and only return the `id`
+     * const driveWithIdOnly = await prisma.drive.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends DriveUpdateManyAndReturnArgs>(args: SelectSubset<T, DriveUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DrivePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Drive.
+     * @param {DriveUpsertArgs} args - Arguments to update or create a Drive.
+     * @example
+     * // Update or create a Drive
+     * const drive = await prisma.drive.upsert({
+     *   create: {
+     *     // ... data to create a Drive
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Drive we want to update
+     *   }
+     * })
+     */
+    upsert<T extends DriveUpsertArgs>(args: SelectSubset<T, DriveUpsertArgs<ExtArgs>>): Prisma__DriveClient<$Result.GetResult<Prisma.$DrivePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Drives.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DriveCountArgs} args - Arguments to filter Drives to count.
+     * @example
+     * // Count the number of Drives
+     * const count = await prisma.drive.count({
+     *   where: {
+     *     // ... the filter for the Drives we want to count
+     *   }
+     * })
+    **/
+    count<T extends DriveCountArgs>(
+      args?: Subset<T, DriveCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], DriveCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Drive.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DriveAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends DriveAggregateArgs>(args: Subset<T, DriveAggregateArgs>): Prisma.PrismaPromise<GetDriveAggregateType<T>>
+
+    /**
+     * Group by Drive.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DriveGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends DriveGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: DriveGroupByArgs['orderBy'] }
+        : { orderBy?: DriveGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, DriveGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDriveGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Drive model
+   */
+  readonly fields: DriveFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Drive.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__DriveClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    owner<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    files<T extends Drive$filesArgs<ExtArgs> = {}>(args?: Subset<T, Drive$filesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MediaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    access<T extends Drive$accessArgs<ExtArgs> = {}>(args?: Subset<T, Drive$accessArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DriveAccessPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Drive model
+   */
+  interface DriveFieldRefs {
+    readonly id: FieldRef<"Drive", 'String'>
+    readonly name: FieldRef<"Drive", 'String'>
+    readonly description: FieldRef<"Drive", 'String'>
+    readonly ownerId: FieldRef<"Drive", 'String'>
+    readonly isPublic: FieldRef<"Drive", 'Boolean'>
+    readonly publicRole: FieldRef<"Drive", 'String'>
+    readonly createdAt: FieldRef<"Drive", 'DateTime'>
+    readonly updatedAt: FieldRef<"Drive", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Drive findUnique
+   */
+  export type DriveFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Drive
+     */
+    select?: DriveSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Drive
+     */
+    omit?: DriveOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DriveInclude<ExtArgs> | null
+    /**
+     * Filter, which Drive to fetch.
+     */
+    where: DriveWhereUniqueInput
+  }
+
+  /**
+   * Drive findUniqueOrThrow
+   */
+  export type DriveFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Drive
+     */
+    select?: DriveSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Drive
+     */
+    omit?: DriveOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DriveInclude<ExtArgs> | null
+    /**
+     * Filter, which Drive to fetch.
+     */
+    where: DriveWhereUniqueInput
+  }
+
+  /**
+   * Drive findFirst
+   */
+  export type DriveFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Drive
+     */
+    select?: DriveSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Drive
+     */
+    omit?: DriveOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DriveInclude<ExtArgs> | null
+    /**
+     * Filter, which Drive to fetch.
+     */
+    where?: DriveWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Drives to fetch.
+     */
+    orderBy?: DriveOrderByWithRelationInput | DriveOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Drives.
+     */
+    cursor?: DriveWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Drives from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Drives.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Drives.
+     */
+    distinct?: DriveScalarFieldEnum | DriveScalarFieldEnum[]
+  }
+
+  /**
+   * Drive findFirstOrThrow
+   */
+  export type DriveFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Drive
+     */
+    select?: DriveSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Drive
+     */
+    omit?: DriveOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DriveInclude<ExtArgs> | null
+    /**
+     * Filter, which Drive to fetch.
+     */
+    where?: DriveWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Drives to fetch.
+     */
+    orderBy?: DriveOrderByWithRelationInput | DriveOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Drives.
+     */
+    cursor?: DriveWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Drives from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Drives.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Drives.
+     */
+    distinct?: DriveScalarFieldEnum | DriveScalarFieldEnum[]
+  }
+
+  /**
+   * Drive findMany
+   */
+  export type DriveFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Drive
+     */
+    select?: DriveSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Drive
+     */
+    omit?: DriveOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DriveInclude<ExtArgs> | null
+    /**
+     * Filter, which Drives to fetch.
+     */
+    where?: DriveWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Drives to fetch.
+     */
+    orderBy?: DriveOrderByWithRelationInput | DriveOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Drives.
+     */
+    cursor?: DriveWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Drives from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Drives.
+     */
+    skip?: number
+    distinct?: DriveScalarFieldEnum | DriveScalarFieldEnum[]
+  }
+
+  /**
+   * Drive create
+   */
+  export type DriveCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Drive
+     */
+    select?: DriveSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Drive
+     */
+    omit?: DriveOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DriveInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Drive.
+     */
+    data: XOR<DriveCreateInput, DriveUncheckedCreateInput>
+  }
+
+  /**
+   * Drive createMany
+   */
+  export type DriveCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Drives.
+     */
+    data: DriveCreateManyInput | DriveCreateManyInput[]
+  }
+
+  /**
+   * Drive createManyAndReturn
+   */
+  export type DriveCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Drive
+     */
+    select?: DriveSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Drive
+     */
+    omit?: DriveOmit<ExtArgs> | null
+    /**
+     * The data used to create many Drives.
+     */
+    data: DriveCreateManyInput | DriveCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DriveIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Drive update
+   */
+  export type DriveUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Drive
+     */
+    select?: DriveSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Drive
+     */
+    omit?: DriveOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DriveInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Drive.
+     */
+    data: XOR<DriveUpdateInput, DriveUncheckedUpdateInput>
+    /**
+     * Choose, which Drive to update.
+     */
+    where: DriveWhereUniqueInput
+  }
+
+  /**
+   * Drive updateMany
+   */
+  export type DriveUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Drives.
+     */
+    data: XOR<DriveUpdateManyMutationInput, DriveUncheckedUpdateManyInput>
+    /**
+     * Filter which Drives to update
+     */
+    where?: DriveWhereInput
+    /**
+     * Limit how many Drives to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Drive updateManyAndReturn
+   */
+  export type DriveUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Drive
+     */
+    select?: DriveSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Drive
+     */
+    omit?: DriveOmit<ExtArgs> | null
+    /**
+     * The data used to update Drives.
+     */
+    data: XOR<DriveUpdateManyMutationInput, DriveUncheckedUpdateManyInput>
+    /**
+     * Filter which Drives to update
+     */
+    where?: DriveWhereInput
+    /**
+     * Limit how many Drives to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DriveIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Drive upsert
+   */
+  export type DriveUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Drive
+     */
+    select?: DriveSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Drive
+     */
+    omit?: DriveOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DriveInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Drive to update in case it exists.
+     */
+    where: DriveWhereUniqueInput
+    /**
+     * In case the Drive found by the `where` argument doesn't exist, create a new Drive with this data.
+     */
+    create: XOR<DriveCreateInput, DriveUncheckedCreateInput>
+    /**
+     * In case the Drive was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<DriveUpdateInput, DriveUncheckedUpdateInput>
+  }
+
+  /**
+   * Drive delete
+   */
+  export type DriveDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Drive
+     */
+    select?: DriveSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Drive
+     */
+    omit?: DriveOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DriveInclude<ExtArgs> | null
+    /**
+     * Filter which Drive to delete.
+     */
+    where: DriveWhereUniqueInput
+  }
+
+  /**
+   * Drive deleteMany
+   */
+  export type DriveDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Drives to delete
+     */
+    where?: DriveWhereInput
+    /**
+     * Limit how many Drives to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Drive.files
+   */
+  export type Drive$filesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Media
+     */
+    select?: MediaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Media
+     */
+    omit?: MediaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MediaInclude<ExtArgs> | null
+    where?: MediaWhereInput
+    orderBy?: MediaOrderByWithRelationInput | MediaOrderByWithRelationInput[]
+    cursor?: MediaWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MediaScalarFieldEnum | MediaScalarFieldEnum[]
+  }
+
+  /**
+   * Drive.access
+   */
+  export type Drive$accessArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DriveAccess
+     */
+    select?: DriveAccessSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DriveAccess
+     */
+    omit?: DriveAccessOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DriveAccessInclude<ExtArgs> | null
+    where?: DriveAccessWhereInput
+    orderBy?: DriveAccessOrderByWithRelationInput | DriveAccessOrderByWithRelationInput[]
+    cursor?: DriveAccessWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DriveAccessScalarFieldEnum | DriveAccessScalarFieldEnum[]
+  }
+
+  /**
+   * Drive without action
+   */
+  export type DriveDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Drive
+     */
+    select?: DriveSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Drive
+     */
+    omit?: DriveOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DriveInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model DriveAccess
+   */
+
+  export type AggregateDriveAccess = {
+    _count: DriveAccessCountAggregateOutputType | null
+    _min: DriveAccessMinAggregateOutputType | null
+    _max: DriveAccessMaxAggregateOutputType | null
+  }
+
+  export type DriveAccessMinAggregateOutputType = {
+    id: string | null
+    driveId: string | null
+    userId: string | null
+    role: string | null
+    createdAt: Date | null
+  }
+
+  export type DriveAccessMaxAggregateOutputType = {
+    id: string | null
+    driveId: string | null
+    userId: string | null
+    role: string | null
+    createdAt: Date | null
+  }
+
+  export type DriveAccessCountAggregateOutputType = {
+    id: number
+    driveId: number
+    userId: number
+    role: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type DriveAccessMinAggregateInputType = {
+    id?: true
+    driveId?: true
+    userId?: true
+    role?: true
+    createdAt?: true
+  }
+
+  export type DriveAccessMaxAggregateInputType = {
+    id?: true
+    driveId?: true
+    userId?: true
+    role?: true
+    createdAt?: true
+  }
+
+  export type DriveAccessCountAggregateInputType = {
+    id?: true
+    driveId?: true
+    userId?: true
+    role?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type DriveAccessAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DriveAccess to aggregate.
+     */
+    where?: DriveAccessWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DriveAccesses to fetch.
+     */
+    orderBy?: DriveAccessOrderByWithRelationInput | DriveAccessOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: DriveAccessWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DriveAccesses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DriveAccesses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned DriveAccesses
+    **/
+    _count?: true | DriveAccessCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: DriveAccessMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: DriveAccessMaxAggregateInputType
+  }
+
+  export type GetDriveAccessAggregateType<T extends DriveAccessAggregateArgs> = {
+        [P in keyof T & keyof AggregateDriveAccess]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDriveAccess[P]>
+      : GetScalarType<T[P], AggregateDriveAccess[P]>
+  }
+
+
+
+
+  export type DriveAccessGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DriveAccessWhereInput
+    orderBy?: DriveAccessOrderByWithAggregationInput | DriveAccessOrderByWithAggregationInput[]
+    by: DriveAccessScalarFieldEnum[] | DriveAccessScalarFieldEnum
+    having?: DriveAccessScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: DriveAccessCountAggregateInputType | true
+    _min?: DriveAccessMinAggregateInputType
+    _max?: DriveAccessMaxAggregateInputType
+  }
+
+  export type DriveAccessGroupByOutputType = {
+    id: string
+    driveId: string
+    userId: string
+    role: string
+    createdAt: Date
+    _count: DriveAccessCountAggregateOutputType | null
+    _min: DriveAccessMinAggregateOutputType | null
+    _max: DriveAccessMaxAggregateOutputType | null
+  }
+
+  type GetDriveAccessGroupByPayload<T extends DriveAccessGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<DriveAccessGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof DriveAccessGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], DriveAccessGroupByOutputType[P]>
+            : GetScalarType<T[P], DriveAccessGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type DriveAccessSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    driveId?: boolean
+    userId?: boolean
+    role?: boolean
+    createdAt?: boolean
+    drive?: boolean | DriveDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["driveAccess"]>
+
+  export type DriveAccessSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    driveId?: boolean
+    userId?: boolean
+    role?: boolean
+    createdAt?: boolean
+    drive?: boolean | DriveDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["driveAccess"]>
+
+  export type DriveAccessSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    driveId?: boolean
+    userId?: boolean
+    role?: boolean
+    createdAt?: boolean
+    drive?: boolean | DriveDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["driveAccess"]>
+
+  export type DriveAccessSelectScalar = {
+    id?: boolean
+    driveId?: boolean
+    userId?: boolean
+    role?: boolean
+    createdAt?: boolean
+  }
+
+  export type DriveAccessOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "driveId" | "userId" | "role" | "createdAt", ExtArgs["result"]["driveAccess"]>
+  export type DriveAccessInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    drive?: boolean | DriveDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type DriveAccessIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    drive?: boolean | DriveDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type DriveAccessIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    drive?: boolean | DriveDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $DriveAccessPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "DriveAccess"
+    objects: {
+      drive: Prisma.$DrivePayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      driveId: string
+      userId: string
+      role: string
+      createdAt: Date
+    }, ExtArgs["result"]["driveAccess"]>
+    composites: {}
+  }
+
+  type DriveAccessGetPayload<S extends boolean | null | undefined | DriveAccessDefaultArgs> = $Result.GetResult<Prisma.$DriveAccessPayload, S>
+
+  type DriveAccessCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<DriveAccessFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: DriveAccessCountAggregateInputType | true
+    }
+
+  export interface DriveAccessDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['DriveAccess'], meta: { name: 'DriveAccess' } }
+    /**
+     * Find zero or one DriveAccess that matches the filter.
+     * @param {DriveAccessFindUniqueArgs} args - Arguments to find a DriveAccess
+     * @example
+     * // Get one DriveAccess
+     * const driveAccess = await prisma.driveAccess.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends DriveAccessFindUniqueArgs>(args: SelectSubset<T, DriveAccessFindUniqueArgs<ExtArgs>>): Prisma__DriveAccessClient<$Result.GetResult<Prisma.$DriveAccessPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one DriveAccess that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {DriveAccessFindUniqueOrThrowArgs} args - Arguments to find a DriveAccess
+     * @example
+     * // Get one DriveAccess
+     * const driveAccess = await prisma.driveAccess.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends DriveAccessFindUniqueOrThrowArgs>(args: SelectSubset<T, DriveAccessFindUniqueOrThrowArgs<ExtArgs>>): Prisma__DriveAccessClient<$Result.GetResult<Prisma.$DriveAccessPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DriveAccess that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DriveAccessFindFirstArgs} args - Arguments to find a DriveAccess
+     * @example
+     * // Get one DriveAccess
+     * const driveAccess = await prisma.driveAccess.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends DriveAccessFindFirstArgs>(args?: SelectSubset<T, DriveAccessFindFirstArgs<ExtArgs>>): Prisma__DriveAccessClient<$Result.GetResult<Prisma.$DriveAccessPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DriveAccess that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DriveAccessFindFirstOrThrowArgs} args - Arguments to find a DriveAccess
+     * @example
+     * // Get one DriveAccess
+     * const driveAccess = await prisma.driveAccess.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends DriveAccessFindFirstOrThrowArgs>(args?: SelectSubset<T, DriveAccessFindFirstOrThrowArgs<ExtArgs>>): Prisma__DriveAccessClient<$Result.GetResult<Prisma.$DriveAccessPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more DriveAccesses that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DriveAccessFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all DriveAccesses
+     * const driveAccesses = await prisma.driveAccess.findMany()
+     * 
+     * // Get first 10 DriveAccesses
+     * const driveAccesses = await prisma.driveAccess.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const driveAccessWithIdOnly = await prisma.driveAccess.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends DriveAccessFindManyArgs>(args?: SelectSubset<T, DriveAccessFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DriveAccessPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a DriveAccess.
+     * @param {DriveAccessCreateArgs} args - Arguments to create a DriveAccess.
+     * @example
+     * // Create one DriveAccess
+     * const DriveAccess = await prisma.driveAccess.create({
+     *   data: {
+     *     // ... data to create a DriveAccess
+     *   }
+     * })
+     * 
+     */
+    create<T extends DriveAccessCreateArgs>(args: SelectSubset<T, DriveAccessCreateArgs<ExtArgs>>): Prisma__DriveAccessClient<$Result.GetResult<Prisma.$DriveAccessPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many DriveAccesses.
+     * @param {DriveAccessCreateManyArgs} args - Arguments to create many DriveAccesses.
+     * @example
+     * // Create many DriveAccesses
+     * const driveAccess = await prisma.driveAccess.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends DriveAccessCreateManyArgs>(args?: SelectSubset<T, DriveAccessCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many DriveAccesses and returns the data saved in the database.
+     * @param {DriveAccessCreateManyAndReturnArgs} args - Arguments to create many DriveAccesses.
+     * @example
+     * // Create many DriveAccesses
+     * const driveAccess = await prisma.driveAccess.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many DriveAccesses and only return the `id`
+     * const driveAccessWithIdOnly = await prisma.driveAccess.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends DriveAccessCreateManyAndReturnArgs>(args?: SelectSubset<T, DriveAccessCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DriveAccessPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a DriveAccess.
+     * @param {DriveAccessDeleteArgs} args - Arguments to delete one DriveAccess.
+     * @example
+     * // Delete one DriveAccess
+     * const DriveAccess = await prisma.driveAccess.delete({
+     *   where: {
+     *     // ... filter to delete one DriveAccess
+     *   }
+     * })
+     * 
+     */
+    delete<T extends DriveAccessDeleteArgs>(args: SelectSubset<T, DriveAccessDeleteArgs<ExtArgs>>): Prisma__DriveAccessClient<$Result.GetResult<Prisma.$DriveAccessPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one DriveAccess.
+     * @param {DriveAccessUpdateArgs} args - Arguments to update one DriveAccess.
+     * @example
+     * // Update one DriveAccess
+     * const driveAccess = await prisma.driveAccess.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends DriveAccessUpdateArgs>(args: SelectSubset<T, DriveAccessUpdateArgs<ExtArgs>>): Prisma__DriveAccessClient<$Result.GetResult<Prisma.$DriveAccessPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more DriveAccesses.
+     * @param {DriveAccessDeleteManyArgs} args - Arguments to filter DriveAccesses to delete.
+     * @example
+     * // Delete a few DriveAccesses
+     * const { count } = await prisma.driveAccess.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends DriveAccessDeleteManyArgs>(args?: SelectSubset<T, DriveAccessDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DriveAccesses.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DriveAccessUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many DriveAccesses
+     * const driveAccess = await prisma.driveAccess.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends DriveAccessUpdateManyArgs>(args: SelectSubset<T, DriveAccessUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DriveAccesses and returns the data updated in the database.
+     * @param {DriveAccessUpdateManyAndReturnArgs} args - Arguments to update many DriveAccesses.
+     * @example
+     * // Update many DriveAccesses
+     * const driveAccess = await prisma.driveAccess.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more DriveAccesses and only return the `id`
+     * const driveAccessWithIdOnly = await prisma.driveAccess.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends DriveAccessUpdateManyAndReturnArgs>(args: SelectSubset<T, DriveAccessUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DriveAccessPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one DriveAccess.
+     * @param {DriveAccessUpsertArgs} args - Arguments to update or create a DriveAccess.
+     * @example
+     * // Update or create a DriveAccess
+     * const driveAccess = await prisma.driveAccess.upsert({
+     *   create: {
+     *     // ... data to create a DriveAccess
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the DriveAccess we want to update
+     *   }
+     * })
+     */
+    upsert<T extends DriveAccessUpsertArgs>(args: SelectSubset<T, DriveAccessUpsertArgs<ExtArgs>>): Prisma__DriveAccessClient<$Result.GetResult<Prisma.$DriveAccessPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of DriveAccesses.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DriveAccessCountArgs} args - Arguments to filter DriveAccesses to count.
+     * @example
+     * // Count the number of DriveAccesses
+     * const count = await prisma.driveAccess.count({
+     *   where: {
+     *     // ... the filter for the DriveAccesses we want to count
+     *   }
+     * })
+    **/
+    count<T extends DriveAccessCountArgs>(
+      args?: Subset<T, DriveAccessCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], DriveAccessCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a DriveAccess.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DriveAccessAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends DriveAccessAggregateArgs>(args: Subset<T, DriveAccessAggregateArgs>): Prisma.PrismaPromise<GetDriveAccessAggregateType<T>>
+
+    /**
+     * Group by DriveAccess.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DriveAccessGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends DriveAccessGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: DriveAccessGroupByArgs['orderBy'] }
+        : { orderBy?: DriveAccessGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, DriveAccessGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDriveAccessGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the DriveAccess model
+   */
+  readonly fields: DriveAccessFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for DriveAccess.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__DriveAccessClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    drive<T extends DriveDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DriveDefaultArgs<ExtArgs>>): Prisma__DriveClient<$Result.GetResult<Prisma.$DrivePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the DriveAccess model
+   */
+  interface DriveAccessFieldRefs {
+    readonly id: FieldRef<"DriveAccess", 'String'>
+    readonly driveId: FieldRef<"DriveAccess", 'String'>
+    readonly userId: FieldRef<"DriveAccess", 'String'>
+    readonly role: FieldRef<"DriveAccess", 'String'>
+    readonly createdAt: FieldRef<"DriveAccess", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * DriveAccess findUnique
+   */
+  export type DriveAccessFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DriveAccess
+     */
+    select?: DriveAccessSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DriveAccess
+     */
+    omit?: DriveAccessOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DriveAccessInclude<ExtArgs> | null
+    /**
+     * Filter, which DriveAccess to fetch.
+     */
+    where: DriveAccessWhereUniqueInput
+  }
+
+  /**
+   * DriveAccess findUniqueOrThrow
+   */
+  export type DriveAccessFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DriveAccess
+     */
+    select?: DriveAccessSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DriveAccess
+     */
+    omit?: DriveAccessOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DriveAccessInclude<ExtArgs> | null
+    /**
+     * Filter, which DriveAccess to fetch.
+     */
+    where: DriveAccessWhereUniqueInput
+  }
+
+  /**
+   * DriveAccess findFirst
+   */
+  export type DriveAccessFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DriveAccess
+     */
+    select?: DriveAccessSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DriveAccess
+     */
+    omit?: DriveAccessOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DriveAccessInclude<ExtArgs> | null
+    /**
+     * Filter, which DriveAccess to fetch.
+     */
+    where?: DriveAccessWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DriveAccesses to fetch.
+     */
+    orderBy?: DriveAccessOrderByWithRelationInput | DriveAccessOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DriveAccesses.
+     */
+    cursor?: DriveAccessWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DriveAccesses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DriveAccesses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DriveAccesses.
+     */
+    distinct?: DriveAccessScalarFieldEnum | DriveAccessScalarFieldEnum[]
+  }
+
+  /**
+   * DriveAccess findFirstOrThrow
+   */
+  export type DriveAccessFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DriveAccess
+     */
+    select?: DriveAccessSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DriveAccess
+     */
+    omit?: DriveAccessOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DriveAccessInclude<ExtArgs> | null
+    /**
+     * Filter, which DriveAccess to fetch.
+     */
+    where?: DriveAccessWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DriveAccesses to fetch.
+     */
+    orderBy?: DriveAccessOrderByWithRelationInput | DriveAccessOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DriveAccesses.
+     */
+    cursor?: DriveAccessWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DriveAccesses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DriveAccesses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DriveAccesses.
+     */
+    distinct?: DriveAccessScalarFieldEnum | DriveAccessScalarFieldEnum[]
+  }
+
+  /**
+   * DriveAccess findMany
+   */
+  export type DriveAccessFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DriveAccess
+     */
+    select?: DriveAccessSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DriveAccess
+     */
+    omit?: DriveAccessOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DriveAccessInclude<ExtArgs> | null
+    /**
+     * Filter, which DriveAccesses to fetch.
+     */
+    where?: DriveAccessWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DriveAccesses to fetch.
+     */
+    orderBy?: DriveAccessOrderByWithRelationInput | DriveAccessOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing DriveAccesses.
+     */
+    cursor?: DriveAccessWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DriveAccesses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DriveAccesses.
+     */
+    skip?: number
+    distinct?: DriveAccessScalarFieldEnum | DriveAccessScalarFieldEnum[]
+  }
+
+  /**
+   * DriveAccess create
+   */
+  export type DriveAccessCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DriveAccess
+     */
+    select?: DriveAccessSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DriveAccess
+     */
+    omit?: DriveAccessOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DriveAccessInclude<ExtArgs> | null
+    /**
+     * The data needed to create a DriveAccess.
+     */
+    data: XOR<DriveAccessCreateInput, DriveAccessUncheckedCreateInput>
+  }
+
+  /**
+   * DriveAccess createMany
+   */
+  export type DriveAccessCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many DriveAccesses.
+     */
+    data: DriveAccessCreateManyInput | DriveAccessCreateManyInput[]
+  }
+
+  /**
+   * DriveAccess createManyAndReturn
+   */
+  export type DriveAccessCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DriveAccess
+     */
+    select?: DriveAccessSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DriveAccess
+     */
+    omit?: DriveAccessOmit<ExtArgs> | null
+    /**
+     * The data used to create many DriveAccesses.
+     */
+    data: DriveAccessCreateManyInput | DriveAccessCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DriveAccessIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * DriveAccess update
+   */
+  export type DriveAccessUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DriveAccess
+     */
+    select?: DriveAccessSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DriveAccess
+     */
+    omit?: DriveAccessOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DriveAccessInclude<ExtArgs> | null
+    /**
+     * The data needed to update a DriveAccess.
+     */
+    data: XOR<DriveAccessUpdateInput, DriveAccessUncheckedUpdateInput>
+    /**
+     * Choose, which DriveAccess to update.
+     */
+    where: DriveAccessWhereUniqueInput
+  }
+
+  /**
+   * DriveAccess updateMany
+   */
+  export type DriveAccessUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update DriveAccesses.
+     */
+    data: XOR<DriveAccessUpdateManyMutationInput, DriveAccessUncheckedUpdateManyInput>
+    /**
+     * Filter which DriveAccesses to update
+     */
+    where?: DriveAccessWhereInput
+    /**
+     * Limit how many DriveAccesses to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * DriveAccess updateManyAndReturn
+   */
+  export type DriveAccessUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DriveAccess
+     */
+    select?: DriveAccessSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DriveAccess
+     */
+    omit?: DriveAccessOmit<ExtArgs> | null
+    /**
+     * The data used to update DriveAccesses.
+     */
+    data: XOR<DriveAccessUpdateManyMutationInput, DriveAccessUncheckedUpdateManyInput>
+    /**
+     * Filter which DriveAccesses to update
+     */
+    where?: DriveAccessWhereInput
+    /**
+     * Limit how many DriveAccesses to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DriveAccessIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * DriveAccess upsert
+   */
+  export type DriveAccessUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DriveAccess
+     */
+    select?: DriveAccessSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DriveAccess
+     */
+    omit?: DriveAccessOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DriveAccessInclude<ExtArgs> | null
+    /**
+     * The filter to search for the DriveAccess to update in case it exists.
+     */
+    where: DriveAccessWhereUniqueInput
+    /**
+     * In case the DriveAccess found by the `where` argument doesn't exist, create a new DriveAccess with this data.
+     */
+    create: XOR<DriveAccessCreateInput, DriveAccessUncheckedCreateInput>
+    /**
+     * In case the DriveAccess was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<DriveAccessUpdateInput, DriveAccessUncheckedUpdateInput>
+  }
+
+  /**
+   * DriveAccess delete
+   */
+  export type DriveAccessDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DriveAccess
+     */
+    select?: DriveAccessSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DriveAccess
+     */
+    omit?: DriveAccessOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DriveAccessInclude<ExtArgs> | null
+    /**
+     * Filter which DriveAccess to delete.
+     */
+    where: DriveAccessWhereUniqueInput
+  }
+
+  /**
+   * DriveAccess deleteMany
+   */
+  export type DriveAccessDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DriveAccesses to delete
+     */
+    where?: DriveAccessWhereInput
+    /**
+     * Limit how many DriveAccesses to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * DriveAccess without action
+   */
+  export type DriveAccessDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DriveAccess
+     */
+    select?: DriveAccessSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DriveAccess
+     */
+    omit?: DriveAccessOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DriveAccessInclude<ExtArgs> | null
   }
 
 
@@ -4594,10 +7147,36 @@ export namespace Prisma {
     isPrivate: 'isPrivate',
     transcodeStatus: 'transcodeStatus',
     transcodeError: 'transcodeError',
-    createdAt: 'createdAt'
+    createdAt: 'createdAt',
+    driveId: 'driveId'
   };
 
   export type MediaScalarFieldEnum = (typeof MediaScalarFieldEnum)[keyof typeof MediaScalarFieldEnum]
+
+
+  export const DriveScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    description: 'description',
+    ownerId: 'ownerId',
+    isPublic: 'isPublic',
+    publicRole: 'publicRole',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type DriveScalarFieldEnum = (typeof DriveScalarFieldEnum)[keyof typeof DriveScalarFieldEnum]
+
+
+  export const DriveAccessScalarFieldEnum: {
+    id: 'id',
+    driveId: 'driveId',
+    userId: 'userId',
+    role: 'role',
+    createdAt: 'createdAt'
+  };
+
+  export type DriveAccessScalarFieldEnum = (typeof DriveAccessScalarFieldEnum)[keyof typeof DriveAccessScalarFieldEnum]
 
 
   export const SettingsScalarFieldEnum: {
@@ -4699,6 +7278,8 @@ export namespace Prisma {
     customMaxFileSize?: BigIntNullableFilter<"User"> | bigint | number | null
     customRateLimitWindow?: IntNullableFilter<"User"> | number | null
     media?: MediaListRelationFilter
+    ownedDrives?: DriveListRelationFilter
+    driveAccess?: DriveAccessListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -4711,6 +7292,8 @@ export namespace Prisma {
     customMaxFileSize?: SortOrderInput | SortOrder
     customRateLimitWindow?: SortOrderInput | SortOrder
     media?: MediaOrderByRelationAggregateInput
+    ownedDrives?: DriveOrderByRelationAggregateInput
+    driveAccess?: DriveAccessOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -4726,6 +7309,8 @@ export namespace Prisma {
     customMaxFileSize?: BigIntNullableFilter<"User"> | bigint | number | null
     customRateLimitWindow?: IntNullableFilter<"User"> | number | null
     media?: MediaListRelationFilter
+    ownedDrives?: DriveListRelationFilter
+    driveAccess?: DriveAccessListRelationFilter
   }, "id" | "username">
 
   export type UserOrderByWithAggregationInput = {
@@ -4773,7 +7358,9 @@ export namespace Prisma {
     transcodeStatus?: StringFilter<"Media"> | string
     transcodeError?: StringNullableFilter<"Media"> | string | null
     createdAt?: DateTimeFilter<"Media"> | Date | string
+    driveId?: StringNullableFilter<"Media"> | string | null
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    drive?: XOR<DriveNullableScalarRelationFilter, DriveWhereInput> | null
   }
 
   export type MediaOrderByWithRelationInput = {
@@ -4788,7 +7375,9 @@ export namespace Prisma {
     transcodeStatus?: SortOrder
     transcodeError?: SortOrderInput | SortOrder
     createdAt?: SortOrder
+    driveId?: SortOrderInput | SortOrder
     user?: UserOrderByWithRelationInput
+    drive?: DriveOrderByWithRelationInput
   }
 
   export type MediaWhereUniqueInput = Prisma.AtLeast<{
@@ -4806,7 +7395,9 @@ export namespace Prisma {
     transcodeStatus?: StringFilter<"Media"> | string
     transcodeError?: StringNullableFilter<"Media"> | string | null
     createdAt?: DateTimeFilter<"Media"> | Date | string
+    driveId?: StringNullableFilter<"Media"> | string | null
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    drive?: XOR<DriveNullableScalarRelationFilter, DriveWhereInput> | null
   }, "id">
 
   export type MediaOrderByWithAggregationInput = {
@@ -4821,6 +7412,7 @@ export namespace Prisma {
     transcodeStatus?: SortOrder
     transcodeError?: SortOrderInput | SortOrder
     createdAt?: SortOrder
+    driveId?: SortOrderInput | SortOrder
     _count?: MediaCountOrderByAggregateInput
     _avg?: MediaAvgOrderByAggregateInput
     _max?: MediaMaxOrderByAggregateInput
@@ -4843,6 +7435,142 @@ export namespace Prisma {
     transcodeStatus?: StringWithAggregatesFilter<"Media"> | string
     transcodeError?: StringNullableWithAggregatesFilter<"Media"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Media"> | Date | string
+    driveId?: StringNullableWithAggregatesFilter<"Media"> | string | null
+  }
+
+  export type DriveWhereInput = {
+    AND?: DriveWhereInput | DriveWhereInput[]
+    OR?: DriveWhereInput[]
+    NOT?: DriveWhereInput | DriveWhereInput[]
+    id?: StringFilter<"Drive"> | string
+    name?: StringFilter<"Drive"> | string
+    description?: StringNullableFilter<"Drive"> | string | null
+    ownerId?: StringFilter<"Drive"> | string
+    isPublic?: BoolFilter<"Drive"> | boolean
+    publicRole?: StringFilter<"Drive"> | string
+    createdAt?: DateTimeFilter<"Drive"> | Date | string
+    updatedAt?: DateTimeFilter<"Drive"> | Date | string
+    owner?: XOR<UserScalarRelationFilter, UserWhereInput>
+    files?: MediaListRelationFilter
+    access?: DriveAccessListRelationFilter
+  }
+
+  export type DriveOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    ownerId?: SortOrder
+    isPublic?: SortOrder
+    publicRole?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    owner?: UserOrderByWithRelationInput
+    files?: MediaOrderByRelationAggregateInput
+    access?: DriveAccessOrderByRelationAggregateInput
+  }
+
+  export type DriveWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: DriveWhereInput | DriveWhereInput[]
+    OR?: DriveWhereInput[]
+    NOT?: DriveWhereInput | DriveWhereInput[]
+    name?: StringFilter<"Drive"> | string
+    description?: StringNullableFilter<"Drive"> | string | null
+    ownerId?: StringFilter<"Drive"> | string
+    isPublic?: BoolFilter<"Drive"> | boolean
+    publicRole?: StringFilter<"Drive"> | string
+    createdAt?: DateTimeFilter<"Drive"> | Date | string
+    updatedAt?: DateTimeFilter<"Drive"> | Date | string
+    owner?: XOR<UserScalarRelationFilter, UserWhereInput>
+    files?: MediaListRelationFilter
+    access?: DriveAccessListRelationFilter
+  }, "id">
+
+  export type DriveOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    ownerId?: SortOrder
+    isPublic?: SortOrder
+    publicRole?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: DriveCountOrderByAggregateInput
+    _max?: DriveMaxOrderByAggregateInput
+    _min?: DriveMinOrderByAggregateInput
+  }
+
+  export type DriveScalarWhereWithAggregatesInput = {
+    AND?: DriveScalarWhereWithAggregatesInput | DriveScalarWhereWithAggregatesInput[]
+    OR?: DriveScalarWhereWithAggregatesInput[]
+    NOT?: DriveScalarWhereWithAggregatesInput | DriveScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Drive"> | string
+    name?: StringWithAggregatesFilter<"Drive"> | string
+    description?: StringNullableWithAggregatesFilter<"Drive"> | string | null
+    ownerId?: StringWithAggregatesFilter<"Drive"> | string
+    isPublic?: BoolWithAggregatesFilter<"Drive"> | boolean
+    publicRole?: StringWithAggregatesFilter<"Drive"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"Drive"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Drive"> | Date | string
+  }
+
+  export type DriveAccessWhereInput = {
+    AND?: DriveAccessWhereInput | DriveAccessWhereInput[]
+    OR?: DriveAccessWhereInput[]
+    NOT?: DriveAccessWhereInput | DriveAccessWhereInput[]
+    id?: StringFilter<"DriveAccess"> | string
+    driveId?: StringFilter<"DriveAccess"> | string
+    userId?: StringFilter<"DriveAccess"> | string
+    role?: StringFilter<"DriveAccess"> | string
+    createdAt?: DateTimeFilter<"DriveAccess"> | Date | string
+    drive?: XOR<DriveScalarRelationFilter, DriveWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type DriveAccessOrderByWithRelationInput = {
+    id?: SortOrder
+    driveId?: SortOrder
+    userId?: SortOrder
+    role?: SortOrder
+    createdAt?: SortOrder
+    drive?: DriveOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type DriveAccessWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    driveId_userId?: DriveAccessDriveIdUserIdCompoundUniqueInput
+    AND?: DriveAccessWhereInput | DriveAccessWhereInput[]
+    OR?: DriveAccessWhereInput[]
+    NOT?: DriveAccessWhereInput | DriveAccessWhereInput[]
+    driveId?: StringFilter<"DriveAccess"> | string
+    userId?: StringFilter<"DriveAccess"> | string
+    role?: StringFilter<"DriveAccess"> | string
+    createdAt?: DateTimeFilter<"DriveAccess"> | Date | string
+    drive?: XOR<DriveScalarRelationFilter, DriveWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "driveId_userId">
+
+  export type DriveAccessOrderByWithAggregationInput = {
+    id?: SortOrder
+    driveId?: SortOrder
+    userId?: SortOrder
+    role?: SortOrder
+    createdAt?: SortOrder
+    _count?: DriveAccessCountOrderByAggregateInput
+    _max?: DriveAccessMaxOrderByAggregateInput
+    _min?: DriveAccessMinOrderByAggregateInput
+  }
+
+  export type DriveAccessScalarWhereWithAggregatesInput = {
+    AND?: DriveAccessScalarWhereWithAggregatesInput | DriveAccessScalarWhereWithAggregatesInput[]
+    OR?: DriveAccessScalarWhereWithAggregatesInput[]
+    NOT?: DriveAccessScalarWhereWithAggregatesInput | DriveAccessScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"DriveAccess"> | string
+    driveId?: StringWithAggregatesFilter<"DriveAccess"> | string
+    userId?: StringWithAggregatesFilter<"DriveAccess"> | string
+    role?: StringWithAggregatesFilter<"DriveAccess"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"DriveAccess"> | Date | string
   }
 
   export type SettingsWhereInput = {
@@ -4954,6 +7682,8 @@ export namespace Prisma {
     customMaxFileSize?: bigint | number | null
     customRateLimitWindow?: number | null
     media?: MediaCreateNestedManyWithoutUserInput
+    ownedDrives?: DriveCreateNestedManyWithoutOwnerInput
+    driveAccess?: DriveAccessCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -4966,6 +7696,8 @@ export namespace Prisma {
     customMaxFileSize?: bigint | number | null
     customRateLimitWindow?: number | null
     media?: MediaUncheckedCreateNestedManyWithoutUserInput
+    ownedDrives?: DriveUncheckedCreateNestedManyWithoutOwnerInput
+    driveAccess?: DriveAccessUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -4978,6 +7710,8 @@ export namespace Prisma {
     customMaxFileSize?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
     customRateLimitWindow?: NullableIntFieldUpdateOperationsInput | number | null
     media?: MediaUpdateManyWithoutUserNestedInput
+    ownedDrives?: DriveUpdateManyWithoutOwnerNestedInput
+    driveAccess?: DriveAccessUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -4990,6 +7724,8 @@ export namespace Prisma {
     customMaxFileSize?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
     customRateLimitWindow?: NullableIntFieldUpdateOperationsInput | number | null
     media?: MediaUncheckedUpdateManyWithoutUserNestedInput
+    ownedDrives?: DriveUncheckedUpdateManyWithoutOwnerNestedInput
+    driveAccess?: DriveAccessUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -5037,6 +7773,7 @@ export namespace Prisma {
     transcodeError?: string | null
     createdAt?: Date | string
     user?: UserCreateNestedOneWithoutMediaInput
+    drive?: DriveCreateNestedOneWithoutFilesInput
   }
 
   export type MediaUncheckedCreateInput = {
@@ -5051,6 +7788,7 @@ export namespace Prisma {
     transcodeStatus?: string
     transcodeError?: string | null
     createdAt?: Date | string
+    driveId?: string | null
   }
 
   export type MediaUpdateInput = {
@@ -5065,6 +7803,7 @@ export namespace Prisma {
     transcodeError?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneWithoutMediaNestedInput
+    drive?: DriveUpdateOneWithoutFilesNestedInput
   }
 
   export type MediaUncheckedUpdateInput = {
@@ -5079,6 +7818,7 @@ export namespace Prisma {
     transcodeStatus?: StringFieldUpdateOperationsInput | string
     transcodeError?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    driveId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type MediaCreateManyInput = {
@@ -5093,6 +7833,7 @@ export namespace Prisma {
     transcodeStatus?: string
     transcodeError?: string | null
     createdAt?: Date | string
+    driveId?: string | null
   }
 
   export type MediaUpdateManyMutationInput = {
@@ -5119,6 +7860,145 @@ export namespace Prisma {
     isPrivate?: BoolFieldUpdateOperationsInput | boolean
     transcodeStatus?: StringFieldUpdateOperationsInput | string
     transcodeError?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    driveId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type DriveCreateInput = {
+    id?: string
+    name: string
+    description?: string | null
+    isPublic?: boolean
+    publicRole?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    owner: UserCreateNestedOneWithoutOwnedDrivesInput
+    files?: MediaCreateNestedManyWithoutDriveInput
+    access?: DriveAccessCreateNestedManyWithoutDriveInput
+  }
+
+  export type DriveUncheckedCreateInput = {
+    id?: string
+    name: string
+    description?: string | null
+    ownerId: string
+    isPublic?: boolean
+    publicRole?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    files?: MediaUncheckedCreateNestedManyWithoutDriveInput
+    access?: DriveAccessUncheckedCreateNestedManyWithoutDriveInput
+  }
+
+  export type DriveUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    publicRole?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    owner?: UserUpdateOneRequiredWithoutOwnedDrivesNestedInput
+    files?: MediaUpdateManyWithoutDriveNestedInput
+    access?: DriveAccessUpdateManyWithoutDriveNestedInput
+  }
+
+  export type DriveUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerId?: StringFieldUpdateOperationsInput | string
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    publicRole?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    files?: MediaUncheckedUpdateManyWithoutDriveNestedInput
+    access?: DriveAccessUncheckedUpdateManyWithoutDriveNestedInput
+  }
+
+  export type DriveCreateManyInput = {
+    id?: string
+    name: string
+    description?: string | null
+    ownerId: string
+    isPublic?: boolean
+    publicRole?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DriveUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    publicRole?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DriveUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerId?: StringFieldUpdateOperationsInput | string
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    publicRole?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DriveAccessCreateInput = {
+    id?: string
+    role?: string
+    createdAt?: Date | string
+    drive: DriveCreateNestedOneWithoutAccessInput
+    user: UserCreateNestedOneWithoutDriveAccessInput
+  }
+
+  export type DriveAccessUncheckedCreateInput = {
+    id?: string
+    driveId: string
+    userId: string
+    role?: string
+    createdAt?: Date | string
+  }
+
+  export type DriveAccessUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    drive?: DriveUpdateOneRequiredWithoutAccessNestedInput
+    user?: UserUpdateOneRequiredWithoutDriveAccessNestedInput
+  }
+
+  export type DriveAccessUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    driveId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DriveAccessCreateManyInput = {
+    id?: string
+    driveId: string
+    userId: string
+    role?: string
+    createdAt?: Date | string
+  }
+
+  export type DriveAccessUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DriveAccessUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    driveId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -5299,12 +8179,32 @@ export namespace Prisma {
     none?: MediaWhereInput
   }
 
+  export type DriveListRelationFilter = {
+    every?: DriveWhereInput
+    some?: DriveWhereInput
+    none?: DriveWhereInput
+  }
+
+  export type DriveAccessListRelationFilter = {
+    every?: DriveAccessWhereInput
+    some?: DriveAccessWhereInput
+    none?: DriveAccessWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
   }
 
   export type MediaOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type DriveOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type DriveAccessOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -5452,6 +8352,11 @@ export namespace Prisma {
     isNot?: UserWhereInput | null
   }
 
+  export type DriveNullableScalarRelationFilter = {
+    is?: DriveWhereInput | null
+    isNot?: DriveWhereInput | null
+  }
+
   export type MediaCountOrderByAggregateInput = {
     id?: SortOrder
     filename?: SortOrder
@@ -5464,6 +8369,7 @@ export namespace Prisma {
     transcodeStatus?: SortOrder
     transcodeError?: SortOrder
     createdAt?: SortOrder
+    driveId?: SortOrder
   }
 
   export type MediaAvgOrderByAggregateInput = {
@@ -5482,6 +8388,7 @@ export namespace Prisma {
     transcodeStatus?: SortOrder
     transcodeError?: SortOrder
     createdAt?: SortOrder
+    driveId?: SortOrder
   }
 
   export type MediaMinOrderByAggregateInput = {
@@ -5496,6 +8403,7 @@ export namespace Prisma {
     transcodeStatus?: SortOrder
     transcodeError?: SortOrder
     createdAt?: SortOrder
+    driveId?: SortOrder
   }
 
   export type MediaSumOrderByAggregateInput = {
@@ -5533,6 +8441,78 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
     _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type UserScalarRelationFilter = {
+    is?: UserWhereInput
+    isNot?: UserWhereInput
+  }
+
+  export type DriveCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    ownerId?: SortOrder
+    isPublic?: SortOrder
+    publicRole?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DriveMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    ownerId?: SortOrder
+    isPublic?: SortOrder
+    publicRole?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DriveMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    ownerId?: SortOrder
+    isPublic?: SortOrder
+    publicRole?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DriveScalarRelationFilter = {
+    is?: DriveWhereInput
+    isNot?: DriveWhereInput
+  }
+
+  export type DriveAccessDriveIdUserIdCompoundUniqueInput = {
+    driveId: string
+    userId: string
+  }
+
+  export type DriveAccessCountOrderByAggregateInput = {
+    id?: SortOrder
+    driveId?: SortOrder
+    userId?: SortOrder
+    role?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type DriveAccessMaxOrderByAggregateInput = {
+    id?: SortOrder
+    driveId?: SortOrder
+    userId?: SortOrder
+    role?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type DriveAccessMinOrderByAggregateInput = {
+    id?: SortOrder
+    driveId?: SortOrder
+    userId?: SortOrder
+    role?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type BigIntFilter<$PrismaModel = never> = {
@@ -5632,11 +8612,39 @@ export namespace Prisma {
     connect?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
   }
 
+  export type DriveCreateNestedManyWithoutOwnerInput = {
+    create?: XOR<DriveCreateWithoutOwnerInput, DriveUncheckedCreateWithoutOwnerInput> | DriveCreateWithoutOwnerInput[] | DriveUncheckedCreateWithoutOwnerInput[]
+    connectOrCreate?: DriveCreateOrConnectWithoutOwnerInput | DriveCreateOrConnectWithoutOwnerInput[]
+    createMany?: DriveCreateManyOwnerInputEnvelope
+    connect?: DriveWhereUniqueInput | DriveWhereUniqueInput[]
+  }
+
+  export type DriveAccessCreateNestedManyWithoutUserInput = {
+    create?: XOR<DriveAccessCreateWithoutUserInput, DriveAccessUncheckedCreateWithoutUserInput> | DriveAccessCreateWithoutUserInput[] | DriveAccessUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: DriveAccessCreateOrConnectWithoutUserInput | DriveAccessCreateOrConnectWithoutUserInput[]
+    createMany?: DriveAccessCreateManyUserInputEnvelope
+    connect?: DriveAccessWhereUniqueInput | DriveAccessWhereUniqueInput[]
+  }
+
   export type MediaUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<MediaCreateWithoutUserInput, MediaUncheckedCreateWithoutUserInput> | MediaCreateWithoutUserInput[] | MediaUncheckedCreateWithoutUserInput[]
     connectOrCreate?: MediaCreateOrConnectWithoutUserInput | MediaCreateOrConnectWithoutUserInput[]
     createMany?: MediaCreateManyUserInputEnvelope
     connect?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
+  }
+
+  export type DriveUncheckedCreateNestedManyWithoutOwnerInput = {
+    create?: XOR<DriveCreateWithoutOwnerInput, DriveUncheckedCreateWithoutOwnerInput> | DriveCreateWithoutOwnerInput[] | DriveUncheckedCreateWithoutOwnerInput[]
+    connectOrCreate?: DriveCreateOrConnectWithoutOwnerInput | DriveCreateOrConnectWithoutOwnerInput[]
+    createMany?: DriveCreateManyOwnerInputEnvelope
+    connect?: DriveWhereUniqueInput | DriveWhereUniqueInput[]
+  }
+
+  export type DriveAccessUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<DriveAccessCreateWithoutUserInput, DriveAccessUncheckedCreateWithoutUserInput> | DriveAccessCreateWithoutUserInput[] | DriveAccessUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: DriveAccessCreateOrConnectWithoutUserInput | DriveAccessCreateOrConnectWithoutUserInput[]
+    createMany?: DriveAccessCreateManyUserInputEnvelope
+    connect?: DriveAccessWhereUniqueInput | DriveAccessWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -5681,6 +8689,34 @@ export namespace Prisma {
     deleteMany?: MediaScalarWhereInput | MediaScalarWhereInput[]
   }
 
+  export type DriveUpdateManyWithoutOwnerNestedInput = {
+    create?: XOR<DriveCreateWithoutOwnerInput, DriveUncheckedCreateWithoutOwnerInput> | DriveCreateWithoutOwnerInput[] | DriveUncheckedCreateWithoutOwnerInput[]
+    connectOrCreate?: DriveCreateOrConnectWithoutOwnerInput | DriveCreateOrConnectWithoutOwnerInput[]
+    upsert?: DriveUpsertWithWhereUniqueWithoutOwnerInput | DriveUpsertWithWhereUniqueWithoutOwnerInput[]
+    createMany?: DriveCreateManyOwnerInputEnvelope
+    set?: DriveWhereUniqueInput | DriveWhereUniqueInput[]
+    disconnect?: DriveWhereUniqueInput | DriveWhereUniqueInput[]
+    delete?: DriveWhereUniqueInput | DriveWhereUniqueInput[]
+    connect?: DriveWhereUniqueInput | DriveWhereUniqueInput[]
+    update?: DriveUpdateWithWhereUniqueWithoutOwnerInput | DriveUpdateWithWhereUniqueWithoutOwnerInput[]
+    updateMany?: DriveUpdateManyWithWhereWithoutOwnerInput | DriveUpdateManyWithWhereWithoutOwnerInput[]
+    deleteMany?: DriveScalarWhereInput | DriveScalarWhereInput[]
+  }
+
+  export type DriveAccessUpdateManyWithoutUserNestedInput = {
+    create?: XOR<DriveAccessCreateWithoutUserInput, DriveAccessUncheckedCreateWithoutUserInput> | DriveAccessCreateWithoutUserInput[] | DriveAccessUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: DriveAccessCreateOrConnectWithoutUserInput | DriveAccessCreateOrConnectWithoutUserInput[]
+    upsert?: DriveAccessUpsertWithWhereUniqueWithoutUserInput | DriveAccessUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: DriveAccessCreateManyUserInputEnvelope
+    set?: DriveAccessWhereUniqueInput | DriveAccessWhereUniqueInput[]
+    disconnect?: DriveAccessWhereUniqueInput | DriveAccessWhereUniqueInput[]
+    delete?: DriveAccessWhereUniqueInput | DriveAccessWhereUniqueInput[]
+    connect?: DriveAccessWhereUniqueInput | DriveAccessWhereUniqueInput[]
+    update?: DriveAccessUpdateWithWhereUniqueWithoutUserInput | DriveAccessUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: DriveAccessUpdateManyWithWhereWithoutUserInput | DriveAccessUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: DriveAccessScalarWhereInput | DriveAccessScalarWhereInput[]
+  }
+
   export type MediaUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<MediaCreateWithoutUserInput, MediaUncheckedCreateWithoutUserInput> | MediaCreateWithoutUserInput[] | MediaUncheckedCreateWithoutUserInput[]
     connectOrCreate?: MediaCreateOrConnectWithoutUserInput | MediaCreateOrConnectWithoutUserInput[]
@@ -5695,10 +8731,44 @@ export namespace Prisma {
     deleteMany?: MediaScalarWhereInput | MediaScalarWhereInput[]
   }
 
+  export type DriveUncheckedUpdateManyWithoutOwnerNestedInput = {
+    create?: XOR<DriveCreateWithoutOwnerInput, DriveUncheckedCreateWithoutOwnerInput> | DriveCreateWithoutOwnerInput[] | DriveUncheckedCreateWithoutOwnerInput[]
+    connectOrCreate?: DriveCreateOrConnectWithoutOwnerInput | DriveCreateOrConnectWithoutOwnerInput[]
+    upsert?: DriveUpsertWithWhereUniqueWithoutOwnerInput | DriveUpsertWithWhereUniqueWithoutOwnerInput[]
+    createMany?: DriveCreateManyOwnerInputEnvelope
+    set?: DriveWhereUniqueInput | DriveWhereUniqueInput[]
+    disconnect?: DriveWhereUniqueInput | DriveWhereUniqueInput[]
+    delete?: DriveWhereUniqueInput | DriveWhereUniqueInput[]
+    connect?: DriveWhereUniqueInput | DriveWhereUniqueInput[]
+    update?: DriveUpdateWithWhereUniqueWithoutOwnerInput | DriveUpdateWithWhereUniqueWithoutOwnerInput[]
+    updateMany?: DriveUpdateManyWithWhereWithoutOwnerInput | DriveUpdateManyWithWhereWithoutOwnerInput[]
+    deleteMany?: DriveScalarWhereInput | DriveScalarWhereInput[]
+  }
+
+  export type DriveAccessUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<DriveAccessCreateWithoutUserInput, DriveAccessUncheckedCreateWithoutUserInput> | DriveAccessCreateWithoutUserInput[] | DriveAccessUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: DriveAccessCreateOrConnectWithoutUserInput | DriveAccessCreateOrConnectWithoutUserInput[]
+    upsert?: DriveAccessUpsertWithWhereUniqueWithoutUserInput | DriveAccessUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: DriveAccessCreateManyUserInputEnvelope
+    set?: DriveAccessWhereUniqueInput | DriveAccessWhereUniqueInput[]
+    disconnect?: DriveAccessWhereUniqueInput | DriveAccessWhereUniqueInput[]
+    delete?: DriveAccessWhereUniqueInput | DriveAccessWhereUniqueInput[]
+    connect?: DriveAccessWhereUniqueInput | DriveAccessWhereUniqueInput[]
+    update?: DriveAccessUpdateWithWhereUniqueWithoutUserInput | DriveAccessUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: DriveAccessUpdateManyWithWhereWithoutUserInput | DriveAccessUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: DriveAccessScalarWhereInput | DriveAccessScalarWhereInput[]
+  }
+
   export type UserCreateNestedOneWithoutMediaInput = {
     create?: XOR<UserCreateWithoutMediaInput, UserUncheckedCreateWithoutMediaInput>
     connectOrCreate?: UserCreateOrConnectWithoutMediaInput
     connect?: UserWhereUniqueInput
+  }
+
+  export type DriveCreateNestedOneWithoutFilesInput = {
+    create?: XOR<DriveCreateWithoutFilesInput, DriveUncheckedCreateWithoutFilesInput>
+    connectOrCreate?: DriveCreateOrConnectWithoutFilesInput
+    connect?: DriveWhereUniqueInput
   }
 
   export type IntFieldUpdateOperationsInput = {
@@ -5721,6 +8791,142 @@ export namespace Prisma {
     delete?: UserWhereInput | boolean
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutMediaInput, UserUpdateWithoutMediaInput>, UserUncheckedUpdateWithoutMediaInput>
+  }
+
+  export type DriveUpdateOneWithoutFilesNestedInput = {
+    create?: XOR<DriveCreateWithoutFilesInput, DriveUncheckedCreateWithoutFilesInput>
+    connectOrCreate?: DriveCreateOrConnectWithoutFilesInput
+    upsert?: DriveUpsertWithoutFilesInput
+    disconnect?: DriveWhereInput | boolean
+    delete?: DriveWhereInput | boolean
+    connect?: DriveWhereUniqueInput
+    update?: XOR<XOR<DriveUpdateToOneWithWhereWithoutFilesInput, DriveUpdateWithoutFilesInput>, DriveUncheckedUpdateWithoutFilesInput>
+  }
+
+  export type UserCreateNestedOneWithoutOwnedDrivesInput = {
+    create?: XOR<UserCreateWithoutOwnedDrivesInput, UserUncheckedCreateWithoutOwnedDrivesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutOwnedDrivesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type MediaCreateNestedManyWithoutDriveInput = {
+    create?: XOR<MediaCreateWithoutDriveInput, MediaUncheckedCreateWithoutDriveInput> | MediaCreateWithoutDriveInput[] | MediaUncheckedCreateWithoutDriveInput[]
+    connectOrCreate?: MediaCreateOrConnectWithoutDriveInput | MediaCreateOrConnectWithoutDriveInput[]
+    createMany?: MediaCreateManyDriveInputEnvelope
+    connect?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
+  }
+
+  export type DriveAccessCreateNestedManyWithoutDriveInput = {
+    create?: XOR<DriveAccessCreateWithoutDriveInput, DriveAccessUncheckedCreateWithoutDriveInput> | DriveAccessCreateWithoutDriveInput[] | DriveAccessUncheckedCreateWithoutDriveInput[]
+    connectOrCreate?: DriveAccessCreateOrConnectWithoutDriveInput | DriveAccessCreateOrConnectWithoutDriveInput[]
+    createMany?: DriveAccessCreateManyDriveInputEnvelope
+    connect?: DriveAccessWhereUniqueInput | DriveAccessWhereUniqueInput[]
+  }
+
+  export type MediaUncheckedCreateNestedManyWithoutDriveInput = {
+    create?: XOR<MediaCreateWithoutDriveInput, MediaUncheckedCreateWithoutDriveInput> | MediaCreateWithoutDriveInput[] | MediaUncheckedCreateWithoutDriveInput[]
+    connectOrCreate?: MediaCreateOrConnectWithoutDriveInput | MediaCreateOrConnectWithoutDriveInput[]
+    createMany?: MediaCreateManyDriveInputEnvelope
+    connect?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
+  }
+
+  export type DriveAccessUncheckedCreateNestedManyWithoutDriveInput = {
+    create?: XOR<DriveAccessCreateWithoutDriveInput, DriveAccessUncheckedCreateWithoutDriveInput> | DriveAccessCreateWithoutDriveInput[] | DriveAccessUncheckedCreateWithoutDriveInput[]
+    connectOrCreate?: DriveAccessCreateOrConnectWithoutDriveInput | DriveAccessCreateOrConnectWithoutDriveInput[]
+    createMany?: DriveAccessCreateManyDriveInputEnvelope
+    connect?: DriveAccessWhereUniqueInput | DriveAccessWhereUniqueInput[]
+  }
+
+  export type UserUpdateOneRequiredWithoutOwnedDrivesNestedInput = {
+    create?: XOR<UserCreateWithoutOwnedDrivesInput, UserUncheckedCreateWithoutOwnedDrivesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutOwnedDrivesInput
+    upsert?: UserUpsertWithoutOwnedDrivesInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutOwnedDrivesInput, UserUpdateWithoutOwnedDrivesInput>, UserUncheckedUpdateWithoutOwnedDrivesInput>
+  }
+
+  export type MediaUpdateManyWithoutDriveNestedInput = {
+    create?: XOR<MediaCreateWithoutDriveInput, MediaUncheckedCreateWithoutDriveInput> | MediaCreateWithoutDriveInput[] | MediaUncheckedCreateWithoutDriveInput[]
+    connectOrCreate?: MediaCreateOrConnectWithoutDriveInput | MediaCreateOrConnectWithoutDriveInput[]
+    upsert?: MediaUpsertWithWhereUniqueWithoutDriveInput | MediaUpsertWithWhereUniqueWithoutDriveInput[]
+    createMany?: MediaCreateManyDriveInputEnvelope
+    set?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
+    disconnect?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
+    delete?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
+    connect?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
+    update?: MediaUpdateWithWhereUniqueWithoutDriveInput | MediaUpdateWithWhereUniqueWithoutDriveInput[]
+    updateMany?: MediaUpdateManyWithWhereWithoutDriveInput | MediaUpdateManyWithWhereWithoutDriveInput[]
+    deleteMany?: MediaScalarWhereInput | MediaScalarWhereInput[]
+  }
+
+  export type DriveAccessUpdateManyWithoutDriveNestedInput = {
+    create?: XOR<DriveAccessCreateWithoutDriveInput, DriveAccessUncheckedCreateWithoutDriveInput> | DriveAccessCreateWithoutDriveInput[] | DriveAccessUncheckedCreateWithoutDriveInput[]
+    connectOrCreate?: DriveAccessCreateOrConnectWithoutDriveInput | DriveAccessCreateOrConnectWithoutDriveInput[]
+    upsert?: DriveAccessUpsertWithWhereUniqueWithoutDriveInput | DriveAccessUpsertWithWhereUniqueWithoutDriveInput[]
+    createMany?: DriveAccessCreateManyDriveInputEnvelope
+    set?: DriveAccessWhereUniqueInput | DriveAccessWhereUniqueInput[]
+    disconnect?: DriveAccessWhereUniqueInput | DriveAccessWhereUniqueInput[]
+    delete?: DriveAccessWhereUniqueInput | DriveAccessWhereUniqueInput[]
+    connect?: DriveAccessWhereUniqueInput | DriveAccessWhereUniqueInput[]
+    update?: DriveAccessUpdateWithWhereUniqueWithoutDriveInput | DriveAccessUpdateWithWhereUniqueWithoutDriveInput[]
+    updateMany?: DriveAccessUpdateManyWithWhereWithoutDriveInput | DriveAccessUpdateManyWithWhereWithoutDriveInput[]
+    deleteMany?: DriveAccessScalarWhereInput | DriveAccessScalarWhereInput[]
+  }
+
+  export type MediaUncheckedUpdateManyWithoutDriveNestedInput = {
+    create?: XOR<MediaCreateWithoutDriveInput, MediaUncheckedCreateWithoutDriveInput> | MediaCreateWithoutDriveInput[] | MediaUncheckedCreateWithoutDriveInput[]
+    connectOrCreate?: MediaCreateOrConnectWithoutDriveInput | MediaCreateOrConnectWithoutDriveInput[]
+    upsert?: MediaUpsertWithWhereUniqueWithoutDriveInput | MediaUpsertWithWhereUniqueWithoutDriveInput[]
+    createMany?: MediaCreateManyDriveInputEnvelope
+    set?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
+    disconnect?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
+    delete?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
+    connect?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
+    update?: MediaUpdateWithWhereUniqueWithoutDriveInput | MediaUpdateWithWhereUniqueWithoutDriveInput[]
+    updateMany?: MediaUpdateManyWithWhereWithoutDriveInput | MediaUpdateManyWithWhereWithoutDriveInput[]
+    deleteMany?: MediaScalarWhereInput | MediaScalarWhereInput[]
+  }
+
+  export type DriveAccessUncheckedUpdateManyWithoutDriveNestedInput = {
+    create?: XOR<DriveAccessCreateWithoutDriveInput, DriveAccessUncheckedCreateWithoutDriveInput> | DriveAccessCreateWithoutDriveInput[] | DriveAccessUncheckedCreateWithoutDriveInput[]
+    connectOrCreate?: DriveAccessCreateOrConnectWithoutDriveInput | DriveAccessCreateOrConnectWithoutDriveInput[]
+    upsert?: DriveAccessUpsertWithWhereUniqueWithoutDriveInput | DriveAccessUpsertWithWhereUniqueWithoutDriveInput[]
+    createMany?: DriveAccessCreateManyDriveInputEnvelope
+    set?: DriveAccessWhereUniqueInput | DriveAccessWhereUniqueInput[]
+    disconnect?: DriveAccessWhereUniqueInput | DriveAccessWhereUniqueInput[]
+    delete?: DriveAccessWhereUniqueInput | DriveAccessWhereUniqueInput[]
+    connect?: DriveAccessWhereUniqueInput | DriveAccessWhereUniqueInput[]
+    update?: DriveAccessUpdateWithWhereUniqueWithoutDriveInput | DriveAccessUpdateWithWhereUniqueWithoutDriveInput[]
+    updateMany?: DriveAccessUpdateManyWithWhereWithoutDriveInput | DriveAccessUpdateManyWithWhereWithoutDriveInput[]
+    deleteMany?: DriveAccessScalarWhereInput | DriveAccessScalarWhereInput[]
+  }
+
+  export type DriveCreateNestedOneWithoutAccessInput = {
+    create?: XOR<DriveCreateWithoutAccessInput, DriveUncheckedCreateWithoutAccessInput>
+    connectOrCreate?: DriveCreateOrConnectWithoutAccessInput
+    connect?: DriveWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutDriveAccessInput = {
+    create?: XOR<UserCreateWithoutDriveAccessInput, UserUncheckedCreateWithoutDriveAccessInput>
+    connectOrCreate?: UserCreateOrConnectWithoutDriveAccessInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type DriveUpdateOneRequiredWithoutAccessNestedInput = {
+    create?: XOR<DriveCreateWithoutAccessInput, DriveUncheckedCreateWithoutAccessInput>
+    connectOrCreate?: DriveCreateOrConnectWithoutAccessInput
+    upsert?: DriveUpsertWithoutAccessInput
+    connect?: DriveWhereUniqueInput
+    update?: XOR<XOR<DriveUpdateToOneWithWhereWithoutAccessInput, DriveUpdateWithoutAccessInput>, DriveUncheckedUpdateWithoutAccessInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutDriveAccessNestedInput = {
+    create?: XOR<UserCreateWithoutDriveAccessInput, UserUncheckedCreateWithoutDriveAccessInput>
+    connectOrCreate?: UserCreateOrConnectWithoutDriveAccessInput
+    upsert?: UserUpsertWithoutDriveAccessInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutDriveAccessInput, UserUpdateWithoutDriveAccessInput>, UserUncheckedUpdateWithoutDriveAccessInput>
   }
 
   export type BigIntFieldUpdateOperationsInput = {
@@ -5972,6 +9178,7 @@ export namespace Prisma {
     transcodeStatus?: string
     transcodeError?: string | null
     createdAt?: Date | string
+    drive?: DriveCreateNestedOneWithoutFilesInput
   }
 
   export type MediaUncheckedCreateWithoutUserInput = {
@@ -5985,6 +9192,7 @@ export namespace Prisma {
     transcodeStatus?: string
     transcodeError?: string | null
     createdAt?: Date | string
+    driveId?: string | null
   }
 
   export type MediaCreateOrConnectWithoutUserInput = {
@@ -5994,6 +9202,62 @@ export namespace Prisma {
 
   export type MediaCreateManyUserInputEnvelope = {
     data: MediaCreateManyUserInput | MediaCreateManyUserInput[]
+  }
+
+  export type DriveCreateWithoutOwnerInput = {
+    id?: string
+    name: string
+    description?: string | null
+    isPublic?: boolean
+    publicRole?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    files?: MediaCreateNestedManyWithoutDriveInput
+    access?: DriveAccessCreateNestedManyWithoutDriveInput
+  }
+
+  export type DriveUncheckedCreateWithoutOwnerInput = {
+    id?: string
+    name: string
+    description?: string | null
+    isPublic?: boolean
+    publicRole?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    files?: MediaUncheckedCreateNestedManyWithoutDriveInput
+    access?: DriveAccessUncheckedCreateNestedManyWithoutDriveInput
+  }
+
+  export type DriveCreateOrConnectWithoutOwnerInput = {
+    where: DriveWhereUniqueInput
+    create: XOR<DriveCreateWithoutOwnerInput, DriveUncheckedCreateWithoutOwnerInput>
+  }
+
+  export type DriveCreateManyOwnerInputEnvelope = {
+    data: DriveCreateManyOwnerInput | DriveCreateManyOwnerInput[]
+  }
+
+  export type DriveAccessCreateWithoutUserInput = {
+    id?: string
+    role?: string
+    createdAt?: Date | string
+    drive: DriveCreateNestedOneWithoutAccessInput
+  }
+
+  export type DriveAccessUncheckedCreateWithoutUserInput = {
+    id?: string
+    driveId: string
+    role?: string
+    createdAt?: Date | string
+  }
+
+  export type DriveAccessCreateOrConnectWithoutUserInput = {
+    where: DriveAccessWhereUniqueInput
+    create: XOR<DriveAccessCreateWithoutUserInput, DriveAccessUncheckedCreateWithoutUserInput>
+  }
+
+  export type DriveAccessCreateManyUserInputEnvelope = {
+    data: DriveAccessCreateManyUserInput | DriveAccessCreateManyUserInput[]
   }
 
   export type MediaUpsertWithWhereUniqueWithoutUserInput = {
@@ -6027,6 +9291,64 @@ export namespace Prisma {
     transcodeStatus?: StringFilter<"Media"> | string
     transcodeError?: StringNullableFilter<"Media"> | string | null
     createdAt?: DateTimeFilter<"Media"> | Date | string
+    driveId?: StringNullableFilter<"Media"> | string | null
+  }
+
+  export type DriveUpsertWithWhereUniqueWithoutOwnerInput = {
+    where: DriveWhereUniqueInput
+    update: XOR<DriveUpdateWithoutOwnerInput, DriveUncheckedUpdateWithoutOwnerInput>
+    create: XOR<DriveCreateWithoutOwnerInput, DriveUncheckedCreateWithoutOwnerInput>
+  }
+
+  export type DriveUpdateWithWhereUniqueWithoutOwnerInput = {
+    where: DriveWhereUniqueInput
+    data: XOR<DriveUpdateWithoutOwnerInput, DriveUncheckedUpdateWithoutOwnerInput>
+  }
+
+  export type DriveUpdateManyWithWhereWithoutOwnerInput = {
+    where: DriveScalarWhereInput
+    data: XOR<DriveUpdateManyMutationInput, DriveUncheckedUpdateManyWithoutOwnerInput>
+  }
+
+  export type DriveScalarWhereInput = {
+    AND?: DriveScalarWhereInput | DriveScalarWhereInput[]
+    OR?: DriveScalarWhereInput[]
+    NOT?: DriveScalarWhereInput | DriveScalarWhereInput[]
+    id?: StringFilter<"Drive"> | string
+    name?: StringFilter<"Drive"> | string
+    description?: StringNullableFilter<"Drive"> | string | null
+    ownerId?: StringFilter<"Drive"> | string
+    isPublic?: BoolFilter<"Drive"> | boolean
+    publicRole?: StringFilter<"Drive"> | string
+    createdAt?: DateTimeFilter<"Drive"> | Date | string
+    updatedAt?: DateTimeFilter<"Drive"> | Date | string
+  }
+
+  export type DriveAccessUpsertWithWhereUniqueWithoutUserInput = {
+    where: DriveAccessWhereUniqueInput
+    update: XOR<DriveAccessUpdateWithoutUserInput, DriveAccessUncheckedUpdateWithoutUserInput>
+    create: XOR<DriveAccessCreateWithoutUserInput, DriveAccessUncheckedCreateWithoutUserInput>
+  }
+
+  export type DriveAccessUpdateWithWhereUniqueWithoutUserInput = {
+    where: DriveAccessWhereUniqueInput
+    data: XOR<DriveAccessUpdateWithoutUserInput, DriveAccessUncheckedUpdateWithoutUserInput>
+  }
+
+  export type DriveAccessUpdateManyWithWhereWithoutUserInput = {
+    where: DriveAccessScalarWhereInput
+    data: XOR<DriveAccessUpdateManyMutationInput, DriveAccessUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type DriveAccessScalarWhereInput = {
+    AND?: DriveAccessScalarWhereInput | DriveAccessScalarWhereInput[]
+    OR?: DriveAccessScalarWhereInput[]
+    NOT?: DriveAccessScalarWhereInput | DriveAccessScalarWhereInput[]
+    id?: StringFilter<"DriveAccess"> | string
+    driveId?: StringFilter<"DriveAccess"> | string
+    userId?: StringFilter<"DriveAccess"> | string
+    role?: StringFilter<"DriveAccess"> | string
+    createdAt?: DateTimeFilter<"DriveAccess"> | Date | string
   }
 
   export type UserCreateWithoutMediaInput = {
@@ -6038,6 +9360,8 @@ export namespace Prisma {
     createdAt?: Date | string
     customMaxFileSize?: bigint | number | null
     customRateLimitWindow?: number | null
+    ownedDrives?: DriveCreateNestedManyWithoutOwnerInput
+    driveAccess?: DriveAccessCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutMediaInput = {
@@ -6049,11 +9373,42 @@ export namespace Prisma {
     createdAt?: Date | string
     customMaxFileSize?: bigint | number | null
     customRateLimitWindow?: number | null
+    ownedDrives?: DriveUncheckedCreateNestedManyWithoutOwnerInput
+    driveAccess?: DriveAccessUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutMediaInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutMediaInput, UserUncheckedCreateWithoutMediaInput>
+  }
+
+  export type DriveCreateWithoutFilesInput = {
+    id?: string
+    name: string
+    description?: string | null
+    isPublic?: boolean
+    publicRole?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    owner: UserCreateNestedOneWithoutOwnedDrivesInput
+    access?: DriveAccessCreateNestedManyWithoutDriveInput
+  }
+
+  export type DriveUncheckedCreateWithoutFilesInput = {
+    id?: string
+    name: string
+    description?: string | null
+    ownerId: string
+    isPublic?: boolean
+    publicRole?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    access?: DriveAccessUncheckedCreateNestedManyWithoutDriveInput
+  }
+
+  export type DriveCreateOrConnectWithoutFilesInput = {
+    where: DriveWhereUniqueInput
+    create: XOR<DriveCreateWithoutFilesInput, DriveUncheckedCreateWithoutFilesInput>
   }
 
   export type UserUpsertWithoutMediaInput = {
@@ -6076,6 +9431,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     customMaxFileSize?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
     customRateLimitWindow?: NullableIntFieldUpdateOperationsInput | number | null
+    ownedDrives?: DriveUpdateManyWithoutOwnerNestedInput
+    driveAccess?: DriveAccessUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMediaInput = {
@@ -6087,6 +9444,335 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     customMaxFileSize?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
     customRateLimitWindow?: NullableIntFieldUpdateOperationsInput | number | null
+    ownedDrives?: DriveUncheckedUpdateManyWithoutOwnerNestedInput
+    driveAccess?: DriveAccessUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type DriveUpsertWithoutFilesInput = {
+    update: XOR<DriveUpdateWithoutFilesInput, DriveUncheckedUpdateWithoutFilesInput>
+    create: XOR<DriveCreateWithoutFilesInput, DriveUncheckedCreateWithoutFilesInput>
+    where?: DriveWhereInput
+  }
+
+  export type DriveUpdateToOneWithWhereWithoutFilesInput = {
+    where?: DriveWhereInput
+    data: XOR<DriveUpdateWithoutFilesInput, DriveUncheckedUpdateWithoutFilesInput>
+  }
+
+  export type DriveUpdateWithoutFilesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    publicRole?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    owner?: UserUpdateOneRequiredWithoutOwnedDrivesNestedInput
+    access?: DriveAccessUpdateManyWithoutDriveNestedInput
+  }
+
+  export type DriveUncheckedUpdateWithoutFilesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerId?: StringFieldUpdateOperationsInput | string
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    publicRole?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    access?: DriveAccessUncheckedUpdateManyWithoutDriveNestedInput
+  }
+
+  export type UserCreateWithoutOwnedDrivesInput = {
+    id?: string
+    username: string
+    password: string
+    isAdmin?: boolean
+    mustChangePassword?: boolean
+    createdAt?: Date | string
+    customMaxFileSize?: bigint | number | null
+    customRateLimitWindow?: number | null
+    media?: MediaCreateNestedManyWithoutUserInput
+    driveAccess?: DriveAccessCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutOwnedDrivesInput = {
+    id?: string
+    username: string
+    password: string
+    isAdmin?: boolean
+    mustChangePassword?: boolean
+    createdAt?: Date | string
+    customMaxFileSize?: bigint | number | null
+    customRateLimitWindow?: number | null
+    media?: MediaUncheckedCreateNestedManyWithoutUserInput
+    driveAccess?: DriveAccessUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutOwnedDrivesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutOwnedDrivesInput, UserUncheckedCreateWithoutOwnedDrivesInput>
+  }
+
+  export type MediaCreateWithoutDriveInput = {
+    id?: string
+    filename: string
+    originalName: string
+    mimeType: string
+    size: number
+    ip?: string | null
+    isPrivate?: boolean
+    transcodeStatus?: string
+    transcodeError?: string | null
+    createdAt?: Date | string
+    user?: UserCreateNestedOneWithoutMediaInput
+  }
+
+  export type MediaUncheckedCreateWithoutDriveInput = {
+    id?: string
+    filename: string
+    originalName: string
+    mimeType: string
+    size: number
+    ip?: string | null
+    userId?: string | null
+    isPrivate?: boolean
+    transcodeStatus?: string
+    transcodeError?: string | null
+    createdAt?: Date | string
+  }
+
+  export type MediaCreateOrConnectWithoutDriveInput = {
+    where: MediaWhereUniqueInput
+    create: XOR<MediaCreateWithoutDriveInput, MediaUncheckedCreateWithoutDriveInput>
+  }
+
+  export type MediaCreateManyDriveInputEnvelope = {
+    data: MediaCreateManyDriveInput | MediaCreateManyDriveInput[]
+  }
+
+  export type DriveAccessCreateWithoutDriveInput = {
+    id?: string
+    role?: string
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutDriveAccessInput
+  }
+
+  export type DriveAccessUncheckedCreateWithoutDriveInput = {
+    id?: string
+    userId: string
+    role?: string
+    createdAt?: Date | string
+  }
+
+  export type DriveAccessCreateOrConnectWithoutDriveInput = {
+    where: DriveAccessWhereUniqueInput
+    create: XOR<DriveAccessCreateWithoutDriveInput, DriveAccessUncheckedCreateWithoutDriveInput>
+  }
+
+  export type DriveAccessCreateManyDriveInputEnvelope = {
+    data: DriveAccessCreateManyDriveInput | DriveAccessCreateManyDriveInput[]
+  }
+
+  export type UserUpsertWithoutOwnedDrivesInput = {
+    update: XOR<UserUpdateWithoutOwnedDrivesInput, UserUncheckedUpdateWithoutOwnedDrivesInput>
+    create: XOR<UserCreateWithoutOwnedDrivesInput, UserUncheckedCreateWithoutOwnedDrivesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutOwnedDrivesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutOwnedDrivesInput, UserUncheckedUpdateWithoutOwnedDrivesInput>
+  }
+
+  export type UserUpdateWithoutOwnedDrivesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    isAdmin?: BoolFieldUpdateOperationsInput | boolean
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    customMaxFileSize?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    customRateLimitWindow?: NullableIntFieldUpdateOperationsInput | number | null
+    media?: MediaUpdateManyWithoutUserNestedInput
+    driveAccess?: DriveAccessUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutOwnedDrivesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    isAdmin?: BoolFieldUpdateOperationsInput | boolean
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    customMaxFileSize?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    customRateLimitWindow?: NullableIntFieldUpdateOperationsInput | number | null
+    media?: MediaUncheckedUpdateManyWithoutUserNestedInput
+    driveAccess?: DriveAccessUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type MediaUpsertWithWhereUniqueWithoutDriveInput = {
+    where: MediaWhereUniqueInput
+    update: XOR<MediaUpdateWithoutDriveInput, MediaUncheckedUpdateWithoutDriveInput>
+    create: XOR<MediaCreateWithoutDriveInput, MediaUncheckedCreateWithoutDriveInput>
+  }
+
+  export type MediaUpdateWithWhereUniqueWithoutDriveInput = {
+    where: MediaWhereUniqueInput
+    data: XOR<MediaUpdateWithoutDriveInput, MediaUncheckedUpdateWithoutDriveInput>
+  }
+
+  export type MediaUpdateManyWithWhereWithoutDriveInput = {
+    where: MediaScalarWhereInput
+    data: XOR<MediaUpdateManyMutationInput, MediaUncheckedUpdateManyWithoutDriveInput>
+  }
+
+  export type DriveAccessUpsertWithWhereUniqueWithoutDriveInput = {
+    where: DriveAccessWhereUniqueInput
+    update: XOR<DriveAccessUpdateWithoutDriveInput, DriveAccessUncheckedUpdateWithoutDriveInput>
+    create: XOR<DriveAccessCreateWithoutDriveInput, DriveAccessUncheckedCreateWithoutDriveInput>
+  }
+
+  export type DriveAccessUpdateWithWhereUniqueWithoutDriveInput = {
+    where: DriveAccessWhereUniqueInput
+    data: XOR<DriveAccessUpdateWithoutDriveInput, DriveAccessUncheckedUpdateWithoutDriveInput>
+  }
+
+  export type DriveAccessUpdateManyWithWhereWithoutDriveInput = {
+    where: DriveAccessScalarWhereInput
+    data: XOR<DriveAccessUpdateManyMutationInput, DriveAccessUncheckedUpdateManyWithoutDriveInput>
+  }
+
+  export type DriveCreateWithoutAccessInput = {
+    id?: string
+    name: string
+    description?: string | null
+    isPublic?: boolean
+    publicRole?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    owner: UserCreateNestedOneWithoutOwnedDrivesInput
+    files?: MediaCreateNestedManyWithoutDriveInput
+  }
+
+  export type DriveUncheckedCreateWithoutAccessInput = {
+    id?: string
+    name: string
+    description?: string | null
+    ownerId: string
+    isPublic?: boolean
+    publicRole?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    files?: MediaUncheckedCreateNestedManyWithoutDriveInput
+  }
+
+  export type DriveCreateOrConnectWithoutAccessInput = {
+    where: DriveWhereUniqueInput
+    create: XOR<DriveCreateWithoutAccessInput, DriveUncheckedCreateWithoutAccessInput>
+  }
+
+  export type UserCreateWithoutDriveAccessInput = {
+    id?: string
+    username: string
+    password: string
+    isAdmin?: boolean
+    mustChangePassword?: boolean
+    createdAt?: Date | string
+    customMaxFileSize?: bigint | number | null
+    customRateLimitWindow?: number | null
+    media?: MediaCreateNestedManyWithoutUserInput
+    ownedDrives?: DriveCreateNestedManyWithoutOwnerInput
+  }
+
+  export type UserUncheckedCreateWithoutDriveAccessInput = {
+    id?: string
+    username: string
+    password: string
+    isAdmin?: boolean
+    mustChangePassword?: boolean
+    createdAt?: Date | string
+    customMaxFileSize?: bigint | number | null
+    customRateLimitWindow?: number | null
+    media?: MediaUncheckedCreateNestedManyWithoutUserInput
+    ownedDrives?: DriveUncheckedCreateNestedManyWithoutOwnerInput
+  }
+
+  export type UserCreateOrConnectWithoutDriveAccessInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutDriveAccessInput, UserUncheckedCreateWithoutDriveAccessInput>
+  }
+
+  export type DriveUpsertWithoutAccessInput = {
+    update: XOR<DriveUpdateWithoutAccessInput, DriveUncheckedUpdateWithoutAccessInput>
+    create: XOR<DriveCreateWithoutAccessInput, DriveUncheckedCreateWithoutAccessInput>
+    where?: DriveWhereInput
+  }
+
+  export type DriveUpdateToOneWithWhereWithoutAccessInput = {
+    where?: DriveWhereInput
+    data: XOR<DriveUpdateWithoutAccessInput, DriveUncheckedUpdateWithoutAccessInput>
+  }
+
+  export type DriveUpdateWithoutAccessInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    publicRole?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    owner?: UserUpdateOneRequiredWithoutOwnedDrivesNestedInput
+    files?: MediaUpdateManyWithoutDriveNestedInput
+  }
+
+  export type DriveUncheckedUpdateWithoutAccessInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerId?: StringFieldUpdateOperationsInput | string
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    publicRole?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    files?: MediaUncheckedUpdateManyWithoutDriveNestedInput
+  }
+
+  export type UserUpsertWithoutDriveAccessInput = {
+    update: XOR<UserUpdateWithoutDriveAccessInput, UserUncheckedUpdateWithoutDriveAccessInput>
+    create: XOR<UserCreateWithoutDriveAccessInput, UserUncheckedCreateWithoutDriveAccessInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutDriveAccessInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutDriveAccessInput, UserUncheckedUpdateWithoutDriveAccessInput>
+  }
+
+  export type UserUpdateWithoutDriveAccessInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    isAdmin?: BoolFieldUpdateOperationsInput | boolean
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    customMaxFileSize?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    customRateLimitWindow?: NullableIntFieldUpdateOperationsInput | number | null
+    media?: MediaUpdateManyWithoutUserNestedInput
+    ownedDrives?: DriveUpdateManyWithoutOwnerNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutDriveAccessInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    isAdmin?: BoolFieldUpdateOperationsInput | boolean
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    customMaxFileSize?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    customRateLimitWindow?: NullableIntFieldUpdateOperationsInput | number | null
+    media?: MediaUncheckedUpdateManyWithoutUserNestedInput
+    ownedDrives?: DriveUncheckedUpdateManyWithoutOwnerNestedInput
   }
 
   export type MediaCreateManyUserInput = {
@@ -6099,6 +9785,24 @@ export namespace Prisma {
     isPrivate?: boolean
     transcodeStatus?: string
     transcodeError?: string | null
+    createdAt?: Date | string
+    driveId?: string | null
+  }
+
+  export type DriveCreateManyOwnerInput = {
+    id?: string
+    name: string
+    description?: string | null
+    isPublic?: boolean
+    publicRole?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DriveAccessCreateManyUserInput = {
+    id?: string
+    driveId: string
+    role?: string
     createdAt?: Date | string
   }
 
@@ -6113,6 +9817,7 @@ export namespace Prisma {
     transcodeStatus?: StringFieldUpdateOperationsInput | string
     transcodeError?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    drive?: DriveUpdateOneWithoutFilesNestedInput
   }
 
   export type MediaUncheckedUpdateWithoutUserInput = {
@@ -6126,6 +9831,7 @@ export namespace Prisma {
     transcodeStatus?: StringFieldUpdateOperationsInput | string
     transcodeError?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    driveId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type MediaUncheckedUpdateManyWithoutUserInput = {
@@ -6138,6 +9844,146 @@ export namespace Prisma {
     isPrivate?: BoolFieldUpdateOperationsInput | boolean
     transcodeStatus?: StringFieldUpdateOperationsInput | string
     transcodeError?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    driveId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type DriveUpdateWithoutOwnerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    publicRole?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    files?: MediaUpdateManyWithoutDriveNestedInput
+    access?: DriveAccessUpdateManyWithoutDriveNestedInput
+  }
+
+  export type DriveUncheckedUpdateWithoutOwnerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    publicRole?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    files?: MediaUncheckedUpdateManyWithoutDriveNestedInput
+    access?: DriveAccessUncheckedUpdateManyWithoutDriveNestedInput
+  }
+
+  export type DriveUncheckedUpdateManyWithoutOwnerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    publicRole?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DriveAccessUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    drive?: DriveUpdateOneRequiredWithoutAccessNestedInput
+  }
+
+  export type DriveAccessUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    driveId?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DriveAccessUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    driveId?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MediaCreateManyDriveInput = {
+    id?: string
+    filename: string
+    originalName: string
+    mimeType: string
+    size: number
+    ip?: string | null
+    userId?: string | null
+    isPrivate?: boolean
+    transcodeStatus?: string
+    transcodeError?: string | null
+    createdAt?: Date | string
+  }
+
+  export type DriveAccessCreateManyDriveInput = {
+    id?: string
+    userId: string
+    role?: string
+    createdAt?: Date | string
+  }
+
+  export type MediaUpdateWithoutDriveInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    filename?: StringFieldUpdateOperationsInput | string
+    originalName?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
+    size?: IntFieldUpdateOperationsInput | number
+    ip?: NullableStringFieldUpdateOperationsInput | string | null
+    isPrivate?: BoolFieldUpdateOperationsInput | boolean
+    transcodeStatus?: StringFieldUpdateOperationsInput | string
+    transcodeError?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneWithoutMediaNestedInput
+  }
+
+  export type MediaUncheckedUpdateWithoutDriveInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    filename?: StringFieldUpdateOperationsInput | string
+    originalName?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
+    size?: IntFieldUpdateOperationsInput | number
+    ip?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    isPrivate?: BoolFieldUpdateOperationsInput | boolean
+    transcodeStatus?: StringFieldUpdateOperationsInput | string
+    transcodeError?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MediaUncheckedUpdateManyWithoutDriveInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    filename?: StringFieldUpdateOperationsInput | string
+    originalName?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
+    size?: IntFieldUpdateOperationsInput | number
+    ip?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    isPrivate?: BoolFieldUpdateOperationsInput | boolean
+    transcodeStatus?: StringFieldUpdateOperationsInput | string
+    transcodeError?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DriveAccessUpdateWithoutDriveInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutDriveAccessNestedInput
+  }
+
+  export type DriveAccessUncheckedUpdateWithoutDriveInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DriveAccessUncheckedUpdateManyWithoutDriveInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

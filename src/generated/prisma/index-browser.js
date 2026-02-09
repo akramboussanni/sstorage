@@ -139,6 +139,26 @@ exports.Prisma.MediaScalarFieldEnum = {
   isPrivate: 'isPrivate',
   transcodeStatus: 'transcodeStatus',
   transcodeError: 'transcodeError',
+  createdAt: 'createdAt',
+  driveId: 'driveId'
+};
+
+exports.Prisma.DriveScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  ownerId: 'ownerId',
+  isPublic: 'isPublic',
+  publicRole: 'publicRole',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.DriveAccessScalarFieldEnum = {
+  id: 'id',
+  driveId: 'driveId',
+  userId: 'userId',
+  role: 'role',
   createdAt: 'createdAt'
 };
 
@@ -173,6 +193,8 @@ exports.Prisma.NullsOrder = {
 exports.Prisma.ModelName = {
   User: 'User',
   Media: 'Media',
+  Drive: 'Drive',
+  DriveAccess: 'DriveAccess',
   Settings: 'Settings'
 };
 

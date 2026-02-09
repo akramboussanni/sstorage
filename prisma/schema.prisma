@@ -16,6 +16,8 @@ model User {
   mustChangePassword Boolean  @default(false)
   createdAt          DateTime @default(now())
   media              Media[]
+  ownedDrives        Drive[]    @relation("OwnedDrives")
+  driveAccess        DriveAccess[]
   customMaxFileSize   BigInt?  // Custom limit in bytes, overrides global setting
   customRateLimitWindow Int?   // Custom cooldown in seconds
 }
@@ -33,6 +35,39 @@ model Media {
   transcodeStatus String   @default("not_required") // pending, processing, completed, failed, not_required
   transcodeError  String?
   createdAt       DateTime @default(now())
+  driveId         String?
+  drive           Drive?   @relation(fields: [driveId], references: [id], onDelete: Cascade)
+}
+
+model Drive {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  ownerId     String
+  owner       User     @relation("OwnedDrives", fields: [ownerId], references: [id])
+  
+  // Public Access Settings
+  isPublic    Boolean  @default(false)
+  publicRole  String   @default("VIEWER") // VIEWER, EDITOR (Upload/Delete)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  files       Media[]
+  access      DriveAccess[]
+}
+
+model DriveAccess {
+  id        String   @id @default(uuid())
+  driveId   String
+  drive     Drive    @relation(fields: [driveId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role      String   @default("VIEWER") // VIEWER, EDITOR
+  
+  createdAt DateTime @default(now())
+
+  @@unique([driveId, userId])
 }
 
 model Settings {
