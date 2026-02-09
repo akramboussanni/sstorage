@@ -1,0 +1,186 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { writeFile, mkdir, rm } from 'fs/promises';
+import { join } from 'path';
+import { v4 as uuidv4 } from 'uuid';
+import { prisma } from '@/lib/db';
+import { startTranscodeInBackground, CompressionQuality } from '@/lib/transcode';
+import { existsSync, createReadStream, createWriteStream } from 'fs';
+import { readdir, stat } from 'fs/promises';
+
+const UPLOAD_DIR = join(process.cwd(), 'uploads');
+const TEMP_DIR = join(UPLOAD_DIR, 'temp');
+
+const VALID_QUALITIES: CompressionQuality[] = ['none', 'high', 'balanced', 'small'];
+
+export interface UploadContext {
+    userId?: string | null;
+    driveId?: string | null; // If provided, overrides form data
+    folderId?: string | null; // If provided, overrides form data
+    forcedIp?: string;
+}
+
+export async function handleUpload(
+    request: NextRequest,
+    context: UploadContext = {},
+    preParsedFormData?: FormData
+) {
+    try {
+        // Ensure directories exist
+        if (!existsSync(UPLOAD_DIR)) {
+            await mkdir(UPLOAD_DIR, { recursive: true });
+        }
+        if (!existsSync(TEMP_DIR)) {
+            await mkdir(TEMP_DIR, { recursive: true });
+        }
+
+        const url = request.nextUrl;
+        const chunkIndexStr = url.searchParams.get('chunkIndex');
+        const totalChunksStr = url.searchParams.get('totalChunks');
+        const uploadId = url.searchParams.get('uploadId');
+
+        const isChunked = chunkIndexStr !== null && totalChunksStr !== null && uploadId !== null;
+        const chunkIndex = isChunked ? parseInt(chunkIndexStr) : 0;
+        const totalChunks = isChunked ? parseInt(totalChunksStr) : 1;
+
+        const formData = preParsedFormData || await request.formData();
+        const file = formData.get('file') as File;
+        const formDriveId = formData.get('driveId') as string | null;
+        const formFolderId = formData.get('folderId') as string | null;
+        const qualityParam = formData.get('quality') as string | null;
+
+        if (!file) {
+            return NextResponse.json({ error: 'No file provided' }, { status: 400 });
+        }
+
+        // Determine IDs
+        const driveId = context.driveId || formDriveId || null;
+        const folderId = context.folderId || formFolderId || null;
+
+        // Settings & Quality
+        const settings = await prisma.settings.findUnique({ where: { id: 'default' } });
+        const quality: CompressionQuality = qualityParam && VALID_QUALITIES.includes(qualityParam as CompressionQuality)
+            ? (qualityParam as CompressionQuality)
+            : (settings?.defaultCompression as CompressionQuality) || 'balanced';
+
+        // File Identification
+        const fileId = isChunked ? uploadId! : uuidv4();
+        const ext = file.name.split('.').pop() || '';
+        const filename = `${fileId}.${ext}`;
+        const filepath = join(UPLOAD_DIR, filename);
+
+        let finalSize = 0;
+
+        if (isChunked) {
+             const chunkDir = join(TEMP_DIR, fileId);
+             if (!existsSync(chunkDir)) {
+                 await mkdir(chunkDir, { recursive: true });
+             }
+             
+             const chunkPath = join(chunkDir, `chunk-${chunkIndex}`);
+             const bytes = await file.arrayBuffer();
+             await writeFile(chunkPath, Buffer.from(bytes));
+
+             // Check if all chunks are uploaded
+             const dirFiles = await readdir(chunkDir);
+             const files = dirFiles.filter(f => f.startsWith('chunk-'));
+             
+             // We use a simple check here. For robust production systems, 
+             // you'd want a separate "finalize" step or a map of received chunks.
+             // But checking count == total works if we trust the client sends 0..N-1
+             if (files.length === totalChunks) {
+                 // Sort chunks numerically
+                 files.sort((a: string, b: string) => {
+                     const idxA = parseInt(a.split('-')[1]);
+                     const idxB = parseInt(b.split('-')[1]);
+                     return idxA - idxB;
+                 });
+
+                 // Verify integrity (basic)
+                 for(let i=0; i<totalChunks; i++) {
+                     if (!files.some((f: string) => f === `chunk-${i}`)) {
+                         // Missing chunks, wait for them
+                         return NextResponse.json({ success: true, chunkId: chunkIndex, message: 'Chunk received' });
+                     }
+                 }
+                 
+                 // Create write stream for final file
+                 const writeStream = createWriteStream(filepath);
+                 
+                 for (let i = 0; i < totalChunks; i++) {
+                     const cp = join(chunkDir, `chunk-${i}`);
+                     const readStream = createReadStream(cp);
+                     await new Promise<void>((resolve, reject) => {
+                         readStream.pipe(writeStream, { end: false });
+                         readStream.on('end', () => resolve());
+                         readStream.on('error', reject);
+                     });
+                 }
+                 writeStream.end();
+                 
+                 // Wait for close
+                 await new Promise<void>((resolve, reject) => {
+                     writeStream.on('finish', () => resolve());
+                     writeStream.on('error', reject);
+                 });
+
+                 // Get final size
+                 const stats = await stat(filepath);
+                 finalSize = stats.size;
+
+                 // Clean up chunks
+                 await rm(chunkDir, { recursive: true, force: true });
+             } else {
+                 return NextResponse.json({ success: true, chunkId: chunkIndex, message: 'Chunk received' });
+             }
+
+        } else {
+            const bytes = await file.arrayBuffer();
+            const buffer = Buffer.from(bytes);
+            await writeFile(filepath, buffer);
+            finalSize = buffer.length;
+        }
+
+        // Processing (DB + Transcode)
+        const isVideo = file.type.startsWith('video/');
+        const shouldTranscode = isVideo && quality !== 'none';
+
+        // IP
+        const forwardedFor = request.headers.get('x-forwarded-for');
+        const ip = context.forcedIp || (forwardedFor ? forwardedFor.split(',')[0].trim() : '127.0.0.1');
+
+        const media = await prisma.media.create({
+            data: {
+                id: fileId,
+                filename,
+                originalName: file.name,
+                mimeType: file.type,
+                size: finalSize,
+                ip,
+                userId: context.userId || null,
+                driveId: driveId,
+                folderId: folderId,
+                transcodeStatus: shouldTranscode ? 'pending' : 'not_required',
+            }
+        });
+
+        if (shouldTranscode) {
+            startTranscodeInBackground(fileId, filepath, quality);
+        }
+
+        return NextResponse.json({
+            success: true,
+            id: media.id,
+            url: `/api/media/${media.id}`,
+            transcodeStatus: media.transcodeStatus,
+            quality: isVideo ? quality : null,
+            media
+        });
+
+    } catch (error: any) {
+        console.error('Upload error:', error);
+         if (error.code === 'P2003') {
+             return NextResponse.json({ error: 'Invalid reference (User, Drive, or Folder not found)' }, { status: 400 });
+        }
+        return NextResponse.json({ error: 'Upload failed', details: error.message }, { status: 500 });
+    }
+}

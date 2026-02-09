@@ -368,27 +368,68 @@ export default function DrivePage() {
     if (!file || !drive?.canEdit) return;
 
     setUploading(true);
-    const formData = new FormData();
-    formData.append("file", file);
-    if (currentFolderId) {
-      formData.append("folderId", currentFolderId);
-    }
+    
+    const CHUNK_SIZE = 5 * 1024 * 1024; // 5MB
+    const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
+    
+    // Use a UUID for the upload session to group chunks
+    const uploadId = crypto.randomUUID();
 
     try {
-      const res = await fetch(`/api/drives/${driveId}/upload`, {
-        method: "POST",
-        body: formData,
-      });
-      const data = await res.json();
+      if (totalChunks === 1) {
+        // Simple upload for small files
+        const formData = new FormData();
+        formData.append("file", file);
+        if (currentFolderId) {
+          formData.append("folderId", currentFolderId);
+        }
 
-      if (res.ok) {
-        showToast("File uploaded!");
-        loadContents();
+        const res = await fetch(`/api/drives/${driveId}/upload`, {
+          method: "POST",
+          body: formData,
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+           showToast("File uploaded!");
+        } else {
+           throw new Error(data.error || "Upload failed");
+        }
+
       } else {
-        showToast(data.error || "Upload failed", "error");
+          // Chunked upload
+          for (let i = 0; i < totalChunks; i++) {
+              const start = i * CHUNK_SIZE;
+              const end = Math.min(file.size, start + CHUNK_SIZE);
+              const chunk = file.slice(start, end);
+
+              const formData = new FormData();
+              formData.append("file", chunk, file.name);
+              if (currentFolderId) {
+                formData.append("folderId", currentFolderId);
+              }
+              // params
+              const params = new URLSearchParams({
+                  chunkIndex: i.toString(),
+                  totalChunks: totalChunks.toString(),
+                  uploadId: uploadId
+              });
+
+              const res = await fetch(`/api/drives/${driveId}/upload?${params.toString()}`, {
+                  method: "POST",
+                  body: formData,
+              });
+              
+              if (!res.ok) {
+                  const data = await res.json();
+                  throw new Error(data.error || "Chunk upload failed");
+              }
+          }
+          showToast("File uploaded!");
       }
-    } catch (err) {
-      showToast("Upload failed", "error");
+      loadContents();
+    } catch (err: any) {
+      showToast(err.message || "Upload failed", "error");
     } finally {
       setUploading(false);
       e.target.value = "";
