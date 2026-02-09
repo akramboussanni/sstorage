@@ -53,12 +53,19 @@ COPY docker-entrypoint.sh ./
 RUN chmod +x docker-entrypoint.sh
 
 # Create uploads and data directories
-RUN mkdir -p uploads data prisma && chown -R nextjs:nodejs uploads data prisma src
+RUN mkdir -p uploads data prisma
 
-# Install prisma CLI globally or in the local node_modules to ensure npx prisma works fast and offline
-RUN npm install -g pnpm && pnpm install prisma --save-exact
+# Install pnpm globally (as root)
+RUN npm install -g pnpm
 
+# Set ownership of the app directory to the nextjs user
+RUN chown -R nextjs:nodejs /app
+
+# Switch to non-root user
 USER nextjs
+
+# Install prisma CLI
+RUN pnpm add prisma --save-exact
 
 EXPOSE 3000
 
