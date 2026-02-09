@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import { useUpload } from '@/components/UploadContext';
 import { Dialog, useDialog } from '@/components/Dialog';
 import { Toast, useToast } from '@/components/Toast';
 import { MediaCard, MediaItem, spinnerStyles } from '@/components/MediaCard';
@@ -34,6 +35,7 @@ export default function Home() {
   const { toast, showToast } = useToast();
   const { contextMenu, closeContextMenu } = useContextMenu();
   const pollIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const { startUpload } = useUpload();
 
   const isVideo = file?.type.startsWith('video/');
 
@@ -120,93 +122,22 @@ export default function Home() {
   const handleUpload = async () => {
     if (!file) return;
 
-    setUploading(true);
     setError(null);
 
     try {
-      const CHUNK_SIZE = 50 * 1024 * 1024; // 50MB
+      const quality = isVideo && noCompression ? 'none' : 
+                      isVideo ? (settings?.defaultCompression || 'balanced') : undefined;
 
-      if (file.size > CHUNK_SIZE) {
-        const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
-        const uploadId = crypto.randomUUID();
+      await startUpload(file, {
+        quality,
+      });
 
-        for (let i = 0; i < totalChunks; i++) {
-          const start = i * CHUNK_SIZE;
-          const end = Math.min(start + CHUNK_SIZE, file.size);
-          const chunk = file.slice(start, end);
-
-          const formData = new FormData();
-          formData.append('file', chunk, file.name);
-
-          // Use noCompression checkbox or default compression from admin settings
-          if (isVideo) {
-            const quality = noCompression ? 'none' : (settings?.defaultCompression || 'balanced');
-            formData.append('quality', quality);
-          }
-
-
-          const params = new URLSearchParams({
-            chunkIndex: i.toString(),
-            totalChunks: totalChunks.toString(),
-            uploadId
-          });
-
-          const res = await fetch(`/api/upload?${params.toString()}`, {
-            method: 'POST',
-            body: formData,
-          });
-
-          const data = await res.json();
-
-          if (!res.ok) {
-            throw new Error(data.error || 'Upload failed');
-          }
-
-          if (i === totalChunks - 1) {
-            setFile(null);
-            setNoCompression(false);
-            refreshUploads();
-
-            if (data.transcodeStatus === 'pending') {
-              setLastUploadId(data.id);
-            }
-          }
-        }
-      } else {
-        const formData = new FormData();
-        formData.append('file', file);
-
-        // Use noCompression checkbox or default compression from admin settings
-        if (isVideo) {
-          const quality = noCompression ? 'none' : (settings?.defaultCompression || 'balanced');
-          formData.append('quality', quality);
-        }
-
-
-        const res = await fetch('/api/upload', {
-          method: 'POST',
-          body: formData,
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-          throw new Error(data.error || 'Upload failed');
-        }
-
-        setFile(null);
-        setNoCompression(false);
-        refreshUploads();
-
-        if (data.transcodeStatus === 'pending') {
-          setLastUploadId(data.id);
-        }
-      }
+      setFile(null);
+      setNoCompression(false);
+      refreshUploads();
 
     } catch (err: any) {
       setError(err.message);
-    } finally {
-      setUploading(false);
     }
   };
 
