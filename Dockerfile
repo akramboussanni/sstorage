@@ -4,26 +4,27 @@ FROM node:20-slim AS builder
 WORKDIR /app
 
 # Copy package files
-COPY package*.json ./
+COPY package.json pnpm-lock.yaml ./
 COPY prisma ./prisma/
 # Copy config file needed for Prisma 7
 COPY prisma.config.ts ./
 
 # Install dependencies
 RUN apt-get update && apt-get install -y openssl ffmpeg && rm -rf /var/lib/apt/lists/*
-RUN npm ci
+RUN npm install -g pnpm
+RUN pnpm install --frozen-lockfile
 
 # Generate Prisma client
-RUN npx prisma generate
+RUN pnpm prisma generate
 
 # Compile seed script
-RUN npx tsc prisma/seed.ts --module commonjs --esModuleInterop --skipLibCheck --moduleResolution node --target es2020 --outDir prisma
+RUN pnpm tsc prisma/seed.ts --module commonjs --esModuleInterop --skipLibCheck --moduleResolution node --target es2020 --outDir prisma
 
 # Copy source files
 COPY . .
 
 # Build the app
-RUN npm run build
+RUN pnpm run build
 
 # Production stage
 FROM node:20-slim AS runner
