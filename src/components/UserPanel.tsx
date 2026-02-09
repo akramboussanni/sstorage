@@ -9,31 +9,21 @@ interface UserPanelProps {
 export function UserPanel({ user, allowRegistration, onLogout }: UserPanelProps) {
     if (user) {
         return (
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', marginTop: '10px' }}>
-                <span style={{ color: '#888', fontSize: '0.9rem' }}>
-                    Logged in as <strong style={{ color: '#5865f2' }}>{user.username}</strong>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, marginTop: 16 }}>
+                <span style={{ color: 'var(--muted-foreground)', fontSize: '0.875rem' }}>
+                    Signed in as <strong style={{ color: 'var(--foreground)' }}>{user.username}</strong>
                 </span>
-                <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', justifyContent: 'center' }}>
+                <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', justifyContent: 'center' }}>
                     {user.isAdmin && (
-                        <a href="/admin" style={{ color: '#5865f2', textDecoration: 'none', fontSize: '0.9rem' }}>
-                            Admin Panel
+                        <a href="/admin" className="app-btn app-btn-ghost" style={{ textDecoration: 'none', padding: '6px 12px' }}>
+                            Admin
                         </a>
                     )}
-                    <a href="/change-password" style={{ color: '#666', textDecoration: 'none', fontSize: '0.9rem' }}>
-                        Change Password
+                    <a href="/change-password" className="app-btn app-btn-ghost" style={{ textDecoration: 'none', padding: '6px 12px' }}>
+                        Password
                     </a>
-                    <button
-                        onClick={onLogout}
-                        style={{
-                            background: 'none',
-                            border: 'none',
-                            color: '#ff5555',
-                            fontSize: '0.9rem',
-                            cursor: 'pointer',
-                            padding: 0,
-                        }}
-                    >
-                        Sign Out
+                    <button type="button" onClick={onLogout} className="app-btn app-btn-danger" style={{ padding: '6px 12px' }}>
+                        Sign out
                     </button>
                 </div>
             </div>
@@ -41,12 +31,12 @@ export function UserPanel({ user, allowRegistration, onLogout }: UserPanelProps)
     }
 
     return (
-        <div style={{ display: 'flex', gap: '16px', marginTop: '10px' }}>
-            <a href="/login" style={{ color: '#5865f2', textDecoration: 'none', fontSize: '0.9rem' }}>
-                Login
+        <div style={{ display: 'flex', gap: 10, marginTop: 16 }}>
+            <a href="/login" className="app-btn app-btn-primary" style={{ textDecoration: 'none' }}>
+                Sign in
             </a>
             {allowRegistration && (
-                <a href="/register" style={{ color: '#666', textDecoration: 'none', fontSize: '0.9rem' }}>
+                <a href="/register" className="app-btn app-btn-secondary" style={{ textDecoration: 'none' }}>
                     Register
                 </a>
             )}

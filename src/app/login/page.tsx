@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { Lock } from 'lucide-react';
 
 export default function LoginPage() {
     const router = useRouter();
@@ -56,7 +57,9 @@ export default function LoginPage() {
             color: '#fff',
             fontFamily: 'system-ui, sans-serif',
         }}>
-            <h1 style={{ marginBottom: '30px', fontSize: '1.5rem' }}>🔐 Login</h1>
+            <h1 style={{ marginBottom: '30px', fontSize: '1.5rem', display: 'flex', alignItems: 'center', gap: '10px', justifyContent: 'center' }}>
+                <Lock size={28} /> Login
+            </h1>
 
             <form
                 onSubmit={handleSubmit}

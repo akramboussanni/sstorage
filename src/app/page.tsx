@@ -7,6 +7,7 @@ import { Toast, useToast } from '@/components/Toast';
 import { MediaCard, MediaItem, spinnerStyles } from '@/components/MediaCard';
 import { UserPanel } from '@/components/UserPanel';
 import { DriveCard } from '@/components/DriveCard';
+import { ContextMenu, useContextMenu } from '@/components/ContextMenu';
 
 type CompressionQuality = 'none' | 'high' | 'balanced' | 'small';
 
@@ -15,8 +16,6 @@ interface Settings {
   allowRegistration?: boolean;
   defaultCompression: CompressionQuality;
   showNoCompression: boolean;
-  showPrivateOption: boolean;
-  forcePrivate: boolean;
 }
 
 export default function Home() {
@@ -24,7 +23,6 @@ export default function Home() {
   const [user, setUser] = useState<{ username: string; isAdmin: boolean; mustChangePassword?: boolean } | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [noCompression, setNoCompression] = useState(false);
-  const [isPrivate, setIsPrivate] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [lastUploadId, setLastUploadId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -34,6 +32,7 @@ export default function Home() {
   const [drives, setDrives] = useState<any[]>([]);
   const { dialog, showDialog, closeDialog } = useDialog();
   const { toast, showToast } = useToast();
+  const { contextMenu, closeContextMenu } = useContextMenu();
   const pollIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const isVideo = file?.type.startsWith('video/');
@@ -145,9 +144,6 @@ export default function Home() {
             formData.append('quality', quality);
           }
 
-          if (user && isPrivate) {
-            formData.append('isPrivate', 'true');
-          }
 
           const params = new URLSearchParams({
             chunkIndex: i.toString(),
@@ -186,9 +182,6 @@ export default function Home() {
           formData.append('quality', quality);
         }
 
-        if (user && isPrivate) {
-          formData.append('isPrivate', 'true');
-        }
 
         const res = await fetch('/api/upload', {
           method: 'POST',
@@ -233,20 +226,56 @@ export default function Home() {
   };
 
   const handleCreateDrive = () => {
-    const name = prompt('Enter drive name:');
-    if (!name) return;
+    showDialog('Create Drive', 'Enter drive name:', 'prompt', undefined, (name: string) => {
+      if (!name || !name.trim()) return;
 
-    fetch('/api/drives', {
-      method: 'POST',
+      fetch('/api/drives', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: name.trim(), description: '' })
+      }).then(res => res.json()).then(data => {
+        if (data.id) {
+          showToast('Drive created!');
+          refreshUploads();
+        } else {
+          showToast(data.error || 'Failed to create drive', 'error');
+        }
+      });
+    }, 'Drive name');
+  };
+
+  const handleDeleteDrive = (id: string) => {
+    const drive = drives.find(d => d.id === id);
+    showDialog('Delete Drive', `Are you sure you want to delete "${drive?.name}"? This will delete all files and folders inside.`, 'confirm', async () => {
+      try {
+        const res = await fetch(`/api/drives/${id}`, { method: 'DELETE' });
+        if (res.ok) {
+          setDrives(prev => prev.filter(d => d.id !== id));
+          showToast('Drive deleted!');
+        } else {
+          showDialog('Error', 'Failed to delete drive');
+        }
+      } catch (err) {
+        showDialog('Error', 'Error deleting drive');
+      }
+    });
+  };
+
+  const handleRenameDrive = (id: string, newName: string) => {
+    fetch(`/api/drives/${id}`, {
+      method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, description: '' })
-    }).then(res => res.json()).then(data => {
-      if (data.id) {
-        showToast('Drive created!');
+      body: JSON.stringify({ name: newName })
+    }).then(async res => {
+      const data = await res.json();
+      if (res.ok) {
+        showToast('Drive renamed!');
         refreshUploads();
       } else {
-        showToast(data.error || 'Failed to create drive', 'error');
+        showToast(data.error || 'Failed to rename drive', 'error');
       }
+    }).catch(() => {
+      showToast('Failed to rename drive', 'error');
     });
   };
 
@@ -257,10 +286,10 @@ export default function Home() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#0a0a0a',
-        color: '#fff',
+        background: 'var(--background)',
+        color: 'var(--foreground)',
       }}>
-        Loading...
+        <span style={{ fontSize: '0.9375rem', color: 'var(--muted-foreground)' }}>Loading…</span>
       </div>
     );
   }
@@ -271,52 +300,31 @@ export default function Home() {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      paddingTop: '60px',
-      paddingBottom: '40px',
-      backgroundColor: '#0a0a0a',
-      color: '#fff',
-      padding: '20px',
-      fontFamily: 'system-ui, sans-serif',
+      paddingTop: 48,
+      paddingBottom: 48,
+      paddingLeft: 20,
+      paddingRight: 20,
+      background: 'var(--background)',
+      color: 'var(--foreground)',
     }}>
       <Dialog state={dialog} onClose={closeDialog} />
       <Toast message={toast.message} show={toast.show} type={toast.type} />
+      <ContextMenu
+        items={contextMenu.items}
+        position={contextMenu.position}
+        onClose={closeContextMenu}
+      />
 
-      <h1 style={{ marginBottom: '10px', fontSize: '2rem' }}>📁 SStorage</h1>
-
-      {/* Privacy Disclaimer */}
-      {settings && (
-        <div style={{
-          marginBottom: '16px',
-          color: '#666',
-          fontSize: '0.8rem',
-          textAlign: 'center',
-          maxWidth: '500px',
-        }}>
-          {settings.forcePrivate ? (
-            'All uploads are private — hidden from admin view'
-          ) : (
-            'Uploads are visible to admin unless marked private'
-          )}
-        </div>
-      )}
+      <h1 style={{ marginBottom: 8, fontSize: '1.75rem', fontWeight: 600 }}>SStorage</h1>
+      <p style={{ marginBottom: 32, fontSize: '0.875rem', color: 'var(--muted-foreground)' }}>Upload and share files</p>
 
       {!canUpload ? (
         <div style={{ textAlign: 'center' }}>
-          <p style={{ marginBottom: '20px', color: '#888' }}>
-            Public uploads are disabled. Please login to upload.
+          <p style={{ marginBottom: 20, color: 'var(--muted-foreground)', fontSize: '0.9375rem' }}>
+            You need to sign in to upload.
           </p>
-          <a
-            href="/login"
-            style={{
-              padding: '12px 24px',
-              backgroundColor: '#5865f2',
-              color: '#fff',
-              borderRadius: '8px',
-              textDecoration: 'none',
-              display: 'inline-block',
-            }}
-          >
-            Login
+          <a href="/login" className="app-btn app-btn-primary" style={{ textDecoration: 'none' }}>
+            Sign in
           </a>
         </div>
       ) : (
@@ -324,11 +332,10 @@ export default function Home() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          gap: '20px',
-          maxWidth: '500px',
+          gap: 20,
+          maxWidth: 420,
           width: '100%',
         }}>
-          {/* File Input */}
           <label
             style={{
               display: 'flex',
@@ -336,106 +343,67 @@ export default function Home() {
               alignItems: 'center',
               justifyContent: 'center',
               width: '100%',
-              height: '200px',
-              border: '2px dashed #333',
-              borderRadius: '12px',
+              height: 160,
+              border: '2px dashed var(--border)',
+              borderRadius: 'var(--radius-lg)',
               cursor: 'pointer',
-              transition: 'border-color 0.2s',
+              transition: 'border-color 0.2s, background 0.2s',
+              background: 'var(--surface)',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = 'var(--border-focus)';
+              e.currentTarget.style.background = 'var(--surface-hover)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = 'var(--border)';
+              e.currentTarget.style.background = 'var(--surface)';
             }}
           >
-            <input
-              type="file"
-              onChange={(e) => setFile(e.target.files?.[0] || null)}
-              style={{ display: 'none' }}
-            />
+            <input type="file" onChange={(e) => setFile(e.target.files?.[0] || null)} style={{ display: 'none' }} />
             {file ? (
-              <span style={{ color: '#5865f2' }}>{file.name}</span>
+              <span style={{ color: 'var(--accent)', fontWeight: 500 }}>{file.name}</span>
             ) : (
-              <span style={{ color: '#666' }}>Click to select any file</span>
+              <span style={{ color: 'var(--muted-foreground)', fontSize: '0.9375rem' }}>Choose a file</span>
             )}
           </label>
 
-          {/* Upload Options */}
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '12px',
-            width: '100%',
-          }}>
-            {/* No Compression Checkbox - only for videos, controlled by admin */}
-            {isVideo && settings?.showNoCompression && (
-              <label style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-                padding: '12px 16px',
-                backgroundColor: '#1a1a1a',
-                borderRadius: '8px',
-                cursor: 'pointer',
-              }}>
-                <input
-                  type="checkbox"
-                  checked={noCompression}
-                  onChange={(e) => setNoCompression(e.target.checked)}
-                  style={{ accentColor: '#5865f2', width: '18px', height: '18px' }}
-                />
-                <div>
-                  <div>🎬 No Compression</div>
-                  <div style={{ fontSize: '0.8rem', color: '#888' }}>
-                    Keep original quality (not recommended for large files)
-                  </div>
-                </div>
-              </label>
-            )}
+          {isVideo && settings?.showNoCompression && (
+            <label style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 12,
+              width: '100%',
+              padding: '12px 14px',
+              background: 'var(--surface)',
+              border: '1px solid var(--border)',
+              borderRadius: 'var(--radius)',
+              cursor: 'pointer',
+            }}>
+              <input
+                type="checkbox"
+                checked={noCompression}
+                onChange={(e) => setNoCompression(e.target.checked)}
+                style={{ accentColor: 'var(--accent)', width: 18, height: 18 }}
+              />
+              <div>
+                <span style={{ fontSize: '0.9375rem' }}>No compression</span>
+                <div style={{ fontSize: '0.8125rem', color: 'var(--muted-foreground)' }}>Keep original video quality</div>
+              </div>
+            </label>
+          )}
 
-            {/* Privacy Toggle - only for logged in users, controlled by admin */}
-            {user && settings?.showPrivateOption && (
-              <label style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-                padding: '12px 16px',
-                backgroundColor: '#1a1a1a',
-                borderRadius: '8px',
-                cursor: 'pointer',
-              }}>
-                <input
-                  type="checkbox"
-                  checked={isPrivate}
-                  onChange={(e) => setIsPrivate(e.target.checked)}
-                  style={{ accentColor: '#5865f2', width: '18px', height: '18px' }}
-                />
-                <div>
-                  <div>🔒 Private Upload</div>
-                  <div style={{ fontSize: '0.8rem', color: '#888' }}>
-                    Hidden from admin view
-                  </div>
-                </div>
-              </label>
-            )}
-          </div>
-
-          {/* Upload Button */}
           <button
+            type="button"
             onClick={handleUpload}
             disabled={!file || uploading}
-            style={{
-              padding: '12px 24px',
-              backgroundColor: file && !uploading ? '#5865f2' : '#333',
-              color: '#fff',
-              border: 'none',
-              borderRadius: '8px',
-              cursor: file && !uploading ? 'pointer' : 'not-allowed',
-              fontSize: '1rem',
-              width: '100%',
-            }}
+            className="app-btn app-btn-primary"
+            style={{ width: '100%', padding: '12px 24px', fontSize: '1rem' }}
           >
-            {uploading ? 'Uploading...' : 'Upload'}
+            {uploading ? 'Uploading…' : 'Upload'}
           </button>
 
-          {error && <p style={{ color: '#ff5555' }}>{error}</p>}
+          {error && <p style={{ color: 'var(--danger)', fontSize: '0.875rem', margin: 0 }}>{error}</p>}
 
-          {/* User Panel */}
           <UserPanel
             user={user}
             allowRegistration={settings?.allowRegistration}
@@ -444,66 +412,46 @@ export default function Home() {
         </div>
       )}
 
-      {/* My Uploads Section */}
       {user && myUploads.length > 0 && (
-        <div style={{ marginTop: '60px', width: '100%', maxWidth: '800px' }}>
-          <h2 style={{ fontSize: '1.2rem', marginBottom: '20px', borderBottom: '1px solid #333', paddingBottom: '10px' }}>
-            My Uploads ({myUploads.length})
+        <section style={{ marginTop: 48, width: '100%', maxWidth: 800 }}>
+          <h2 style={{ fontSize: '1rem', fontWeight: 600, marginBottom: 16, color: 'var(--muted-foreground)' }}>
+            My uploads · {myUploads.length}
           </h2>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
-            gap: '16px',
-          }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 16 }}>
             {myUploads.map((media) => (
-              <MediaCard
-                key={media.id}
-                media={media}
-                onDelete={handleDelete}
-                onCopyLink={copyToClipboard}
-                showPrivateBadge={true}
-              />
+              <MediaCard key={media.id} media={media} onDelete={handleDelete} onCopyLink={copyToClipboard} />
             ))}
           </div>
-        </div>
+        </section>
       )}
 
-      {/* My Drives Section */}
       {user && (
-        <div style={{ marginTop: '60px', width: '100%', maxWidth: '800px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', borderBottom: '1px solid #333', paddingBottom: '10px' }}>
-            <h2 style={{ fontSize: '1.2rem', margin: 0 }}>
-              My Drives ({drives.length})
+        <section style={{ marginTop: 48, width: '100%', maxWidth: 800 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+            <h2 style={{ fontSize: '1rem', fontWeight: 600, margin: 0, color: 'var(--muted-foreground)' }}>
+              My drives · {drives.length}
             </h2>
-            <button
-              onClick={handleCreateDrive}
-              style={{
-                backgroundColor: '#1a1a1a',
-                color: '#fff',
-                border: '1px solid #333',
-                padding: '4px 12px',
-                borderRadius: '6px',
-                cursor: 'pointer',
-                fontSize: '0.8rem'
-              }}
-            >
-              + Create Drive
+            <button type="button" onClick={handleCreateDrive} className="app-btn app-btn-secondary">
+              New drive
             </button>
           </div>
           {drives.length === 0 ? (
-            <p style={{ color: '#666', textAlign: 'center', padding: '20px' }}>No drives created yet</p>
+            <p style={{ color: 'var(--muted-foreground)', textAlign: 'center', padding: 24, fontSize: '0.9375rem' }}>
+              No drives yet. Create one to organize files in folders.
+            </p>
           ) : (
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
-              gap: '16px',
-            }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 12 }}>
               {drives.map((drive) => (
-                <DriveCard key={drive.id} drive={drive} />
+                <DriveCard 
+                  key={drive.id} 
+                  drive={drive} 
+                  onDelete={handleDeleteDrive}
+                  onRename={handleRenameDrive}
+                />
               ))}
             </div>
           )}
-        </div>
+        </section>
       )}
 
       <style>{spinnerStyles}</style>

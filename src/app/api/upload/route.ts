@@ -57,11 +57,7 @@ export async function POST(request: NextRequest) {
         const formData = await request.formData();
         const file = formData.get('file') as File;
         const qualityParam = formData.get('quality') as string | null;
-        const isPrivateParam = formData.get('isPrivate') as string | null;
         const driveId = formData.get('driveId') as string | null;
-
-        // Determine privacy: forcePrivate overrides, otherwise user choice (logged-in only)
-        const isPrivate = settings?.forcePrivate || (isPrivateParam === 'true' && !!session);
 
         if (!file) {
             return NextResponse.json({ error: 'No file provided' }, { status: 400 });
@@ -168,7 +164,6 @@ export async function POST(request: NextRequest) {
                 size: finalBuffer.length,
                 ip,
                 userId: session?.id || null,
-                isPrivate,
                 transcodeStatus,
                 driveId: driveId || null,
             },

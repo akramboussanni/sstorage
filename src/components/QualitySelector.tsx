@@ -1,5 +1,7 @@
 'use client';
 
+import { Video } from 'lucide-react';
+
 type CompressionQuality = 'none' | 'high' | 'balanced' | 'small';
 
 const QUALITY_OPTIONS: { value: CompressionQuality; label: string; description: string }[] = [
@@ -24,8 +26,8 @@ export function QualitySelector({ value, onChange }: QualitySelectorProps) {
             backgroundColor: '#1a1a1a',
             borderRadius: '8px',
         }}>
-            <label style={{ display: 'block', marginBottom: '10px', color: '#888', fontSize: '0.9rem' }}>
-                🎬 Video Compression Quality
+            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px', color: '#888', fontSize: '0.9rem' }}>
+                <Video size={16} /> Video Compression Quality
             </label>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 {QUALITY_OPTIONS.map((option) => (

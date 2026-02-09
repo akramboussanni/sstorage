@@ -12,18 +12,24 @@ export function Toast({ message, show, type = 'success' }: ToastProps) {
     if (!show) return null;
 
     return (
-        <div style={{
-            position: 'fixed',
-            bottom: '20px',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            backgroundColor: type === 'error' ? '#f04747' : '#43b581',
-            color: '#fff',
-            padding: '12px 24px',
-            borderRadius: '8px',
-            zIndex: 1001,
-            animation: 'fadeIn 0.2s ease-out',
-        }}>
+        <div
+            role="status"
+            style={{
+                position: 'fixed',
+                bottom: 24,
+                left: '50%',
+                transform: 'translateX(-50%)',
+                backgroundColor: type === 'error' ? 'var(--danger)' : 'var(--success)',
+                color: '#fff',
+                padding: '12px 20px',
+                borderRadius: 'var(--radius)',
+                fontSize: '0.875rem',
+                fontWeight: 500,
+                boxShadow: 'var(--shadow)',
+                zIndex: 1001,
+                animation: 'toast-in 0.2s ease-out',
+            }}
+        >
             {message}
         </div>
     );
@@ -36,18 +42,18 @@ export function useToast() {
         type: 'success'
     });
 
-    const showToast = useCallback((message: string, durationOrType: number | 'success' | 'error' = 2000) => {
-        let duration = 2000;
-        let type: 'success' | 'error' = 'success';
+    const showToast = useCallback((message: string, typeOrDuration: 'success' | 'error' | number = 'success', duration: number = 2000) => {
+        let finalType: 'success' | 'error' = 'success';
+        let finalDuration = duration;
 
-        if (typeof durationOrType === 'string') {
-            type = durationOrType;
+        if (typeof typeOrDuration === 'number') {
+            finalDuration = typeOrDuration;
         } else {
-            duration = durationOrType;
+            finalType = typeOrDuration;
         }
 
-        setToast({ show: true, message, type });
-        setTimeout(() => setToast({ show: false, message: '', type: 'success' }), duration);
+        setToast({ show: true, message, type: finalType });
+        setTimeout(() => setToast({ show: false, message: '', type: 'success' }), finalDuration);
     }, []);
 
     return { toast, showToast };

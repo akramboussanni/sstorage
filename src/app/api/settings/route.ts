@@ -14,8 +14,6 @@ export async function GET() {
                     allowRegistration: false,
                     defaultCompression: 'balanced',
                     showNoCompression: true,
-                    showPrivateOption: true,
-                    forcePrivate: false,
                 },
             });
         }
@@ -38,7 +36,7 @@ export async function PUT(request: NextRequest) {
     try {
         const session = await getSession();
 
-        if (!session?.isAdmin) {
+        if (!session) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
@@ -63,12 +61,12 @@ export async function PUT(request: NextRequest) {
             updateData.showNoCompression = body.showNoCompression;
         }
 
-        if (typeof body.showPrivateOption === 'boolean') {
-            updateData.showPrivateOption = body.showPrivateOption;
+        // Remove privacy-related settings if they exist
+        if ('showPrivateOption' in body) {
+            // Ignore - privacy settings removed
         }
-
-        if (typeof body.forcePrivate === 'boolean') {
-            updateData.forcePrivate = body.forcePrivate;
+        if ('forcePrivate' in body) {
+            // Ignore - privacy settings removed
         }
 
         if (body.maxFileSize !== undefined) {
@@ -115,8 +113,6 @@ export async function PUT(request: NextRequest) {
                 allowRegistration: body.allowRegistration ?? false,
                 defaultCompression: body.defaultCompression ?? 'balanced',
                 showNoCompression: body.showNoCompression ?? true,
-                showPrivateOption: body.showPrivateOption ?? true,
-                forcePrivate: body.forcePrivate ?? false,
                 maxFileSize: body.maxFileSize ? BigInt(body.maxFileSize) : BigInt(104857600),
                 rateLimitWindow: body.rateLimitWindow !== undefined ? parseInt(body.rateLimitWindow, 10) : 10,
                 smtpHost: body.smtpHost || null,

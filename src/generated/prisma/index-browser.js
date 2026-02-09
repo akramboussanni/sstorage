@@ -136,11 +136,26 @@ exports.Prisma.MediaScalarFieldEnum = {
   size: 'size',
   ip: 'ip',
   userId: 'userId',
-  isPrivate: 'isPrivate',
   transcodeStatus: 'transcodeStatus',
   transcodeError: 'transcodeError',
   createdAt: 'createdAt',
-  driveId: 'driveId'
+  driveId: 'driveId',
+  folderId: 'folderId',
+  isPinned: 'isPinned',
+  orderIndex: 'orderIndex'
+};
+
+exports.Prisma.FolderScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  driveId: 'driveId',
+  parentId: 'parentId',
+  userId: 'userId',
+  color: 'color',
+  isPinned: 'isPinned',
+  orderIndex: 'orderIndex',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.DriveScalarFieldEnum = {
@@ -170,8 +185,6 @@ exports.Prisma.SettingsScalarFieldEnum = {
   rateLimitWindow: 'rateLimitWindow',
   defaultCompression: 'defaultCompression',
   showNoCompression: 'showNoCompression',
-  showPrivateOption: 'showPrivateOption',
-  forcePrivate: 'forcePrivate',
   smtpHost: 'smtpHost',
   smtpPort: 'smtpPort',
   smtpUser: 'smtpUser',
@@ -193,6 +206,7 @@ exports.Prisma.NullsOrder = {
 exports.Prisma.ModelName = {
   User: 'User',
   Media: 'Media',
+  Folder: 'Folder',
   Drive: 'Drive',
   DriveAccess: 'DriveAccess',
   Settings: 'Settings'

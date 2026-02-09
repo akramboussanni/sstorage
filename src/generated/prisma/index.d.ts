@@ -24,6 +24,11 @@ export type User = $Result.DefaultSelection<Prisma.$UserPayload>
  */
 export type Media = $Result.DefaultSelection<Prisma.$MediaPayload>
 /**
+ * Model Folder
+ * 
+ */
+export type Folder = $Result.DefaultSelection<Prisma.$FolderPayload>
+/**
  * Model Drive
  * 
  */
@@ -175,6 +180,16 @@ export class PrismaClient<
     * ```
     */
   get media(): Prisma.MediaDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.folder`: Exposes CRUD operations for the **Folder** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Folders
+    * const folders = await prisma.folder.findMany()
+    * ```
+    */
+  get folder(): Prisma.FolderDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.drive`: Exposes CRUD operations for the **Drive** model.
@@ -641,6 +656,7 @@ export namespace Prisma {
   export const ModelName: {
     User: 'User',
     Media: 'Media',
+    Folder: 'Folder',
     Drive: 'Drive',
     DriveAccess: 'DriveAccess',
     Settings: 'Settings'
@@ -659,7 +675,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "media" | "drive" | "driveAccess" | "settings"
+      modelProps: "user" | "media" | "folder" | "drive" | "driveAccess" | "settings"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -808,6 +824,80 @@ export namespace Prisma {
           count: {
             args: Prisma.MediaCountArgs<ExtArgs>
             result: $Utils.Optional<MediaCountAggregateOutputType> | number
+          }
+        }
+      }
+      Folder: {
+        payload: Prisma.$FolderPayload<ExtArgs>
+        fields: Prisma.FolderFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FolderFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FolderPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FolderFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FolderPayload>
+          }
+          findFirst: {
+            args: Prisma.FolderFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FolderPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FolderFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FolderPayload>
+          }
+          findMany: {
+            args: Prisma.FolderFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FolderPayload>[]
+          }
+          create: {
+            args: Prisma.FolderCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FolderPayload>
+          }
+          createMany: {
+            args: Prisma.FolderCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FolderCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FolderPayload>[]
+          }
+          delete: {
+            args: Prisma.FolderDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FolderPayload>
+          }
+          update: {
+            args: Prisma.FolderUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FolderPayload>
+          }
+          deleteMany: {
+            args: Prisma.FolderDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FolderUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.FolderUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FolderPayload>[]
+          }
+          upsert: {
+            args: Prisma.FolderUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FolderPayload>
+          }
+          aggregate: {
+            args: Prisma.FolderAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFolder>
+          }
+          groupBy: {
+            args: Prisma.FolderGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FolderGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FolderCountArgs<ExtArgs>
+            result: $Utils.Optional<FolderCountAggregateOutputType> | number
           }
         }
       }
@@ -1143,6 +1233,7 @@ export namespace Prisma {
   export type GlobalOmitConfig = {
     user?: UserOmit
     media?: MediaOmit
+    folder?: FolderOmit
     drive?: DriveOmit
     driveAccess?: DriveAccessOmit
     settings?: SettingsOmit
@@ -1271,16 +1362,58 @@ export namespace Prisma {
 
 
   /**
+   * Count Type FolderCountOutputType
+   */
+
+  export type FolderCountOutputType = {
+    subFolders: number
+    files: number
+  }
+
+  export type FolderCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    subFolders?: boolean | FolderCountOutputTypeCountSubFoldersArgs
+    files?: boolean | FolderCountOutputTypeCountFilesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * FolderCountOutputType without action
+   */
+  export type FolderCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FolderCountOutputType
+     */
+    select?: FolderCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * FolderCountOutputType without action
+   */
+  export type FolderCountOutputTypeCountSubFoldersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FolderWhereInput
+  }
+
+  /**
+   * FolderCountOutputType without action
+   */
+  export type FolderCountOutputTypeCountFilesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MediaWhereInput
+  }
+
+
+  /**
    * Count Type DriveCountOutputType
    */
 
   export type DriveCountOutputType = {
     files: number
+    folders: number
     access: number
   }
 
   export type DriveCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     files?: boolean | DriveCountOutputTypeCountFilesArgs
+    folders?: boolean | DriveCountOutputTypeCountFoldersArgs
     access?: boolean | DriveCountOutputTypeCountAccessArgs
   }
 
@@ -1300,6 +1433,13 @@ export namespace Prisma {
    */
   export type DriveCountOutputTypeCountFilesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: MediaWhereInput
+  }
+
+  /**
+   * DriveCountOutputType without action
+   */
+  export type DriveCountOutputTypeCountFoldersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FolderWhereInput
   }
 
   /**
@@ -2529,10 +2669,12 @@ export namespace Prisma {
 
   export type MediaAvgAggregateOutputType = {
     size: number | null
+    orderIndex: number | null
   }
 
   export type MediaSumAggregateOutputType = {
     size: number | null
+    orderIndex: number | null
   }
 
   export type MediaMinAggregateOutputType = {
@@ -2543,11 +2685,13 @@ export namespace Prisma {
     size: number | null
     ip: string | null
     userId: string | null
-    isPrivate: boolean | null
     transcodeStatus: string | null
     transcodeError: string | null
     createdAt: Date | null
     driveId: string | null
+    folderId: string | null
+    isPinned: boolean | null
+    orderIndex: number | null
   }
 
   export type MediaMaxAggregateOutputType = {
@@ -2558,11 +2702,13 @@ export namespace Prisma {
     size: number | null
     ip: string | null
     userId: string | null
-    isPrivate: boolean | null
     transcodeStatus: string | null
     transcodeError: string | null
     createdAt: Date | null
     driveId: string | null
+    folderId: string | null
+    isPinned: boolean | null
+    orderIndex: number | null
   }
 
   export type MediaCountAggregateOutputType = {
@@ -2573,21 +2719,25 @@ export namespace Prisma {
     size: number
     ip: number
     userId: number
-    isPrivate: number
     transcodeStatus: number
     transcodeError: number
     createdAt: number
     driveId: number
+    folderId: number
+    isPinned: number
+    orderIndex: number
     _all: number
   }
 
 
   export type MediaAvgAggregateInputType = {
     size?: true
+    orderIndex?: true
   }
 
   export type MediaSumAggregateInputType = {
     size?: true
+    orderIndex?: true
   }
 
   export type MediaMinAggregateInputType = {
@@ -2598,11 +2748,13 @@ export namespace Prisma {
     size?: true
     ip?: true
     userId?: true
-    isPrivate?: true
     transcodeStatus?: true
     transcodeError?: true
     createdAt?: true
     driveId?: true
+    folderId?: true
+    isPinned?: true
+    orderIndex?: true
   }
 
   export type MediaMaxAggregateInputType = {
@@ -2613,11 +2765,13 @@ export namespace Prisma {
     size?: true
     ip?: true
     userId?: true
-    isPrivate?: true
     transcodeStatus?: true
     transcodeError?: true
     createdAt?: true
     driveId?: true
+    folderId?: true
+    isPinned?: true
+    orderIndex?: true
   }
 
   export type MediaCountAggregateInputType = {
@@ -2628,11 +2782,13 @@ export namespace Prisma {
     size?: true
     ip?: true
     userId?: true
-    isPrivate?: true
     transcodeStatus?: true
     transcodeError?: true
     createdAt?: true
     driveId?: true
+    folderId?: true
+    isPinned?: true
+    orderIndex?: true
     _all?: true
   }
 
@@ -2730,11 +2886,13 @@ export namespace Prisma {
     size: number
     ip: string | null
     userId: string | null
-    isPrivate: boolean
     transcodeStatus: string
     transcodeError: string | null
     createdAt: Date
     driveId: string | null
+    folderId: string | null
+    isPinned: boolean
+    orderIndex: number
     _count: MediaCountAggregateOutputType | null
     _avg: MediaAvgAggregateOutputType | null
     _sum: MediaSumAggregateOutputType | null
@@ -2764,13 +2922,16 @@ export namespace Prisma {
     size?: boolean
     ip?: boolean
     userId?: boolean
-    isPrivate?: boolean
     transcodeStatus?: boolean
     transcodeError?: boolean
     createdAt?: boolean
     driveId?: boolean
+    folderId?: boolean
+    isPinned?: boolean
+    orderIndex?: boolean
     user?: boolean | Media$userArgs<ExtArgs>
     drive?: boolean | Media$driveArgs<ExtArgs>
+    folder?: boolean | Media$folderArgs<ExtArgs>
   }, ExtArgs["result"]["media"]>
 
   export type MediaSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2781,13 +2942,16 @@ export namespace Prisma {
     size?: boolean
     ip?: boolean
     userId?: boolean
-    isPrivate?: boolean
     transcodeStatus?: boolean
     transcodeError?: boolean
     createdAt?: boolean
     driveId?: boolean
+    folderId?: boolean
+    isPinned?: boolean
+    orderIndex?: boolean
     user?: boolean | Media$userArgs<ExtArgs>
     drive?: boolean | Media$driveArgs<ExtArgs>
+    folder?: boolean | Media$folderArgs<ExtArgs>
   }, ExtArgs["result"]["media"]>
 
   export type MediaSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2798,13 +2962,16 @@ export namespace Prisma {
     size?: boolean
     ip?: boolean
     userId?: boolean
-    isPrivate?: boolean
     transcodeStatus?: boolean
     transcodeError?: boolean
     createdAt?: boolean
     driveId?: boolean
+    folderId?: boolean
+    isPinned?: boolean
+    orderIndex?: boolean
     user?: boolean | Media$userArgs<ExtArgs>
     drive?: boolean | Media$driveArgs<ExtArgs>
+    folder?: boolean | Media$folderArgs<ExtArgs>
   }, ExtArgs["result"]["media"]>
 
   export type MediaSelectScalar = {
@@ -2815,25 +2982,30 @@ export namespace Prisma {
     size?: boolean
     ip?: boolean
     userId?: boolean
-    isPrivate?: boolean
     transcodeStatus?: boolean
     transcodeError?: boolean
     createdAt?: boolean
     driveId?: boolean
+    folderId?: boolean
+    isPinned?: boolean
+    orderIndex?: boolean
   }
 
-  export type MediaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "filename" | "originalName" | "mimeType" | "size" | "ip" | "userId" | "isPrivate" | "transcodeStatus" | "transcodeError" | "createdAt" | "driveId", ExtArgs["result"]["media"]>
+  export type MediaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "filename" | "originalName" | "mimeType" | "size" | "ip" | "userId" | "transcodeStatus" | "transcodeError" | "createdAt" | "driveId" | "folderId" | "isPinned" | "orderIndex", ExtArgs["result"]["media"]>
   export type MediaInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | Media$userArgs<ExtArgs>
     drive?: boolean | Media$driveArgs<ExtArgs>
+    folder?: boolean | Media$folderArgs<ExtArgs>
   }
   export type MediaIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | Media$userArgs<ExtArgs>
     drive?: boolean | Media$driveArgs<ExtArgs>
+    folder?: boolean | Media$folderArgs<ExtArgs>
   }
   export type MediaIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | Media$userArgs<ExtArgs>
     drive?: boolean | Media$driveArgs<ExtArgs>
+    folder?: boolean | Media$folderArgs<ExtArgs>
   }
 
   export type $MediaPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2841,6 +3013,7 @@ export namespace Prisma {
     objects: {
       user: Prisma.$UserPayload<ExtArgs> | null
       drive: Prisma.$DrivePayload<ExtArgs> | null
+      folder: Prisma.$FolderPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2850,11 +3023,13 @@ export namespace Prisma {
       size: number
       ip: string | null
       userId: string | null
-      isPrivate: boolean
       transcodeStatus: string
       transcodeError: string | null
       createdAt: Date
       driveId: string | null
+      folderId: string | null
+      isPinned: boolean
+      orderIndex: number
     }, ExtArgs["result"]["media"]>
     composites: {}
   }
@@ -3251,6 +3426,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     user<T extends Media$userArgs<ExtArgs> = {}>(args?: Subset<T, Media$userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     drive<T extends Media$driveArgs<ExtArgs> = {}>(args?: Subset<T, Media$driveArgs<ExtArgs>>): Prisma__DriveClient<$Result.GetResult<Prisma.$DrivePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    folder<T extends Media$folderArgs<ExtArgs> = {}>(args?: Subset<T, Media$folderArgs<ExtArgs>>): Prisma__FolderClient<$Result.GetResult<Prisma.$FolderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3287,11 +3463,13 @@ export namespace Prisma {
     readonly size: FieldRef<"Media", 'Int'>
     readonly ip: FieldRef<"Media", 'String'>
     readonly userId: FieldRef<"Media", 'String'>
-    readonly isPrivate: FieldRef<"Media", 'Boolean'>
     readonly transcodeStatus: FieldRef<"Media", 'String'>
     readonly transcodeError: FieldRef<"Media", 'String'>
     readonly createdAt: FieldRef<"Media", 'DateTime'>
     readonly driveId: FieldRef<"Media", 'String'>
+    readonly folderId: FieldRef<"Media", 'String'>
+    readonly isPinned: FieldRef<"Media", 'Boolean'>
+    readonly orderIndex: FieldRef<"Media", 'Int'>
   }
     
 
@@ -3724,6 +3902,25 @@ export namespace Prisma {
   }
 
   /**
+   * Media.folder
+   */
+  export type Media$folderArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Folder
+     */
+    select?: FolderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Folder
+     */
+    omit?: FolderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FolderInclude<ExtArgs> | null
+    where?: FolderWhereInput
+  }
+
+  /**
    * Media without action
    */
   export type MediaDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3739,6 +3936,1246 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: MediaInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Folder
+   */
+
+  export type AggregateFolder = {
+    _count: FolderCountAggregateOutputType | null
+    _avg: FolderAvgAggregateOutputType | null
+    _sum: FolderSumAggregateOutputType | null
+    _min: FolderMinAggregateOutputType | null
+    _max: FolderMaxAggregateOutputType | null
+  }
+
+  export type FolderAvgAggregateOutputType = {
+    orderIndex: number | null
+  }
+
+  export type FolderSumAggregateOutputType = {
+    orderIndex: number | null
+  }
+
+  export type FolderMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    driveId: string | null
+    parentId: string | null
+    userId: string | null
+    color: string | null
+    isPinned: boolean | null
+    orderIndex: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type FolderMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    driveId: string | null
+    parentId: string | null
+    userId: string | null
+    color: string | null
+    isPinned: boolean | null
+    orderIndex: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type FolderCountAggregateOutputType = {
+    id: number
+    name: number
+    driveId: number
+    parentId: number
+    userId: number
+    color: number
+    isPinned: number
+    orderIndex: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type FolderAvgAggregateInputType = {
+    orderIndex?: true
+  }
+
+  export type FolderSumAggregateInputType = {
+    orderIndex?: true
+  }
+
+  export type FolderMinAggregateInputType = {
+    id?: true
+    name?: true
+    driveId?: true
+    parentId?: true
+    userId?: true
+    color?: true
+    isPinned?: true
+    orderIndex?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type FolderMaxAggregateInputType = {
+    id?: true
+    name?: true
+    driveId?: true
+    parentId?: true
+    userId?: true
+    color?: true
+    isPinned?: true
+    orderIndex?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type FolderCountAggregateInputType = {
+    id?: true
+    name?: true
+    driveId?: true
+    parentId?: true
+    userId?: true
+    color?: true
+    isPinned?: true
+    orderIndex?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type FolderAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Folder to aggregate.
+     */
+    where?: FolderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Folders to fetch.
+     */
+    orderBy?: FolderOrderByWithRelationInput | FolderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FolderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Folders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Folders.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Folders
+    **/
+    _count?: true | FolderCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: FolderAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: FolderSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FolderMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FolderMaxAggregateInputType
+  }
+
+  export type GetFolderAggregateType<T extends FolderAggregateArgs> = {
+        [P in keyof T & keyof AggregateFolder]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFolder[P]>
+      : GetScalarType<T[P], AggregateFolder[P]>
+  }
+
+
+
+
+  export type FolderGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FolderWhereInput
+    orderBy?: FolderOrderByWithAggregationInput | FolderOrderByWithAggregationInput[]
+    by: FolderScalarFieldEnum[] | FolderScalarFieldEnum
+    having?: FolderScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FolderCountAggregateInputType | true
+    _avg?: FolderAvgAggregateInputType
+    _sum?: FolderSumAggregateInputType
+    _min?: FolderMinAggregateInputType
+    _max?: FolderMaxAggregateInputType
+  }
+
+  export type FolderGroupByOutputType = {
+    id: string
+    name: string
+    driveId: string
+    parentId: string | null
+    userId: string
+    color: string | null
+    isPinned: boolean
+    orderIndex: number
+    createdAt: Date
+    updatedAt: Date
+    _count: FolderCountAggregateOutputType | null
+    _avg: FolderAvgAggregateOutputType | null
+    _sum: FolderSumAggregateOutputType | null
+    _min: FolderMinAggregateOutputType | null
+    _max: FolderMaxAggregateOutputType | null
+  }
+
+  type GetFolderGroupByPayload<T extends FolderGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FolderGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FolderGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FolderGroupByOutputType[P]>
+            : GetScalarType<T[P], FolderGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FolderSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    driveId?: boolean
+    parentId?: boolean
+    userId?: boolean
+    color?: boolean
+    isPinned?: boolean
+    orderIndex?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    drive?: boolean | DriveDefaultArgs<ExtArgs>
+    parent?: boolean | Folder$parentArgs<ExtArgs>
+    subFolders?: boolean | Folder$subFoldersArgs<ExtArgs>
+    files?: boolean | Folder$filesArgs<ExtArgs>
+    _count?: boolean | FolderCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["folder"]>
+
+  export type FolderSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    driveId?: boolean
+    parentId?: boolean
+    userId?: boolean
+    color?: boolean
+    isPinned?: boolean
+    orderIndex?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    drive?: boolean | DriveDefaultArgs<ExtArgs>
+    parent?: boolean | Folder$parentArgs<ExtArgs>
+  }, ExtArgs["result"]["folder"]>
+
+  export type FolderSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    driveId?: boolean
+    parentId?: boolean
+    userId?: boolean
+    color?: boolean
+    isPinned?: boolean
+    orderIndex?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    drive?: boolean | DriveDefaultArgs<ExtArgs>
+    parent?: boolean | Folder$parentArgs<ExtArgs>
+  }, ExtArgs["result"]["folder"]>
+
+  export type FolderSelectScalar = {
+    id?: boolean
+    name?: boolean
+    driveId?: boolean
+    parentId?: boolean
+    userId?: boolean
+    color?: boolean
+    isPinned?: boolean
+    orderIndex?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type FolderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "driveId" | "parentId" | "userId" | "color" | "isPinned" | "orderIndex" | "createdAt" | "updatedAt", ExtArgs["result"]["folder"]>
+  export type FolderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    drive?: boolean | DriveDefaultArgs<ExtArgs>
+    parent?: boolean | Folder$parentArgs<ExtArgs>
+    subFolders?: boolean | Folder$subFoldersArgs<ExtArgs>
+    files?: boolean | Folder$filesArgs<ExtArgs>
+    _count?: boolean | FolderCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type FolderIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    drive?: boolean | DriveDefaultArgs<ExtArgs>
+    parent?: boolean | Folder$parentArgs<ExtArgs>
+  }
+  export type FolderIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    drive?: boolean | DriveDefaultArgs<ExtArgs>
+    parent?: boolean | Folder$parentArgs<ExtArgs>
+  }
+
+  export type $FolderPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Folder"
+    objects: {
+      drive: Prisma.$DrivePayload<ExtArgs>
+      parent: Prisma.$FolderPayload<ExtArgs> | null
+      subFolders: Prisma.$FolderPayload<ExtArgs>[]
+      files: Prisma.$MediaPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      driveId: string
+      parentId: string | null
+      userId: string
+      color: string | null
+      isPinned: boolean
+      orderIndex: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["folder"]>
+    composites: {}
+  }
+
+  type FolderGetPayload<S extends boolean | null | undefined | FolderDefaultArgs> = $Result.GetResult<Prisma.$FolderPayload, S>
+
+  type FolderCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<FolderFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: FolderCountAggregateInputType | true
+    }
+
+  export interface FolderDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Folder'], meta: { name: 'Folder' } }
+    /**
+     * Find zero or one Folder that matches the filter.
+     * @param {FolderFindUniqueArgs} args - Arguments to find a Folder
+     * @example
+     * // Get one Folder
+     * const folder = await prisma.folder.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FolderFindUniqueArgs>(args: SelectSubset<T, FolderFindUniqueArgs<ExtArgs>>): Prisma__FolderClient<$Result.GetResult<Prisma.$FolderPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Folder that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {FolderFindUniqueOrThrowArgs} args - Arguments to find a Folder
+     * @example
+     * // Get one Folder
+     * const folder = await prisma.folder.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FolderFindUniqueOrThrowArgs>(args: SelectSubset<T, FolderFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FolderClient<$Result.GetResult<Prisma.$FolderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Folder that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FolderFindFirstArgs} args - Arguments to find a Folder
+     * @example
+     * // Get one Folder
+     * const folder = await prisma.folder.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FolderFindFirstArgs>(args?: SelectSubset<T, FolderFindFirstArgs<ExtArgs>>): Prisma__FolderClient<$Result.GetResult<Prisma.$FolderPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Folder that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FolderFindFirstOrThrowArgs} args - Arguments to find a Folder
+     * @example
+     * // Get one Folder
+     * const folder = await prisma.folder.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FolderFindFirstOrThrowArgs>(args?: SelectSubset<T, FolderFindFirstOrThrowArgs<ExtArgs>>): Prisma__FolderClient<$Result.GetResult<Prisma.$FolderPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Folders that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FolderFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Folders
+     * const folders = await prisma.folder.findMany()
+     * 
+     * // Get first 10 Folders
+     * const folders = await prisma.folder.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const folderWithIdOnly = await prisma.folder.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends FolderFindManyArgs>(args?: SelectSubset<T, FolderFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FolderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Folder.
+     * @param {FolderCreateArgs} args - Arguments to create a Folder.
+     * @example
+     * // Create one Folder
+     * const Folder = await prisma.folder.create({
+     *   data: {
+     *     // ... data to create a Folder
+     *   }
+     * })
+     * 
+     */
+    create<T extends FolderCreateArgs>(args: SelectSubset<T, FolderCreateArgs<ExtArgs>>): Prisma__FolderClient<$Result.GetResult<Prisma.$FolderPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Folders.
+     * @param {FolderCreateManyArgs} args - Arguments to create many Folders.
+     * @example
+     * // Create many Folders
+     * const folder = await prisma.folder.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FolderCreateManyArgs>(args?: SelectSubset<T, FolderCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Folders and returns the data saved in the database.
+     * @param {FolderCreateManyAndReturnArgs} args - Arguments to create many Folders.
+     * @example
+     * // Create many Folders
+     * const folder = await prisma.folder.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Folders and only return the `id`
+     * const folderWithIdOnly = await prisma.folder.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FolderCreateManyAndReturnArgs>(args?: SelectSubset<T, FolderCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FolderPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Folder.
+     * @param {FolderDeleteArgs} args - Arguments to delete one Folder.
+     * @example
+     * // Delete one Folder
+     * const Folder = await prisma.folder.delete({
+     *   where: {
+     *     // ... filter to delete one Folder
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FolderDeleteArgs>(args: SelectSubset<T, FolderDeleteArgs<ExtArgs>>): Prisma__FolderClient<$Result.GetResult<Prisma.$FolderPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Folder.
+     * @param {FolderUpdateArgs} args - Arguments to update one Folder.
+     * @example
+     * // Update one Folder
+     * const folder = await prisma.folder.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FolderUpdateArgs>(args: SelectSubset<T, FolderUpdateArgs<ExtArgs>>): Prisma__FolderClient<$Result.GetResult<Prisma.$FolderPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Folders.
+     * @param {FolderDeleteManyArgs} args - Arguments to filter Folders to delete.
+     * @example
+     * // Delete a few Folders
+     * const { count } = await prisma.folder.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FolderDeleteManyArgs>(args?: SelectSubset<T, FolderDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Folders.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FolderUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Folders
+     * const folder = await prisma.folder.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FolderUpdateManyArgs>(args: SelectSubset<T, FolderUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Folders and returns the data updated in the database.
+     * @param {FolderUpdateManyAndReturnArgs} args - Arguments to update many Folders.
+     * @example
+     * // Update many Folders
+     * const folder = await prisma.folder.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Folders and only return the `id`
+     * const folderWithIdOnly = await prisma.folder.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends FolderUpdateManyAndReturnArgs>(args: SelectSubset<T, FolderUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FolderPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Folder.
+     * @param {FolderUpsertArgs} args - Arguments to update or create a Folder.
+     * @example
+     * // Update or create a Folder
+     * const folder = await prisma.folder.upsert({
+     *   create: {
+     *     // ... data to create a Folder
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Folder we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FolderUpsertArgs>(args: SelectSubset<T, FolderUpsertArgs<ExtArgs>>): Prisma__FolderClient<$Result.GetResult<Prisma.$FolderPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Folders.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FolderCountArgs} args - Arguments to filter Folders to count.
+     * @example
+     * // Count the number of Folders
+     * const count = await prisma.folder.count({
+     *   where: {
+     *     // ... the filter for the Folders we want to count
+     *   }
+     * })
+    **/
+    count<T extends FolderCountArgs>(
+      args?: Subset<T, FolderCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FolderCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Folder.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FolderAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FolderAggregateArgs>(args: Subset<T, FolderAggregateArgs>): Prisma.PrismaPromise<GetFolderAggregateType<T>>
+
+    /**
+     * Group by Folder.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FolderGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FolderGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FolderGroupByArgs['orderBy'] }
+        : { orderBy?: FolderGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FolderGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFolderGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Folder model
+   */
+  readonly fields: FolderFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Folder.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FolderClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    drive<T extends DriveDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DriveDefaultArgs<ExtArgs>>): Prisma__DriveClient<$Result.GetResult<Prisma.$DrivePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    parent<T extends Folder$parentArgs<ExtArgs> = {}>(args?: Subset<T, Folder$parentArgs<ExtArgs>>): Prisma__FolderClient<$Result.GetResult<Prisma.$FolderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    subFolders<T extends Folder$subFoldersArgs<ExtArgs> = {}>(args?: Subset<T, Folder$subFoldersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FolderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    files<T extends Folder$filesArgs<ExtArgs> = {}>(args?: Subset<T, Folder$filesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MediaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Folder model
+   */
+  interface FolderFieldRefs {
+    readonly id: FieldRef<"Folder", 'String'>
+    readonly name: FieldRef<"Folder", 'String'>
+    readonly driveId: FieldRef<"Folder", 'String'>
+    readonly parentId: FieldRef<"Folder", 'String'>
+    readonly userId: FieldRef<"Folder", 'String'>
+    readonly color: FieldRef<"Folder", 'String'>
+    readonly isPinned: FieldRef<"Folder", 'Boolean'>
+    readonly orderIndex: FieldRef<"Folder", 'Int'>
+    readonly createdAt: FieldRef<"Folder", 'DateTime'>
+    readonly updatedAt: FieldRef<"Folder", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Folder findUnique
+   */
+  export type FolderFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Folder
+     */
+    select?: FolderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Folder
+     */
+    omit?: FolderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FolderInclude<ExtArgs> | null
+    /**
+     * Filter, which Folder to fetch.
+     */
+    where: FolderWhereUniqueInput
+  }
+
+  /**
+   * Folder findUniqueOrThrow
+   */
+  export type FolderFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Folder
+     */
+    select?: FolderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Folder
+     */
+    omit?: FolderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FolderInclude<ExtArgs> | null
+    /**
+     * Filter, which Folder to fetch.
+     */
+    where: FolderWhereUniqueInput
+  }
+
+  /**
+   * Folder findFirst
+   */
+  export type FolderFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Folder
+     */
+    select?: FolderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Folder
+     */
+    omit?: FolderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FolderInclude<ExtArgs> | null
+    /**
+     * Filter, which Folder to fetch.
+     */
+    where?: FolderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Folders to fetch.
+     */
+    orderBy?: FolderOrderByWithRelationInput | FolderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Folders.
+     */
+    cursor?: FolderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Folders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Folders.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Folders.
+     */
+    distinct?: FolderScalarFieldEnum | FolderScalarFieldEnum[]
+  }
+
+  /**
+   * Folder findFirstOrThrow
+   */
+  export type FolderFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Folder
+     */
+    select?: FolderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Folder
+     */
+    omit?: FolderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FolderInclude<ExtArgs> | null
+    /**
+     * Filter, which Folder to fetch.
+     */
+    where?: FolderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Folders to fetch.
+     */
+    orderBy?: FolderOrderByWithRelationInput | FolderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Folders.
+     */
+    cursor?: FolderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Folders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Folders.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Folders.
+     */
+    distinct?: FolderScalarFieldEnum | FolderScalarFieldEnum[]
+  }
+
+  /**
+   * Folder findMany
+   */
+  export type FolderFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Folder
+     */
+    select?: FolderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Folder
+     */
+    omit?: FolderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FolderInclude<ExtArgs> | null
+    /**
+     * Filter, which Folders to fetch.
+     */
+    where?: FolderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Folders to fetch.
+     */
+    orderBy?: FolderOrderByWithRelationInput | FolderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Folders.
+     */
+    cursor?: FolderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Folders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Folders.
+     */
+    skip?: number
+    distinct?: FolderScalarFieldEnum | FolderScalarFieldEnum[]
+  }
+
+  /**
+   * Folder create
+   */
+  export type FolderCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Folder
+     */
+    select?: FolderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Folder
+     */
+    omit?: FolderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FolderInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Folder.
+     */
+    data: XOR<FolderCreateInput, FolderUncheckedCreateInput>
+  }
+
+  /**
+   * Folder createMany
+   */
+  export type FolderCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Folders.
+     */
+    data: FolderCreateManyInput | FolderCreateManyInput[]
+  }
+
+  /**
+   * Folder createManyAndReturn
+   */
+  export type FolderCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Folder
+     */
+    select?: FolderSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Folder
+     */
+    omit?: FolderOmit<ExtArgs> | null
+    /**
+     * The data used to create many Folders.
+     */
+    data: FolderCreateManyInput | FolderCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FolderIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Folder update
+   */
+  export type FolderUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Folder
+     */
+    select?: FolderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Folder
+     */
+    omit?: FolderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FolderInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Folder.
+     */
+    data: XOR<FolderUpdateInput, FolderUncheckedUpdateInput>
+    /**
+     * Choose, which Folder to update.
+     */
+    where: FolderWhereUniqueInput
+  }
+
+  /**
+   * Folder updateMany
+   */
+  export type FolderUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Folders.
+     */
+    data: XOR<FolderUpdateManyMutationInput, FolderUncheckedUpdateManyInput>
+    /**
+     * Filter which Folders to update
+     */
+    where?: FolderWhereInput
+    /**
+     * Limit how many Folders to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Folder updateManyAndReturn
+   */
+  export type FolderUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Folder
+     */
+    select?: FolderSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Folder
+     */
+    omit?: FolderOmit<ExtArgs> | null
+    /**
+     * The data used to update Folders.
+     */
+    data: XOR<FolderUpdateManyMutationInput, FolderUncheckedUpdateManyInput>
+    /**
+     * Filter which Folders to update
+     */
+    where?: FolderWhereInput
+    /**
+     * Limit how many Folders to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FolderIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Folder upsert
+   */
+  export type FolderUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Folder
+     */
+    select?: FolderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Folder
+     */
+    omit?: FolderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FolderInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Folder to update in case it exists.
+     */
+    where: FolderWhereUniqueInput
+    /**
+     * In case the Folder found by the `where` argument doesn't exist, create a new Folder with this data.
+     */
+    create: XOR<FolderCreateInput, FolderUncheckedCreateInput>
+    /**
+     * In case the Folder was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FolderUpdateInput, FolderUncheckedUpdateInput>
+  }
+
+  /**
+   * Folder delete
+   */
+  export type FolderDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Folder
+     */
+    select?: FolderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Folder
+     */
+    omit?: FolderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FolderInclude<ExtArgs> | null
+    /**
+     * Filter which Folder to delete.
+     */
+    where: FolderWhereUniqueInput
+  }
+
+  /**
+   * Folder deleteMany
+   */
+  export type FolderDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Folders to delete
+     */
+    where?: FolderWhereInput
+    /**
+     * Limit how many Folders to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Folder.parent
+   */
+  export type Folder$parentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Folder
+     */
+    select?: FolderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Folder
+     */
+    omit?: FolderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FolderInclude<ExtArgs> | null
+    where?: FolderWhereInput
+  }
+
+  /**
+   * Folder.subFolders
+   */
+  export type Folder$subFoldersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Folder
+     */
+    select?: FolderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Folder
+     */
+    omit?: FolderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FolderInclude<ExtArgs> | null
+    where?: FolderWhereInput
+    orderBy?: FolderOrderByWithRelationInput | FolderOrderByWithRelationInput[]
+    cursor?: FolderWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FolderScalarFieldEnum | FolderScalarFieldEnum[]
+  }
+
+  /**
+   * Folder.files
+   */
+  export type Folder$filesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Media
+     */
+    select?: MediaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Media
+     */
+    omit?: MediaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MediaInclude<ExtArgs> | null
+    where?: MediaWhereInput
+    orderBy?: MediaOrderByWithRelationInput | MediaOrderByWithRelationInput[]
+    cursor?: MediaWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MediaScalarFieldEnum | MediaScalarFieldEnum[]
+  }
+
+  /**
+   * Folder without action
+   */
+  export type FolderDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Folder
+     */
+    select?: FolderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Folder
+     */
+    omit?: FolderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FolderInclude<ExtArgs> | null
   }
 
 
@@ -3932,6 +5369,7 @@ export namespace Prisma {
     updatedAt?: boolean
     owner?: boolean | UserDefaultArgs<ExtArgs>
     files?: boolean | Drive$filesArgs<ExtArgs>
+    folders?: boolean | Drive$foldersArgs<ExtArgs>
     access?: boolean | Drive$accessArgs<ExtArgs>
     _count?: boolean | DriveCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["drive"]>
@@ -3975,6 +5413,7 @@ export namespace Prisma {
   export type DriveInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     owner?: boolean | UserDefaultArgs<ExtArgs>
     files?: boolean | Drive$filesArgs<ExtArgs>
+    folders?: boolean | Drive$foldersArgs<ExtArgs>
     access?: boolean | Drive$accessArgs<ExtArgs>
     _count?: boolean | DriveCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -3990,6 +5429,7 @@ export namespace Prisma {
     objects: {
       owner: Prisma.$UserPayload<ExtArgs>
       files: Prisma.$MediaPayload<ExtArgs>[]
+      folders: Prisma.$FolderPayload<ExtArgs>[]
       access: Prisma.$DriveAccessPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -4397,6 +5837,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     owner<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     files<T extends Drive$filesArgs<ExtArgs> = {}>(args?: Subset<T, Drive$filesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MediaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    folders<T extends Drive$foldersArgs<ExtArgs> = {}>(args?: Subset<T, Drive$foldersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FolderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     access<T extends Drive$accessArgs<ExtArgs> = {}>(args?: Subset<T, Drive$accessArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DriveAccessPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -4850,6 +6291,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: MediaScalarFieldEnum | MediaScalarFieldEnum[]
+  }
+
+  /**
+   * Drive.folders
+   */
+  export type Drive$foldersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Folder
+     */
+    select?: FolderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Folder
+     */
+    omit?: FolderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FolderInclude<ExtArgs> | null
+    where?: FolderWhereInput
+    orderBy?: FolderOrderByWithRelationInput | FolderOrderByWithRelationInput[]
+    cursor?: FolderWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FolderScalarFieldEnum | FolderScalarFieldEnum[]
   }
 
   /**
@@ -5991,8 +7456,6 @@ export namespace Prisma {
     rateLimitWindow: number | null
     defaultCompression: string | null
     showNoCompression: boolean | null
-    showPrivateOption: boolean | null
-    forcePrivate: boolean | null
     smtpHost: string | null
     smtpPort: number | null
     smtpUser: string | null
@@ -6008,8 +7471,6 @@ export namespace Prisma {
     rateLimitWindow: number | null
     defaultCompression: string | null
     showNoCompression: boolean | null
-    showPrivateOption: boolean | null
-    forcePrivate: boolean | null
     smtpHost: string | null
     smtpPort: number | null
     smtpUser: string | null
@@ -6025,8 +7486,6 @@ export namespace Prisma {
     rateLimitWindow: number
     defaultCompression: number
     showNoCompression: number
-    showPrivateOption: number
-    forcePrivate: number
     smtpHost: number
     smtpPort: number
     smtpUser: number
@@ -6056,8 +7515,6 @@ export namespace Prisma {
     rateLimitWindow?: true
     defaultCompression?: true
     showNoCompression?: true
-    showPrivateOption?: true
-    forcePrivate?: true
     smtpHost?: true
     smtpPort?: true
     smtpUser?: true
@@ -6073,8 +7530,6 @@ export namespace Prisma {
     rateLimitWindow?: true
     defaultCompression?: true
     showNoCompression?: true
-    showPrivateOption?: true
-    forcePrivate?: true
     smtpHost?: true
     smtpPort?: true
     smtpUser?: true
@@ -6090,8 +7545,6 @@ export namespace Prisma {
     rateLimitWindow?: true
     defaultCompression?: true
     showNoCompression?: true
-    showPrivateOption?: true
-    forcePrivate?: true
     smtpHost?: true
     smtpPort?: true
     smtpUser?: true
@@ -6194,8 +7647,6 @@ export namespace Prisma {
     rateLimitWindow: number
     defaultCompression: string
     showNoCompression: boolean
-    showPrivateOption: boolean
-    forcePrivate: boolean
     smtpHost: string | null
     smtpPort: number | null
     smtpUser: string | null
@@ -6230,8 +7681,6 @@ export namespace Prisma {
     rateLimitWindow?: boolean
     defaultCompression?: boolean
     showNoCompression?: boolean
-    showPrivateOption?: boolean
-    forcePrivate?: boolean
     smtpHost?: boolean
     smtpPort?: boolean
     smtpUser?: boolean
@@ -6247,8 +7696,6 @@ export namespace Prisma {
     rateLimitWindow?: boolean
     defaultCompression?: boolean
     showNoCompression?: boolean
-    showPrivateOption?: boolean
-    forcePrivate?: boolean
     smtpHost?: boolean
     smtpPort?: boolean
     smtpUser?: boolean
@@ -6264,8 +7711,6 @@ export namespace Prisma {
     rateLimitWindow?: boolean
     defaultCompression?: boolean
     showNoCompression?: boolean
-    showPrivateOption?: boolean
-    forcePrivate?: boolean
     smtpHost?: boolean
     smtpPort?: boolean
     smtpUser?: boolean
@@ -6281,8 +7726,6 @@ export namespace Prisma {
     rateLimitWindow?: boolean
     defaultCompression?: boolean
     showNoCompression?: boolean
-    showPrivateOption?: boolean
-    forcePrivate?: boolean
     smtpHost?: boolean
     smtpPort?: boolean
     smtpUser?: boolean
@@ -6290,7 +7733,7 @@ export namespace Prisma {
     smtpFrom?: boolean
   }
 
-  export type SettingsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "allowPublicUpload" | "allowRegistration" | "maxFileSize" | "rateLimitWindow" | "defaultCompression" | "showNoCompression" | "showPrivateOption" | "forcePrivate" | "smtpHost" | "smtpPort" | "smtpUser" | "smtpPassword" | "smtpFrom", ExtArgs["result"]["settings"]>
+  export type SettingsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "allowPublicUpload" | "allowRegistration" | "maxFileSize" | "rateLimitWindow" | "defaultCompression" | "showNoCompression" | "smtpHost" | "smtpPort" | "smtpUser" | "smtpPassword" | "smtpFrom", ExtArgs["result"]["settings"]>
 
   export type $SettingsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Settings"
@@ -6303,8 +7746,6 @@ export namespace Prisma {
       rateLimitWindow: number
       defaultCompression: string
       showNoCompression: boolean
-      showPrivateOption: boolean
-      forcePrivate: boolean
       smtpHost: string | null
       smtpPort: number | null
       smtpUser: string | null
@@ -6740,8 +8181,6 @@ export namespace Prisma {
     readonly rateLimitWindow: FieldRef<"Settings", 'Int'>
     readonly defaultCompression: FieldRef<"Settings", 'String'>
     readonly showNoCompression: FieldRef<"Settings", 'Boolean'>
-    readonly showPrivateOption: FieldRef<"Settings", 'Boolean'>
-    readonly forcePrivate: FieldRef<"Settings", 'Boolean'>
     readonly smtpHost: FieldRef<"Settings", 'String'>
     readonly smtpPort: FieldRef<"Settings", 'Int'>
     readonly smtpUser: FieldRef<"Settings", 'String'>
@@ -7144,14 +8583,32 @@ export namespace Prisma {
     size: 'size',
     ip: 'ip',
     userId: 'userId',
-    isPrivate: 'isPrivate',
     transcodeStatus: 'transcodeStatus',
     transcodeError: 'transcodeError',
     createdAt: 'createdAt',
-    driveId: 'driveId'
+    driveId: 'driveId',
+    folderId: 'folderId',
+    isPinned: 'isPinned',
+    orderIndex: 'orderIndex'
   };
 
   export type MediaScalarFieldEnum = (typeof MediaScalarFieldEnum)[keyof typeof MediaScalarFieldEnum]
+
+
+  export const FolderScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    driveId: 'driveId',
+    parentId: 'parentId',
+    userId: 'userId',
+    color: 'color',
+    isPinned: 'isPinned',
+    orderIndex: 'orderIndex',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type FolderScalarFieldEnum = (typeof FolderScalarFieldEnum)[keyof typeof FolderScalarFieldEnum]
 
 
   export const DriveScalarFieldEnum: {
@@ -7187,8 +8644,6 @@ export namespace Prisma {
     rateLimitWindow: 'rateLimitWindow',
     defaultCompression: 'defaultCompression',
     showNoCompression: 'showNoCompression',
-    showPrivateOption: 'showPrivateOption',
-    forcePrivate: 'forcePrivate',
     smtpHost: 'smtpHost',
     smtpPort: 'smtpPort',
     smtpUser: 'smtpUser',
@@ -7354,13 +8809,16 @@ export namespace Prisma {
     size?: IntFilter<"Media"> | number
     ip?: StringNullableFilter<"Media"> | string | null
     userId?: StringNullableFilter<"Media"> | string | null
-    isPrivate?: BoolFilter<"Media"> | boolean
     transcodeStatus?: StringFilter<"Media"> | string
     transcodeError?: StringNullableFilter<"Media"> | string | null
     createdAt?: DateTimeFilter<"Media"> | Date | string
     driveId?: StringNullableFilter<"Media"> | string | null
+    folderId?: StringNullableFilter<"Media"> | string | null
+    isPinned?: BoolFilter<"Media"> | boolean
+    orderIndex?: IntFilter<"Media"> | number
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     drive?: XOR<DriveNullableScalarRelationFilter, DriveWhereInput> | null
+    folder?: XOR<FolderNullableScalarRelationFilter, FolderWhereInput> | null
   }
 
   export type MediaOrderByWithRelationInput = {
@@ -7371,13 +8829,16 @@ export namespace Prisma {
     size?: SortOrder
     ip?: SortOrderInput | SortOrder
     userId?: SortOrderInput | SortOrder
-    isPrivate?: SortOrder
     transcodeStatus?: SortOrder
     transcodeError?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     driveId?: SortOrderInput | SortOrder
+    folderId?: SortOrderInput | SortOrder
+    isPinned?: SortOrder
+    orderIndex?: SortOrder
     user?: UserOrderByWithRelationInput
     drive?: DriveOrderByWithRelationInput
+    folder?: FolderOrderByWithRelationInput
   }
 
   export type MediaWhereUniqueInput = Prisma.AtLeast<{
@@ -7391,13 +8852,16 @@ export namespace Prisma {
     size?: IntFilter<"Media"> | number
     ip?: StringNullableFilter<"Media"> | string | null
     userId?: StringNullableFilter<"Media"> | string | null
-    isPrivate?: BoolFilter<"Media"> | boolean
     transcodeStatus?: StringFilter<"Media"> | string
     transcodeError?: StringNullableFilter<"Media"> | string | null
     createdAt?: DateTimeFilter<"Media"> | Date | string
     driveId?: StringNullableFilter<"Media"> | string | null
+    folderId?: StringNullableFilter<"Media"> | string | null
+    isPinned?: BoolFilter<"Media"> | boolean
+    orderIndex?: IntFilter<"Media"> | number
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     drive?: XOR<DriveNullableScalarRelationFilter, DriveWhereInput> | null
+    folder?: XOR<FolderNullableScalarRelationFilter, FolderWhereInput> | null
   }, "id">
 
   export type MediaOrderByWithAggregationInput = {
@@ -7408,11 +8872,13 @@ export namespace Prisma {
     size?: SortOrder
     ip?: SortOrderInput | SortOrder
     userId?: SortOrderInput | SortOrder
-    isPrivate?: SortOrder
     transcodeStatus?: SortOrder
     transcodeError?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     driveId?: SortOrderInput | SortOrder
+    folderId?: SortOrderInput | SortOrder
+    isPinned?: SortOrder
+    orderIndex?: SortOrder
     _count?: MediaCountOrderByAggregateInput
     _avg?: MediaAvgOrderByAggregateInput
     _max?: MediaMaxOrderByAggregateInput
@@ -7431,11 +8897,104 @@ export namespace Prisma {
     size?: IntWithAggregatesFilter<"Media"> | number
     ip?: StringNullableWithAggregatesFilter<"Media"> | string | null
     userId?: StringNullableWithAggregatesFilter<"Media"> | string | null
-    isPrivate?: BoolWithAggregatesFilter<"Media"> | boolean
     transcodeStatus?: StringWithAggregatesFilter<"Media"> | string
     transcodeError?: StringNullableWithAggregatesFilter<"Media"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Media"> | Date | string
     driveId?: StringNullableWithAggregatesFilter<"Media"> | string | null
+    folderId?: StringNullableWithAggregatesFilter<"Media"> | string | null
+    isPinned?: BoolWithAggregatesFilter<"Media"> | boolean
+    orderIndex?: IntWithAggregatesFilter<"Media"> | number
+  }
+
+  export type FolderWhereInput = {
+    AND?: FolderWhereInput | FolderWhereInput[]
+    OR?: FolderWhereInput[]
+    NOT?: FolderWhereInput | FolderWhereInput[]
+    id?: StringFilter<"Folder"> | string
+    name?: StringFilter<"Folder"> | string
+    driveId?: StringFilter<"Folder"> | string
+    parentId?: StringNullableFilter<"Folder"> | string | null
+    userId?: StringFilter<"Folder"> | string
+    color?: StringNullableFilter<"Folder"> | string | null
+    isPinned?: BoolFilter<"Folder"> | boolean
+    orderIndex?: IntFilter<"Folder"> | number
+    createdAt?: DateTimeFilter<"Folder"> | Date | string
+    updatedAt?: DateTimeFilter<"Folder"> | Date | string
+    drive?: XOR<DriveScalarRelationFilter, DriveWhereInput>
+    parent?: XOR<FolderNullableScalarRelationFilter, FolderWhereInput> | null
+    subFolders?: FolderListRelationFilter
+    files?: MediaListRelationFilter
+  }
+
+  export type FolderOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    driveId?: SortOrder
+    parentId?: SortOrderInput | SortOrder
+    userId?: SortOrder
+    color?: SortOrderInput | SortOrder
+    isPinned?: SortOrder
+    orderIndex?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    drive?: DriveOrderByWithRelationInput
+    parent?: FolderOrderByWithRelationInput
+    subFolders?: FolderOrderByRelationAggregateInput
+    files?: MediaOrderByRelationAggregateInput
+  }
+
+  export type FolderWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: FolderWhereInput | FolderWhereInput[]
+    OR?: FolderWhereInput[]
+    NOT?: FolderWhereInput | FolderWhereInput[]
+    name?: StringFilter<"Folder"> | string
+    driveId?: StringFilter<"Folder"> | string
+    parentId?: StringNullableFilter<"Folder"> | string | null
+    userId?: StringFilter<"Folder"> | string
+    color?: StringNullableFilter<"Folder"> | string | null
+    isPinned?: BoolFilter<"Folder"> | boolean
+    orderIndex?: IntFilter<"Folder"> | number
+    createdAt?: DateTimeFilter<"Folder"> | Date | string
+    updatedAt?: DateTimeFilter<"Folder"> | Date | string
+    drive?: XOR<DriveScalarRelationFilter, DriveWhereInput>
+    parent?: XOR<FolderNullableScalarRelationFilter, FolderWhereInput> | null
+    subFolders?: FolderListRelationFilter
+    files?: MediaListRelationFilter
+  }, "id">
+
+  export type FolderOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    driveId?: SortOrder
+    parentId?: SortOrderInput | SortOrder
+    userId?: SortOrder
+    color?: SortOrderInput | SortOrder
+    isPinned?: SortOrder
+    orderIndex?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: FolderCountOrderByAggregateInput
+    _avg?: FolderAvgOrderByAggregateInput
+    _max?: FolderMaxOrderByAggregateInput
+    _min?: FolderMinOrderByAggregateInput
+    _sum?: FolderSumOrderByAggregateInput
+  }
+
+  export type FolderScalarWhereWithAggregatesInput = {
+    AND?: FolderScalarWhereWithAggregatesInput | FolderScalarWhereWithAggregatesInput[]
+    OR?: FolderScalarWhereWithAggregatesInput[]
+    NOT?: FolderScalarWhereWithAggregatesInput | FolderScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Folder"> | string
+    name?: StringWithAggregatesFilter<"Folder"> | string
+    driveId?: StringWithAggregatesFilter<"Folder"> | string
+    parentId?: StringNullableWithAggregatesFilter<"Folder"> | string | null
+    userId?: StringWithAggregatesFilter<"Folder"> | string
+    color?: StringNullableWithAggregatesFilter<"Folder"> | string | null
+    isPinned?: BoolWithAggregatesFilter<"Folder"> | boolean
+    orderIndex?: IntWithAggregatesFilter<"Folder"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"Folder"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Folder"> | Date | string
   }
 
   export type DriveWhereInput = {
@@ -7452,6 +9011,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Drive"> | Date | string
     owner?: XOR<UserScalarRelationFilter, UserWhereInput>
     files?: MediaListRelationFilter
+    folders?: FolderListRelationFilter
     access?: DriveAccessListRelationFilter
   }
 
@@ -7466,6 +9026,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     owner?: UserOrderByWithRelationInput
     files?: MediaOrderByRelationAggregateInput
+    folders?: FolderOrderByRelationAggregateInput
     access?: DriveAccessOrderByRelationAggregateInput
   }
 
@@ -7483,6 +9044,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Drive"> | Date | string
     owner?: XOR<UserScalarRelationFilter, UserWhereInput>
     files?: MediaListRelationFilter
+    folders?: FolderListRelationFilter
     access?: DriveAccessListRelationFilter
   }, "id">
 
@@ -7584,8 +9146,6 @@ export namespace Prisma {
     rateLimitWindow?: IntFilter<"Settings"> | number
     defaultCompression?: StringFilter<"Settings"> | string
     showNoCompression?: BoolFilter<"Settings"> | boolean
-    showPrivateOption?: BoolFilter<"Settings"> | boolean
-    forcePrivate?: BoolFilter<"Settings"> | boolean
     smtpHost?: StringNullableFilter<"Settings"> | string | null
     smtpPort?: IntNullableFilter<"Settings"> | number | null
     smtpUser?: StringNullableFilter<"Settings"> | string | null
@@ -7601,8 +9161,6 @@ export namespace Prisma {
     rateLimitWindow?: SortOrder
     defaultCompression?: SortOrder
     showNoCompression?: SortOrder
-    showPrivateOption?: SortOrder
-    forcePrivate?: SortOrder
     smtpHost?: SortOrderInput | SortOrder
     smtpPort?: SortOrderInput | SortOrder
     smtpUser?: SortOrderInput | SortOrder
@@ -7621,8 +9179,6 @@ export namespace Prisma {
     rateLimitWindow?: IntFilter<"Settings"> | number
     defaultCompression?: StringFilter<"Settings"> | string
     showNoCompression?: BoolFilter<"Settings"> | boolean
-    showPrivateOption?: BoolFilter<"Settings"> | boolean
-    forcePrivate?: BoolFilter<"Settings"> | boolean
     smtpHost?: StringNullableFilter<"Settings"> | string | null
     smtpPort?: IntNullableFilter<"Settings"> | number | null
     smtpUser?: StringNullableFilter<"Settings"> | string | null
@@ -7638,8 +9194,6 @@ export namespace Prisma {
     rateLimitWindow?: SortOrder
     defaultCompression?: SortOrder
     showNoCompression?: SortOrder
-    showPrivateOption?: SortOrder
-    forcePrivate?: SortOrder
     smtpHost?: SortOrderInput | SortOrder
     smtpPort?: SortOrderInput | SortOrder
     smtpUser?: SortOrderInput | SortOrder
@@ -7663,8 +9217,6 @@ export namespace Prisma {
     rateLimitWindow?: IntWithAggregatesFilter<"Settings"> | number
     defaultCompression?: StringWithAggregatesFilter<"Settings"> | string
     showNoCompression?: BoolWithAggregatesFilter<"Settings"> | boolean
-    showPrivateOption?: BoolWithAggregatesFilter<"Settings"> | boolean
-    forcePrivate?: BoolWithAggregatesFilter<"Settings"> | boolean
     smtpHost?: StringNullableWithAggregatesFilter<"Settings"> | string | null
     smtpPort?: IntNullableWithAggregatesFilter<"Settings"> | number | null
     smtpUser?: StringNullableWithAggregatesFilter<"Settings"> | string | null
@@ -7768,12 +9320,14 @@ export namespace Prisma {
     mimeType: string
     size: number
     ip?: string | null
-    isPrivate?: boolean
     transcodeStatus?: string
     transcodeError?: string | null
     createdAt?: Date | string
+    isPinned?: boolean
+    orderIndex?: number
     user?: UserCreateNestedOneWithoutMediaInput
     drive?: DriveCreateNestedOneWithoutFilesInput
+    folder?: FolderCreateNestedOneWithoutFilesInput
   }
 
   export type MediaUncheckedCreateInput = {
@@ -7784,11 +9338,13 @@ export namespace Prisma {
     size: number
     ip?: string | null
     userId?: string | null
-    isPrivate?: boolean
     transcodeStatus?: string
     transcodeError?: string | null
     createdAt?: Date | string
     driveId?: string | null
+    folderId?: string | null
+    isPinned?: boolean
+    orderIndex?: number
   }
 
   export type MediaUpdateInput = {
@@ -7798,12 +9354,14 @@ export namespace Prisma {
     mimeType?: StringFieldUpdateOperationsInput | string
     size?: IntFieldUpdateOperationsInput | number
     ip?: NullableStringFieldUpdateOperationsInput | string | null
-    isPrivate?: BoolFieldUpdateOperationsInput | boolean
     transcodeStatus?: StringFieldUpdateOperationsInput | string
     transcodeError?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isPinned?: BoolFieldUpdateOperationsInput | boolean
+    orderIndex?: IntFieldUpdateOperationsInput | number
     user?: UserUpdateOneWithoutMediaNestedInput
     drive?: DriveUpdateOneWithoutFilesNestedInput
+    folder?: FolderUpdateOneWithoutFilesNestedInput
   }
 
   export type MediaUncheckedUpdateInput = {
@@ -7814,11 +9372,13 @@ export namespace Prisma {
     size?: IntFieldUpdateOperationsInput | number
     ip?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: NullableStringFieldUpdateOperationsInput | string | null
-    isPrivate?: BoolFieldUpdateOperationsInput | boolean
     transcodeStatus?: StringFieldUpdateOperationsInput | string
     transcodeError?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     driveId?: NullableStringFieldUpdateOperationsInput | string | null
+    folderId?: NullableStringFieldUpdateOperationsInput | string | null
+    isPinned?: BoolFieldUpdateOperationsInput | boolean
+    orderIndex?: IntFieldUpdateOperationsInput | number
   }
 
   export type MediaCreateManyInput = {
@@ -7829,11 +9389,13 @@ export namespace Prisma {
     size: number
     ip?: string | null
     userId?: string | null
-    isPrivate?: boolean
     transcodeStatus?: string
     transcodeError?: string | null
     createdAt?: Date | string
     driveId?: string | null
+    folderId?: string | null
+    isPinned?: boolean
+    orderIndex?: number
   }
 
   export type MediaUpdateManyMutationInput = {
@@ -7843,10 +9405,11 @@ export namespace Prisma {
     mimeType?: StringFieldUpdateOperationsInput | string
     size?: IntFieldUpdateOperationsInput | number
     ip?: NullableStringFieldUpdateOperationsInput | string | null
-    isPrivate?: BoolFieldUpdateOperationsInput | boolean
     transcodeStatus?: StringFieldUpdateOperationsInput | string
     transcodeError?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isPinned?: BoolFieldUpdateOperationsInput | boolean
+    orderIndex?: IntFieldUpdateOperationsInput | number
   }
 
   export type MediaUncheckedUpdateManyInput = {
@@ -7857,11 +9420,110 @@ export namespace Prisma {
     size?: IntFieldUpdateOperationsInput | number
     ip?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: NullableStringFieldUpdateOperationsInput | string | null
-    isPrivate?: BoolFieldUpdateOperationsInput | boolean
     transcodeStatus?: StringFieldUpdateOperationsInput | string
     transcodeError?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     driveId?: NullableStringFieldUpdateOperationsInput | string | null
+    folderId?: NullableStringFieldUpdateOperationsInput | string | null
+    isPinned?: BoolFieldUpdateOperationsInput | boolean
+    orderIndex?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type FolderCreateInput = {
+    id?: string
+    name: string
+    userId: string
+    color?: string | null
+    isPinned?: boolean
+    orderIndex?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    drive: DriveCreateNestedOneWithoutFoldersInput
+    parent?: FolderCreateNestedOneWithoutSubFoldersInput
+    subFolders?: FolderCreateNestedManyWithoutParentInput
+    files?: MediaCreateNestedManyWithoutFolderInput
+  }
+
+  export type FolderUncheckedCreateInput = {
+    id?: string
+    name: string
+    driveId: string
+    parentId?: string | null
+    userId: string
+    color?: string | null
+    isPinned?: boolean
+    orderIndex?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    subFolders?: FolderUncheckedCreateNestedManyWithoutParentInput
+    files?: MediaUncheckedCreateNestedManyWithoutFolderInput
+  }
+
+  export type FolderUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    isPinned?: BoolFieldUpdateOperationsInput | boolean
+    orderIndex?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    drive?: DriveUpdateOneRequiredWithoutFoldersNestedInput
+    parent?: FolderUpdateOneWithoutSubFoldersNestedInput
+    subFolders?: FolderUpdateManyWithoutParentNestedInput
+    files?: MediaUpdateManyWithoutFolderNestedInput
+  }
+
+  export type FolderUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    driveId?: StringFieldUpdateOperationsInput | string
+    parentId?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    isPinned?: BoolFieldUpdateOperationsInput | boolean
+    orderIndex?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    subFolders?: FolderUncheckedUpdateManyWithoutParentNestedInput
+    files?: MediaUncheckedUpdateManyWithoutFolderNestedInput
+  }
+
+  export type FolderCreateManyInput = {
+    id?: string
+    name: string
+    driveId: string
+    parentId?: string | null
+    userId: string
+    color?: string | null
+    isPinned?: boolean
+    orderIndex?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FolderUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    isPinned?: BoolFieldUpdateOperationsInput | boolean
+    orderIndex?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FolderUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    driveId?: StringFieldUpdateOperationsInput | string
+    parentId?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    isPinned?: BoolFieldUpdateOperationsInput | boolean
+    orderIndex?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type DriveCreateInput = {
@@ -7874,6 +9536,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     owner: UserCreateNestedOneWithoutOwnedDrivesInput
     files?: MediaCreateNestedManyWithoutDriveInput
+    folders?: FolderCreateNestedManyWithoutDriveInput
     access?: DriveAccessCreateNestedManyWithoutDriveInput
   }
 
@@ -7887,6 +9550,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     files?: MediaUncheckedCreateNestedManyWithoutDriveInput
+    folders?: FolderUncheckedCreateNestedManyWithoutDriveInput
     access?: DriveAccessUncheckedCreateNestedManyWithoutDriveInput
   }
 
@@ -7900,6 +9564,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     owner?: UserUpdateOneRequiredWithoutOwnedDrivesNestedInput
     files?: MediaUpdateManyWithoutDriveNestedInput
+    folders?: FolderUpdateManyWithoutDriveNestedInput
     access?: DriveAccessUpdateManyWithoutDriveNestedInput
   }
 
@@ -7913,6 +9578,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     files?: MediaUncheckedUpdateManyWithoutDriveNestedInput
+    folders?: FolderUncheckedUpdateManyWithoutDriveNestedInput
     access?: DriveAccessUncheckedUpdateManyWithoutDriveNestedInput
   }
 
@@ -8010,8 +9676,6 @@ export namespace Prisma {
     rateLimitWindow?: number
     defaultCompression?: string
     showNoCompression?: boolean
-    showPrivateOption?: boolean
-    forcePrivate?: boolean
     smtpHost?: string | null
     smtpPort?: number | null
     smtpUser?: string | null
@@ -8027,8 +9691,6 @@ export namespace Prisma {
     rateLimitWindow?: number
     defaultCompression?: string
     showNoCompression?: boolean
-    showPrivateOption?: boolean
-    forcePrivate?: boolean
     smtpHost?: string | null
     smtpPort?: number | null
     smtpUser?: string | null
@@ -8044,8 +9706,6 @@ export namespace Prisma {
     rateLimitWindow?: IntFieldUpdateOperationsInput | number
     defaultCompression?: StringFieldUpdateOperationsInput | string
     showNoCompression?: BoolFieldUpdateOperationsInput | boolean
-    showPrivateOption?: BoolFieldUpdateOperationsInput | boolean
-    forcePrivate?: BoolFieldUpdateOperationsInput | boolean
     smtpHost?: NullableStringFieldUpdateOperationsInput | string | null
     smtpPort?: NullableIntFieldUpdateOperationsInput | number | null
     smtpUser?: NullableStringFieldUpdateOperationsInput | string | null
@@ -8061,8 +9721,6 @@ export namespace Prisma {
     rateLimitWindow?: IntFieldUpdateOperationsInput | number
     defaultCompression?: StringFieldUpdateOperationsInput | string
     showNoCompression?: BoolFieldUpdateOperationsInput | boolean
-    showPrivateOption?: BoolFieldUpdateOperationsInput | boolean
-    forcePrivate?: BoolFieldUpdateOperationsInput | boolean
     smtpHost?: NullableStringFieldUpdateOperationsInput | string | null
     smtpPort?: NullableIntFieldUpdateOperationsInput | number | null
     smtpUser?: NullableStringFieldUpdateOperationsInput | string | null
@@ -8078,8 +9736,6 @@ export namespace Prisma {
     rateLimitWindow?: number
     defaultCompression?: string
     showNoCompression?: boolean
-    showPrivateOption?: boolean
-    forcePrivate?: boolean
     smtpHost?: string | null
     smtpPort?: number | null
     smtpUser?: string | null
@@ -8095,8 +9751,6 @@ export namespace Prisma {
     rateLimitWindow?: IntFieldUpdateOperationsInput | number
     defaultCompression?: StringFieldUpdateOperationsInput | string
     showNoCompression?: BoolFieldUpdateOperationsInput | boolean
-    showPrivateOption?: BoolFieldUpdateOperationsInput | boolean
-    forcePrivate?: BoolFieldUpdateOperationsInput | boolean
     smtpHost?: NullableStringFieldUpdateOperationsInput | string | null
     smtpPort?: NullableIntFieldUpdateOperationsInput | number | null
     smtpUser?: NullableStringFieldUpdateOperationsInput | string | null
@@ -8112,8 +9766,6 @@ export namespace Prisma {
     rateLimitWindow?: IntFieldUpdateOperationsInput | number
     defaultCompression?: StringFieldUpdateOperationsInput | string
     showNoCompression?: BoolFieldUpdateOperationsInput | boolean
-    showPrivateOption?: BoolFieldUpdateOperationsInput | boolean
-    forcePrivate?: BoolFieldUpdateOperationsInput | boolean
     smtpHost?: NullableStringFieldUpdateOperationsInput | string | null
     smtpPort?: NullableIntFieldUpdateOperationsInput | number | null
     smtpUser?: NullableStringFieldUpdateOperationsInput | string | null
@@ -8357,6 +10009,11 @@ export namespace Prisma {
     isNot?: DriveWhereInput | null
   }
 
+  export type FolderNullableScalarRelationFilter = {
+    is?: FolderWhereInput | null
+    isNot?: FolderWhereInput | null
+  }
+
   export type MediaCountOrderByAggregateInput = {
     id?: SortOrder
     filename?: SortOrder
@@ -8365,15 +10022,18 @@ export namespace Prisma {
     size?: SortOrder
     ip?: SortOrder
     userId?: SortOrder
-    isPrivate?: SortOrder
     transcodeStatus?: SortOrder
     transcodeError?: SortOrder
     createdAt?: SortOrder
     driveId?: SortOrder
+    folderId?: SortOrder
+    isPinned?: SortOrder
+    orderIndex?: SortOrder
   }
 
   export type MediaAvgOrderByAggregateInput = {
     size?: SortOrder
+    orderIndex?: SortOrder
   }
 
   export type MediaMaxOrderByAggregateInput = {
@@ -8384,11 +10044,13 @@ export namespace Prisma {
     size?: SortOrder
     ip?: SortOrder
     userId?: SortOrder
-    isPrivate?: SortOrder
     transcodeStatus?: SortOrder
     transcodeError?: SortOrder
     createdAt?: SortOrder
     driveId?: SortOrder
+    folderId?: SortOrder
+    isPinned?: SortOrder
+    orderIndex?: SortOrder
   }
 
   export type MediaMinOrderByAggregateInput = {
@@ -8399,15 +10061,18 @@ export namespace Prisma {
     size?: SortOrder
     ip?: SortOrder
     userId?: SortOrder
-    isPrivate?: SortOrder
     transcodeStatus?: SortOrder
     transcodeError?: SortOrder
     createdAt?: SortOrder
     driveId?: SortOrder
+    folderId?: SortOrder
+    isPinned?: SortOrder
+    orderIndex?: SortOrder
   }
 
   export type MediaSumOrderByAggregateInput = {
     size?: SortOrder
+    orderIndex?: SortOrder
   }
 
   export type IntWithAggregatesFilter<$PrismaModel = never> = {
@@ -8441,6 +10106,68 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
     _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type DriveScalarRelationFilter = {
+    is?: DriveWhereInput
+    isNot?: DriveWhereInput
+  }
+
+  export type FolderListRelationFilter = {
+    every?: FolderWhereInput
+    some?: FolderWhereInput
+    none?: FolderWhereInput
+  }
+
+  export type FolderOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type FolderCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    driveId?: SortOrder
+    parentId?: SortOrder
+    userId?: SortOrder
+    color?: SortOrder
+    isPinned?: SortOrder
+    orderIndex?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FolderAvgOrderByAggregateInput = {
+    orderIndex?: SortOrder
+  }
+
+  export type FolderMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    driveId?: SortOrder
+    parentId?: SortOrder
+    userId?: SortOrder
+    color?: SortOrder
+    isPinned?: SortOrder
+    orderIndex?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FolderMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    driveId?: SortOrder
+    parentId?: SortOrder
+    userId?: SortOrder
+    color?: SortOrder
+    isPinned?: SortOrder
+    orderIndex?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FolderSumOrderByAggregateInput = {
+    orderIndex?: SortOrder
   }
 
   export type UserScalarRelationFilter = {
@@ -8479,11 +10206,6 @@ export namespace Prisma {
     publicRole?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-  }
-
-  export type DriveScalarRelationFilter = {
-    is?: DriveWhereInput
-    isNot?: DriveWhereInput
   }
 
   export type DriveAccessDriveIdUserIdCompoundUniqueInput = {
@@ -8534,8 +10256,6 @@ export namespace Prisma {
     rateLimitWindow?: SortOrder
     defaultCompression?: SortOrder
     showNoCompression?: SortOrder
-    showPrivateOption?: SortOrder
-    forcePrivate?: SortOrder
     smtpHost?: SortOrder
     smtpPort?: SortOrder
     smtpUser?: SortOrder
@@ -8557,8 +10277,6 @@ export namespace Prisma {
     rateLimitWindow?: SortOrder
     defaultCompression?: SortOrder
     showNoCompression?: SortOrder
-    showPrivateOption?: SortOrder
-    forcePrivate?: SortOrder
     smtpHost?: SortOrder
     smtpPort?: SortOrder
     smtpUser?: SortOrder
@@ -8574,8 +10292,6 @@ export namespace Prisma {
     rateLimitWindow?: SortOrder
     defaultCompression?: SortOrder
     showNoCompression?: SortOrder
-    showPrivateOption?: SortOrder
-    forcePrivate?: SortOrder
     smtpHost?: SortOrder
     smtpPort?: SortOrder
     smtpUser?: SortOrder
@@ -8771,6 +10487,12 @@ export namespace Prisma {
     connect?: DriveWhereUniqueInput
   }
 
+  export type FolderCreateNestedOneWithoutFilesInput = {
+    create?: XOR<FolderCreateWithoutFilesInput, FolderUncheckedCreateWithoutFilesInput>
+    connectOrCreate?: FolderCreateOrConnectWithoutFilesInput
+    connect?: FolderWhereUniqueInput
+  }
+
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -8803,6 +10525,130 @@ export namespace Prisma {
     update?: XOR<XOR<DriveUpdateToOneWithWhereWithoutFilesInput, DriveUpdateWithoutFilesInput>, DriveUncheckedUpdateWithoutFilesInput>
   }
 
+  export type FolderUpdateOneWithoutFilesNestedInput = {
+    create?: XOR<FolderCreateWithoutFilesInput, FolderUncheckedCreateWithoutFilesInput>
+    connectOrCreate?: FolderCreateOrConnectWithoutFilesInput
+    upsert?: FolderUpsertWithoutFilesInput
+    disconnect?: FolderWhereInput | boolean
+    delete?: FolderWhereInput | boolean
+    connect?: FolderWhereUniqueInput
+    update?: XOR<XOR<FolderUpdateToOneWithWhereWithoutFilesInput, FolderUpdateWithoutFilesInput>, FolderUncheckedUpdateWithoutFilesInput>
+  }
+
+  export type DriveCreateNestedOneWithoutFoldersInput = {
+    create?: XOR<DriveCreateWithoutFoldersInput, DriveUncheckedCreateWithoutFoldersInput>
+    connectOrCreate?: DriveCreateOrConnectWithoutFoldersInput
+    connect?: DriveWhereUniqueInput
+  }
+
+  export type FolderCreateNestedOneWithoutSubFoldersInput = {
+    create?: XOR<FolderCreateWithoutSubFoldersInput, FolderUncheckedCreateWithoutSubFoldersInput>
+    connectOrCreate?: FolderCreateOrConnectWithoutSubFoldersInput
+    connect?: FolderWhereUniqueInput
+  }
+
+  export type FolderCreateNestedManyWithoutParentInput = {
+    create?: XOR<FolderCreateWithoutParentInput, FolderUncheckedCreateWithoutParentInput> | FolderCreateWithoutParentInput[] | FolderUncheckedCreateWithoutParentInput[]
+    connectOrCreate?: FolderCreateOrConnectWithoutParentInput | FolderCreateOrConnectWithoutParentInput[]
+    createMany?: FolderCreateManyParentInputEnvelope
+    connect?: FolderWhereUniqueInput | FolderWhereUniqueInput[]
+  }
+
+  export type MediaCreateNestedManyWithoutFolderInput = {
+    create?: XOR<MediaCreateWithoutFolderInput, MediaUncheckedCreateWithoutFolderInput> | MediaCreateWithoutFolderInput[] | MediaUncheckedCreateWithoutFolderInput[]
+    connectOrCreate?: MediaCreateOrConnectWithoutFolderInput | MediaCreateOrConnectWithoutFolderInput[]
+    createMany?: MediaCreateManyFolderInputEnvelope
+    connect?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
+  }
+
+  export type FolderUncheckedCreateNestedManyWithoutParentInput = {
+    create?: XOR<FolderCreateWithoutParentInput, FolderUncheckedCreateWithoutParentInput> | FolderCreateWithoutParentInput[] | FolderUncheckedCreateWithoutParentInput[]
+    connectOrCreate?: FolderCreateOrConnectWithoutParentInput | FolderCreateOrConnectWithoutParentInput[]
+    createMany?: FolderCreateManyParentInputEnvelope
+    connect?: FolderWhereUniqueInput | FolderWhereUniqueInput[]
+  }
+
+  export type MediaUncheckedCreateNestedManyWithoutFolderInput = {
+    create?: XOR<MediaCreateWithoutFolderInput, MediaUncheckedCreateWithoutFolderInput> | MediaCreateWithoutFolderInput[] | MediaUncheckedCreateWithoutFolderInput[]
+    connectOrCreate?: MediaCreateOrConnectWithoutFolderInput | MediaCreateOrConnectWithoutFolderInput[]
+    createMany?: MediaCreateManyFolderInputEnvelope
+    connect?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
+  }
+
+  export type DriveUpdateOneRequiredWithoutFoldersNestedInput = {
+    create?: XOR<DriveCreateWithoutFoldersInput, DriveUncheckedCreateWithoutFoldersInput>
+    connectOrCreate?: DriveCreateOrConnectWithoutFoldersInput
+    upsert?: DriveUpsertWithoutFoldersInput
+    connect?: DriveWhereUniqueInput
+    update?: XOR<XOR<DriveUpdateToOneWithWhereWithoutFoldersInput, DriveUpdateWithoutFoldersInput>, DriveUncheckedUpdateWithoutFoldersInput>
+  }
+
+  export type FolderUpdateOneWithoutSubFoldersNestedInput = {
+    create?: XOR<FolderCreateWithoutSubFoldersInput, FolderUncheckedCreateWithoutSubFoldersInput>
+    connectOrCreate?: FolderCreateOrConnectWithoutSubFoldersInput
+    upsert?: FolderUpsertWithoutSubFoldersInput
+    disconnect?: FolderWhereInput | boolean
+    delete?: FolderWhereInput | boolean
+    connect?: FolderWhereUniqueInput
+    update?: XOR<XOR<FolderUpdateToOneWithWhereWithoutSubFoldersInput, FolderUpdateWithoutSubFoldersInput>, FolderUncheckedUpdateWithoutSubFoldersInput>
+  }
+
+  export type FolderUpdateManyWithoutParentNestedInput = {
+    create?: XOR<FolderCreateWithoutParentInput, FolderUncheckedCreateWithoutParentInput> | FolderCreateWithoutParentInput[] | FolderUncheckedCreateWithoutParentInput[]
+    connectOrCreate?: FolderCreateOrConnectWithoutParentInput | FolderCreateOrConnectWithoutParentInput[]
+    upsert?: FolderUpsertWithWhereUniqueWithoutParentInput | FolderUpsertWithWhereUniqueWithoutParentInput[]
+    createMany?: FolderCreateManyParentInputEnvelope
+    set?: FolderWhereUniqueInput | FolderWhereUniqueInput[]
+    disconnect?: FolderWhereUniqueInput | FolderWhereUniqueInput[]
+    delete?: FolderWhereUniqueInput | FolderWhereUniqueInput[]
+    connect?: FolderWhereUniqueInput | FolderWhereUniqueInput[]
+    update?: FolderUpdateWithWhereUniqueWithoutParentInput | FolderUpdateWithWhereUniqueWithoutParentInput[]
+    updateMany?: FolderUpdateManyWithWhereWithoutParentInput | FolderUpdateManyWithWhereWithoutParentInput[]
+    deleteMany?: FolderScalarWhereInput | FolderScalarWhereInput[]
+  }
+
+  export type MediaUpdateManyWithoutFolderNestedInput = {
+    create?: XOR<MediaCreateWithoutFolderInput, MediaUncheckedCreateWithoutFolderInput> | MediaCreateWithoutFolderInput[] | MediaUncheckedCreateWithoutFolderInput[]
+    connectOrCreate?: MediaCreateOrConnectWithoutFolderInput | MediaCreateOrConnectWithoutFolderInput[]
+    upsert?: MediaUpsertWithWhereUniqueWithoutFolderInput | MediaUpsertWithWhereUniqueWithoutFolderInput[]
+    createMany?: MediaCreateManyFolderInputEnvelope
+    set?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
+    disconnect?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
+    delete?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
+    connect?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
+    update?: MediaUpdateWithWhereUniqueWithoutFolderInput | MediaUpdateWithWhereUniqueWithoutFolderInput[]
+    updateMany?: MediaUpdateManyWithWhereWithoutFolderInput | MediaUpdateManyWithWhereWithoutFolderInput[]
+    deleteMany?: MediaScalarWhereInput | MediaScalarWhereInput[]
+  }
+
+  export type FolderUncheckedUpdateManyWithoutParentNestedInput = {
+    create?: XOR<FolderCreateWithoutParentInput, FolderUncheckedCreateWithoutParentInput> | FolderCreateWithoutParentInput[] | FolderUncheckedCreateWithoutParentInput[]
+    connectOrCreate?: FolderCreateOrConnectWithoutParentInput | FolderCreateOrConnectWithoutParentInput[]
+    upsert?: FolderUpsertWithWhereUniqueWithoutParentInput | FolderUpsertWithWhereUniqueWithoutParentInput[]
+    createMany?: FolderCreateManyParentInputEnvelope
+    set?: FolderWhereUniqueInput | FolderWhereUniqueInput[]
+    disconnect?: FolderWhereUniqueInput | FolderWhereUniqueInput[]
+    delete?: FolderWhereUniqueInput | FolderWhereUniqueInput[]
+    connect?: FolderWhereUniqueInput | FolderWhereUniqueInput[]
+    update?: FolderUpdateWithWhereUniqueWithoutParentInput | FolderUpdateWithWhereUniqueWithoutParentInput[]
+    updateMany?: FolderUpdateManyWithWhereWithoutParentInput | FolderUpdateManyWithWhereWithoutParentInput[]
+    deleteMany?: FolderScalarWhereInput | FolderScalarWhereInput[]
+  }
+
+  export type MediaUncheckedUpdateManyWithoutFolderNestedInput = {
+    create?: XOR<MediaCreateWithoutFolderInput, MediaUncheckedCreateWithoutFolderInput> | MediaCreateWithoutFolderInput[] | MediaUncheckedCreateWithoutFolderInput[]
+    connectOrCreate?: MediaCreateOrConnectWithoutFolderInput | MediaCreateOrConnectWithoutFolderInput[]
+    upsert?: MediaUpsertWithWhereUniqueWithoutFolderInput | MediaUpsertWithWhereUniqueWithoutFolderInput[]
+    createMany?: MediaCreateManyFolderInputEnvelope
+    set?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
+    disconnect?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
+    delete?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
+    connect?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
+    update?: MediaUpdateWithWhereUniqueWithoutFolderInput | MediaUpdateWithWhereUniqueWithoutFolderInput[]
+    updateMany?: MediaUpdateManyWithWhereWithoutFolderInput | MediaUpdateManyWithWhereWithoutFolderInput[]
+    deleteMany?: MediaScalarWhereInput | MediaScalarWhereInput[]
+  }
+
   export type UserCreateNestedOneWithoutOwnedDrivesInput = {
     create?: XOR<UserCreateWithoutOwnedDrivesInput, UserUncheckedCreateWithoutOwnedDrivesInput>
     connectOrCreate?: UserCreateOrConnectWithoutOwnedDrivesInput
@@ -8814,6 +10660,13 @@ export namespace Prisma {
     connectOrCreate?: MediaCreateOrConnectWithoutDriveInput | MediaCreateOrConnectWithoutDriveInput[]
     createMany?: MediaCreateManyDriveInputEnvelope
     connect?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
+  }
+
+  export type FolderCreateNestedManyWithoutDriveInput = {
+    create?: XOR<FolderCreateWithoutDriveInput, FolderUncheckedCreateWithoutDriveInput> | FolderCreateWithoutDriveInput[] | FolderUncheckedCreateWithoutDriveInput[]
+    connectOrCreate?: FolderCreateOrConnectWithoutDriveInput | FolderCreateOrConnectWithoutDriveInput[]
+    createMany?: FolderCreateManyDriveInputEnvelope
+    connect?: FolderWhereUniqueInput | FolderWhereUniqueInput[]
   }
 
   export type DriveAccessCreateNestedManyWithoutDriveInput = {
@@ -8828,6 +10681,13 @@ export namespace Prisma {
     connectOrCreate?: MediaCreateOrConnectWithoutDriveInput | MediaCreateOrConnectWithoutDriveInput[]
     createMany?: MediaCreateManyDriveInputEnvelope
     connect?: MediaWhereUniqueInput | MediaWhereUniqueInput[]
+  }
+
+  export type FolderUncheckedCreateNestedManyWithoutDriveInput = {
+    create?: XOR<FolderCreateWithoutDriveInput, FolderUncheckedCreateWithoutDriveInput> | FolderCreateWithoutDriveInput[] | FolderUncheckedCreateWithoutDriveInput[]
+    connectOrCreate?: FolderCreateOrConnectWithoutDriveInput | FolderCreateOrConnectWithoutDriveInput[]
+    createMany?: FolderCreateManyDriveInputEnvelope
+    connect?: FolderWhereUniqueInput | FolderWhereUniqueInput[]
   }
 
   export type DriveAccessUncheckedCreateNestedManyWithoutDriveInput = {
@@ -8859,6 +10719,20 @@ export namespace Prisma {
     deleteMany?: MediaScalarWhereInput | MediaScalarWhereInput[]
   }
 
+  export type FolderUpdateManyWithoutDriveNestedInput = {
+    create?: XOR<FolderCreateWithoutDriveInput, FolderUncheckedCreateWithoutDriveInput> | FolderCreateWithoutDriveInput[] | FolderUncheckedCreateWithoutDriveInput[]
+    connectOrCreate?: FolderCreateOrConnectWithoutDriveInput | FolderCreateOrConnectWithoutDriveInput[]
+    upsert?: FolderUpsertWithWhereUniqueWithoutDriveInput | FolderUpsertWithWhereUniqueWithoutDriveInput[]
+    createMany?: FolderCreateManyDriveInputEnvelope
+    set?: FolderWhereUniqueInput | FolderWhereUniqueInput[]
+    disconnect?: FolderWhereUniqueInput | FolderWhereUniqueInput[]
+    delete?: FolderWhereUniqueInput | FolderWhereUniqueInput[]
+    connect?: FolderWhereUniqueInput | FolderWhereUniqueInput[]
+    update?: FolderUpdateWithWhereUniqueWithoutDriveInput | FolderUpdateWithWhereUniqueWithoutDriveInput[]
+    updateMany?: FolderUpdateManyWithWhereWithoutDriveInput | FolderUpdateManyWithWhereWithoutDriveInput[]
+    deleteMany?: FolderScalarWhereInput | FolderScalarWhereInput[]
+  }
+
   export type DriveAccessUpdateManyWithoutDriveNestedInput = {
     create?: XOR<DriveAccessCreateWithoutDriveInput, DriveAccessUncheckedCreateWithoutDriveInput> | DriveAccessCreateWithoutDriveInput[] | DriveAccessUncheckedCreateWithoutDriveInput[]
     connectOrCreate?: DriveAccessCreateOrConnectWithoutDriveInput | DriveAccessCreateOrConnectWithoutDriveInput[]
@@ -8885,6 +10759,20 @@ export namespace Prisma {
     update?: MediaUpdateWithWhereUniqueWithoutDriveInput | MediaUpdateWithWhereUniqueWithoutDriveInput[]
     updateMany?: MediaUpdateManyWithWhereWithoutDriveInput | MediaUpdateManyWithWhereWithoutDriveInput[]
     deleteMany?: MediaScalarWhereInput | MediaScalarWhereInput[]
+  }
+
+  export type FolderUncheckedUpdateManyWithoutDriveNestedInput = {
+    create?: XOR<FolderCreateWithoutDriveInput, FolderUncheckedCreateWithoutDriveInput> | FolderCreateWithoutDriveInput[] | FolderUncheckedCreateWithoutDriveInput[]
+    connectOrCreate?: FolderCreateOrConnectWithoutDriveInput | FolderCreateOrConnectWithoutDriveInput[]
+    upsert?: FolderUpsertWithWhereUniqueWithoutDriveInput | FolderUpsertWithWhereUniqueWithoutDriveInput[]
+    createMany?: FolderCreateManyDriveInputEnvelope
+    set?: FolderWhereUniqueInput | FolderWhereUniqueInput[]
+    disconnect?: FolderWhereUniqueInput | FolderWhereUniqueInput[]
+    delete?: FolderWhereUniqueInput | FolderWhereUniqueInput[]
+    connect?: FolderWhereUniqueInput | FolderWhereUniqueInput[]
+    update?: FolderUpdateWithWhereUniqueWithoutDriveInput | FolderUpdateWithWhereUniqueWithoutDriveInput[]
+    updateMany?: FolderUpdateManyWithWhereWithoutDriveInput | FolderUpdateManyWithWhereWithoutDriveInput[]
+    deleteMany?: FolderScalarWhereInput | FolderScalarWhereInput[]
   }
 
   export type DriveAccessUncheckedUpdateManyWithoutDriveNestedInput = {
@@ -9174,11 +11062,13 @@ export namespace Prisma {
     mimeType: string
     size: number
     ip?: string | null
-    isPrivate?: boolean
     transcodeStatus?: string
     transcodeError?: string | null
     createdAt?: Date | string
+    isPinned?: boolean
+    orderIndex?: number
     drive?: DriveCreateNestedOneWithoutFilesInput
+    folder?: FolderCreateNestedOneWithoutFilesInput
   }
 
   export type MediaUncheckedCreateWithoutUserInput = {
@@ -9188,11 +11078,13 @@ export namespace Prisma {
     mimeType: string
     size: number
     ip?: string | null
-    isPrivate?: boolean
     transcodeStatus?: string
     transcodeError?: string | null
     createdAt?: Date | string
     driveId?: string | null
+    folderId?: string | null
+    isPinned?: boolean
+    orderIndex?: number
   }
 
   export type MediaCreateOrConnectWithoutUserInput = {
@@ -9213,6 +11105,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     files?: MediaCreateNestedManyWithoutDriveInput
+    folders?: FolderCreateNestedManyWithoutDriveInput
     access?: DriveAccessCreateNestedManyWithoutDriveInput
   }
 
@@ -9225,6 +11118,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     files?: MediaUncheckedCreateNestedManyWithoutDriveInput
+    folders?: FolderUncheckedCreateNestedManyWithoutDriveInput
     access?: DriveAccessUncheckedCreateNestedManyWithoutDriveInput
   }
 
@@ -9287,11 +11181,13 @@ export namespace Prisma {
     size?: IntFilter<"Media"> | number
     ip?: StringNullableFilter<"Media"> | string | null
     userId?: StringNullableFilter<"Media"> | string | null
-    isPrivate?: BoolFilter<"Media"> | boolean
     transcodeStatus?: StringFilter<"Media"> | string
     transcodeError?: StringNullableFilter<"Media"> | string | null
     createdAt?: DateTimeFilter<"Media"> | Date | string
     driveId?: StringNullableFilter<"Media"> | string | null
+    folderId?: StringNullableFilter<"Media"> | string | null
+    isPinned?: BoolFilter<"Media"> | boolean
+    orderIndex?: IntFilter<"Media"> | number
   }
 
   export type DriveUpsertWithWhereUniqueWithoutOwnerInput = {
@@ -9391,6 +11287,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     owner: UserCreateNestedOneWithoutOwnedDrivesInput
+    folders?: FolderCreateNestedManyWithoutDriveInput
     access?: DriveAccessCreateNestedManyWithoutDriveInput
   }
 
@@ -9403,12 +11300,46 @@ export namespace Prisma {
     publicRole?: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    folders?: FolderUncheckedCreateNestedManyWithoutDriveInput
     access?: DriveAccessUncheckedCreateNestedManyWithoutDriveInput
   }
 
   export type DriveCreateOrConnectWithoutFilesInput = {
     where: DriveWhereUniqueInput
     create: XOR<DriveCreateWithoutFilesInput, DriveUncheckedCreateWithoutFilesInput>
+  }
+
+  export type FolderCreateWithoutFilesInput = {
+    id?: string
+    name: string
+    userId: string
+    color?: string | null
+    isPinned?: boolean
+    orderIndex?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    drive: DriveCreateNestedOneWithoutFoldersInput
+    parent?: FolderCreateNestedOneWithoutSubFoldersInput
+    subFolders?: FolderCreateNestedManyWithoutParentInput
+  }
+
+  export type FolderUncheckedCreateWithoutFilesInput = {
+    id?: string
+    name: string
+    driveId: string
+    parentId?: string | null
+    userId: string
+    color?: string | null
+    isPinned?: boolean
+    orderIndex?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    subFolders?: FolderUncheckedCreateNestedManyWithoutParentInput
+  }
+
+  export type FolderCreateOrConnectWithoutFilesInput = {
+    where: FolderWhereUniqueInput
+    create: XOR<FolderCreateWithoutFilesInput, FolderUncheckedCreateWithoutFilesInput>
   }
 
   export type UserUpsertWithoutMediaInput = {
@@ -9468,6 +11399,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     owner?: UserUpdateOneRequiredWithoutOwnedDrivesNestedInput
+    folders?: FolderUpdateManyWithoutDriveNestedInput
     access?: DriveAccessUpdateManyWithoutDriveNestedInput
   }
 
@@ -9480,7 +11412,313 @@ export namespace Prisma {
     publicRole?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    folders?: FolderUncheckedUpdateManyWithoutDriveNestedInput
     access?: DriveAccessUncheckedUpdateManyWithoutDriveNestedInput
+  }
+
+  export type FolderUpsertWithoutFilesInput = {
+    update: XOR<FolderUpdateWithoutFilesInput, FolderUncheckedUpdateWithoutFilesInput>
+    create: XOR<FolderCreateWithoutFilesInput, FolderUncheckedCreateWithoutFilesInput>
+    where?: FolderWhereInput
+  }
+
+  export type FolderUpdateToOneWithWhereWithoutFilesInput = {
+    where?: FolderWhereInput
+    data: XOR<FolderUpdateWithoutFilesInput, FolderUncheckedUpdateWithoutFilesInput>
+  }
+
+  export type FolderUpdateWithoutFilesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    isPinned?: BoolFieldUpdateOperationsInput | boolean
+    orderIndex?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    drive?: DriveUpdateOneRequiredWithoutFoldersNestedInput
+    parent?: FolderUpdateOneWithoutSubFoldersNestedInput
+    subFolders?: FolderUpdateManyWithoutParentNestedInput
+  }
+
+  export type FolderUncheckedUpdateWithoutFilesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    driveId?: StringFieldUpdateOperationsInput | string
+    parentId?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    isPinned?: BoolFieldUpdateOperationsInput | boolean
+    orderIndex?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    subFolders?: FolderUncheckedUpdateManyWithoutParentNestedInput
+  }
+
+  export type DriveCreateWithoutFoldersInput = {
+    id?: string
+    name: string
+    description?: string | null
+    isPublic?: boolean
+    publicRole?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    owner: UserCreateNestedOneWithoutOwnedDrivesInput
+    files?: MediaCreateNestedManyWithoutDriveInput
+    access?: DriveAccessCreateNestedManyWithoutDriveInput
+  }
+
+  export type DriveUncheckedCreateWithoutFoldersInput = {
+    id?: string
+    name: string
+    description?: string | null
+    ownerId: string
+    isPublic?: boolean
+    publicRole?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    files?: MediaUncheckedCreateNestedManyWithoutDriveInput
+    access?: DriveAccessUncheckedCreateNestedManyWithoutDriveInput
+  }
+
+  export type DriveCreateOrConnectWithoutFoldersInput = {
+    where: DriveWhereUniqueInput
+    create: XOR<DriveCreateWithoutFoldersInput, DriveUncheckedCreateWithoutFoldersInput>
+  }
+
+  export type FolderCreateWithoutSubFoldersInput = {
+    id?: string
+    name: string
+    userId: string
+    color?: string | null
+    isPinned?: boolean
+    orderIndex?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    drive: DriveCreateNestedOneWithoutFoldersInput
+    parent?: FolderCreateNestedOneWithoutSubFoldersInput
+    files?: MediaCreateNestedManyWithoutFolderInput
+  }
+
+  export type FolderUncheckedCreateWithoutSubFoldersInput = {
+    id?: string
+    name: string
+    driveId: string
+    parentId?: string | null
+    userId: string
+    color?: string | null
+    isPinned?: boolean
+    orderIndex?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    files?: MediaUncheckedCreateNestedManyWithoutFolderInput
+  }
+
+  export type FolderCreateOrConnectWithoutSubFoldersInput = {
+    where: FolderWhereUniqueInput
+    create: XOR<FolderCreateWithoutSubFoldersInput, FolderUncheckedCreateWithoutSubFoldersInput>
+  }
+
+  export type FolderCreateWithoutParentInput = {
+    id?: string
+    name: string
+    userId: string
+    color?: string | null
+    isPinned?: boolean
+    orderIndex?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    drive: DriveCreateNestedOneWithoutFoldersInput
+    subFolders?: FolderCreateNestedManyWithoutParentInput
+    files?: MediaCreateNestedManyWithoutFolderInput
+  }
+
+  export type FolderUncheckedCreateWithoutParentInput = {
+    id?: string
+    name: string
+    driveId: string
+    userId: string
+    color?: string | null
+    isPinned?: boolean
+    orderIndex?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    subFolders?: FolderUncheckedCreateNestedManyWithoutParentInput
+    files?: MediaUncheckedCreateNestedManyWithoutFolderInput
+  }
+
+  export type FolderCreateOrConnectWithoutParentInput = {
+    where: FolderWhereUniqueInput
+    create: XOR<FolderCreateWithoutParentInput, FolderUncheckedCreateWithoutParentInput>
+  }
+
+  export type FolderCreateManyParentInputEnvelope = {
+    data: FolderCreateManyParentInput | FolderCreateManyParentInput[]
+  }
+
+  export type MediaCreateWithoutFolderInput = {
+    id?: string
+    filename: string
+    originalName: string
+    mimeType: string
+    size: number
+    ip?: string | null
+    transcodeStatus?: string
+    transcodeError?: string | null
+    createdAt?: Date | string
+    isPinned?: boolean
+    orderIndex?: number
+    user?: UserCreateNestedOneWithoutMediaInput
+    drive?: DriveCreateNestedOneWithoutFilesInput
+  }
+
+  export type MediaUncheckedCreateWithoutFolderInput = {
+    id?: string
+    filename: string
+    originalName: string
+    mimeType: string
+    size: number
+    ip?: string | null
+    userId?: string | null
+    transcodeStatus?: string
+    transcodeError?: string | null
+    createdAt?: Date | string
+    driveId?: string | null
+    isPinned?: boolean
+    orderIndex?: number
+  }
+
+  export type MediaCreateOrConnectWithoutFolderInput = {
+    where: MediaWhereUniqueInput
+    create: XOR<MediaCreateWithoutFolderInput, MediaUncheckedCreateWithoutFolderInput>
+  }
+
+  export type MediaCreateManyFolderInputEnvelope = {
+    data: MediaCreateManyFolderInput | MediaCreateManyFolderInput[]
+  }
+
+  export type DriveUpsertWithoutFoldersInput = {
+    update: XOR<DriveUpdateWithoutFoldersInput, DriveUncheckedUpdateWithoutFoldersInput>
+    create: XOR<DriveCreateWithoutFoldersInput, DriveUncheckedCreateWithoutFoldersInput>
+    where?: DriveWhereInput
+  }
+
+  export type DriveUpdateToOneWithWhereWithoutFoldersInput = {
+    where?: DriveWhereInput
+    data: XOR<DriveUpdateWithoutFoldersInput, DriveUncheckedUpdateWithoutFoldersInput>
+  }
+
+  export type DriveUpdateWithoutFoldersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    publicRole?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    owner?: UserUpdateOneRequiredWithoutOwnedDrivesNestedInput
+    files?: MediaUpdateManyWithoutDriveNestedInput
+    access?: DriveAccessUpdateManyWithoutDriveNestedInput
+  }
+
+  export type DriveUncheckedUpdateWithoutFoldersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerId?: StringFieldUpdateOperationsInput | string
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    publicRole?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    files?: MediaUncheckedUpdateManyWithoutDriveNestedInput
+    access?: DriveAccessUncheckedUpdateManyWithoutDriveNestedInput
+  }
+
+  export type FolderUpsertWithoutSubFoldersInput = {
+    update: XOR<FolderUpdateWithoutSubFoldersInput, FolderUncheckedUpdateWithoutSubFoldersInput>
+    create: XOR<FolderCreateWithoutSubFoldersInput, FolderUncheckedCreateWithoutSubFoldersInput>
+    where?: FolderWhereInput
+  }
+
+  export type FolderUpdateToOneWithWhereWithoutSubFoldersInput = {
+    where?: FolderWhereInput
+    data: XOR<FolderUpdateWithoutSubFoldersInput, FolderUncheckedUpdateWithoutSubFoldersInput>
+  }
+
+  export type FolderUpdateWithoutSubFoldersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    isPinned?: BoolFieldUpdateOperationsInput | boolean
+    orderIndex?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    drive?: DriveUpdateOneRequiredWithoutFoldersNestedInput
+    parent?: FolderUpdateOneWithoutSubFoldersNestedInput
+    files?: MediaUpdateManyWithoutFolderNestedInput
+  }
+
+  export type FolderUncheckedUpdateWithoutSubFoldersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    driveId?: StringFieldUpdateOperationsInput | string
+    parentId?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    isPinned?: BoolFieldUpdateOperationsInput | boolean
+    orderIndex?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    files?: MediaUncheckedUpdateManyWithoutFolderNestedInput
+  }
+
+  export type FolderUpsertWithWhereUniqueWithoutParentInput = {
+    where: FolderWhereUniqueInput
+    update: XOR<FolderUpdateWithoutParentInput, FolderUncheckedUpdateWithoutParentInput>
+    create: XOR<FolderCreateWithoutParentInput, FolderUncheckedCreateWithoutParentInput>
+  }
+
+  export type FolderUpdateWithWhereUniqueWithoutParentInput = {
+    where: FolderWhereUniqueInput
+    data: XOR<FolderUpdateWithoutParentInput, FolderUncheckedUpdateWithoutParentInput>
+  }
+
+  export type FolderUpdateManyWithWhereWithoutParentInput = {
+    where: FolderScalarWhereInput
+    data: XOR<FolderUpdateManyMutationInput, FolderUncheckedUpdateManyWithoutParentInput>
+  }
+
+  export type FolderScalarWhereInput = {
+    AND?: FolderScalarWhereInput | FolderScalarWhereInput[]
+    OR?: FolderScalarWhereInput[]
+    NOT?: FolderScalarWhereInput | FolderScalarWhereInput[]
+    id?: StringFilter<"Folder"> | string
+    name?: StringFilter<"Folder"> | string
+    driveId?: StringFilter<"Folder"> | string
+    parentId?: StringNullableFilter<"Folder"> | string | null
+    userId?: StringFilter<"Folder"> | string
+    color?: StringNullableFilter<"Folder"> | string | null
+    isPinned?: BoolFilter<"Folder"> | boolean
+    orderIndex?: IntFilter<"Folder"> | number
+    createdAt?: DateTimeFilter<"Folder"> | Date | string
+    updatedAt?: DateTimeFilter<"Folder"> | Date | string
+  }
+
+  export type MediaUpsertWithWhereUniqueWithoutFolderInput = {
+    where: MediaWhereUniqueInput
+    update: XOR<MediaUpdateWithoutFolderInput, MediaUncheckedUpdateWithoutFolderInput>
+    create: XOR<MediaCreateWithoutFolderInput, MediaUncheckedCreateWithoutFolderInput>
+  }
+
+  export type MediaUpdateWithWhereUniqueWithoutFolderInput = {
+    where: MediaWhereUniqueInput
+    data: XOR<MediaUpdateWithoutFolderInput, MediaUncheckedUpdateWithoutFolderInput>
+  }
+
+  export type MediaUpdateManyWithWhereWithoutFolderInput = {
+    where: MediaScalarWhereInput
+    data: XOR<MediaUpdateManyMutationInput, MediaUncheckedUpdateManyWithoutFolderInput>
   }
 
   export type UserCreateWithoutOwnedDrivesInput = {
@@ -9521,11 +11759,13 @@ export namespace Prisma {
     mimeType: string
     size: number
     ip?: string | null
-    isPrivate?: boolean
     transcodeStatus?: string
     transcodeError?: string | null
     createdAt?: Date | string
+    isPinned?: boolean
+    orderIndex?: number
     user?: UserCreateNestedOneWithoutMediaInput
+    folder?: FolderCreateNestedOneWithoutFilesInput
   }
 
   export type MediaUncheckedCreateWithoutDriveInput = {
@@ -9536,10 +11776,12 @@ export namespace Prisma {
     size: number
     ip?: string | null
     userId?: string | null
-    isPrivate?: boolean
     transcodeStatus?: string
     transcodeError?: string | null
     createdAt?: Date | string
+    folderId?: string | null
+    isPinned?: boolean
+    orderIndex?: number
   }
 
   export type MediaCreateOrConnectWithoutDriveInput = {
@@ -9549,6 +11791,43 @@ export namespace Prisma {
 
   export type MediaCreateManyDriveInputEnvelope = {
     data: MediaCreateManyDriveInput | MediaCreateManyDriveInput[]
+  }
+
+  export type FolderCreateWithoutDriveInput = {
+    id?: string
+    name: string
+    userId: string
+    color?: string | null
+    isPinned?: boolean
+    orderIndex?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parent?: FolderCreateNestedOneWithoutSubFoldersInput
+    subFolders?: FolderCreateNestedManyWithoutParentInput
+    files?: MediaCreateNestedManyWithoutFolderInput
+  }
+
+  export type FolderUncheckedCreateWithoutDriveInput = {
+    id?: string
+    name: string
+    parentId?: string | null
+    userId: string
+    color?: string | null
+    isPinned?: boolean
+    orderIndex?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    subFolders?: FolderUncheckedCreateNestedManyWithoutParentInput
+    files?: MediaUncheckedCreateNestedManyWithoutFolderInput
+  }
+
+  export type FolderCreateOrConnectWithoutDriveInput = {
+    where: FolderWhereUniqueInput
+    create: XOR<FolderCreateWithoutDriveInput, FolderUncheckedCreateWithoutDriveInput>
+  }
+
+  export type FolderCreateManyDriveInputEnvelope = {
+    data: FolderCreateManyDriveInput | FolderCreateManyDriveInput[]
   }
 
   export type DriveAccessCreateWithoutDriveInput = {
@@ -9627,6 +11906,22 @@ export namespace Prisma {
     data: XOR<MediaUpdateManyMutationInput, MediaUncheckedUpdateManyWithoutDriveInput>
   }
 
+  export type FolderUpsertWithWhereUniqueWithoutDriveInput = {
+    where: FolderWhereUniqueInput
+    update: XOR<FolderUpdateWithoutDriveInput, FolderUncheckedUpdateWithoutDriveInput>
+    create: XOR<FolderCreateWithoutDriveInput, FolderUncheckedCreateWithoutDriveInput>
+  }
+
+  export type FolderUpdateWithWhereUniqueWithoutDriveInput = {
+    where: FolderWhereUniqueInput
+    data: XOR<FolderUpdateWithoutDriveInput, FolderUncheckedUpdateWithoutDriveInput>
+  }
+
+  export type FolderUpdateManyWithWhereWithoutDriveInput = {
+    where: FolderScalarWhereInput
+    data: XOR<FolderUpdateManyMutationInput, FolderUncheckedUpdateManyWithoutDriveInput>
+  }
+
   export type DriveAccessUpsertWithWhereUniqueWithoutDriveInput = {
     where: DriveAccessWhereUniqueInput
     update: XOR<DriveAccessUpdateWithoutDriveInput, DriveAccessUncheckedUpdateWithoutDriveInput>
@@ -9653,6 +11948,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     owner: UserCreateNestedOneWithoutOwnedDrivesInput
     files?: MediaCreateNestedManyWithoutDriveInput
+    folders?: FolderCreateNestedManyWithoutDriveInput
   }
 
   export type DriveUncheckedCreateWithoutAccessInput = {
@@ -9665,6 +11961,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     files?: MediaUncheckedCreateNestedManyWithoutDriveInput
+    folders?: FolderUncheckedCreateNestedManyWithoutDriveInput
   }
 
   export type DriveCreateOrConnectWithoutAccessInput = {
@@ -9724,6 +12021,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     owner?: UserUpdateOneRequiredWithoutOwnedDrivesNestedInput
     files?: MediaUpdateManyWithoutDriveNestedInput
+    folders?: FolderUpdateManyWithoutDriveNestedInput
   }
 
   export type DriveUncheckedUpdateWithoutAccessInput = {
@@ -9736,6 +12034,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     files?: MediaUncheckedUpdateManyWithoutDriveNestedInput
+    folders?: FolderUncheckedUpdateManyWithoutDriveNestedInput
   }
 
   export type UserUpsertWithoutDriveAccessInput = {
@@ -9782,11 +12081,13 @@ export namespace Prisma {
     mimeType: string
     size: number
     ip?: string | null
-    isPrivate?: boolean
     transcodeStatus?: string
     transcodeError?: string | null
     createdAt?: Date | string
     driveId?: string | null
+    folderId?: string | null
+    isPinned?: boolean
+    orderIndex?: number
   }
 
   export type DriveCreateManyOwnerInput = {
@@ -9813,11 +12114,13 @@ export namespace Prisma {
     mimeType?: StringFieldUpdateOperationsInput | string
     size?: IntFieldUpdateOperationsInput | number
     ip?: NullableStringFieldUpdateOperationsInput | string | null
-    isPrivate?: BoolFieldUpdateOperationsInput | boolean
     transcodeStatus?: StringFieldUpdateOperationsInput | string
     transcodeError?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isPinned?: BoolFieldUpdateOperationsInput | boolean
+    orderIndex?: IntFieldUpdateOperationsInput | number
     drive?: DriveUpdateOneWithoutFilesNestedInput
+    folder?: FolderUpdateOneWithoutFilesNestedInput
   }
 
   export type MediaUncheckedUpdateWithoutUserInput = {
@@ -9827,11 +12130,13 @@ export namespace Prisma {
     mimeType?: StringFieldUpdateOperationsInput | string
     size?: IntFieldUpdateOperationsInput | number
     ip?: NullableStringFieldUpdateOperationsInput | string | null
-    isPrivate?: BoolFieldUpdateOperationsInput | boolean
     transcodeStatus?: StringFieldUpdateOperationsInput | string
     transcodeError?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     driveId?: NullableStringFieldUpdateOperationsInput | string | null
+    folderId?: NullableStringFieldUpdateOperationsInput | string | null
+    isPinned?: BoolFieldUpdateOperationsInput | boolean
+    orderIndex?: IntFieldUpdateOperationsInput | number
   }
 
   export type MediaUncheckedUpdateManyWithoutUserInput = {
@@ -9841,11 +12146,13 @@ export namespace Prisma {
     mimeType?: StringFieldUpdateOperationsInput | string
     size?: IntFieldUpdateOperationsInput | number
     ip?: NullableStringFieldUpdateOperationsInput | string | null
-    isPrivate?: BoolFieldUpdateOperationsInput | boolean
     transcodeStatus?: StringFieldUpdateOperationsInput | string
     transcodeError?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     driveId?: NullableStringFieldUpdateOperationsInput | string | null
+    folderId?: NullableStringFieldUpdateOperationsInput | string | null
+    isPinned?: BoolFieldUpdateOperationsInput | boolean
+    orderIndex?: IntFieldUpdateOperationsInput | number
   }
 
   export type DriveUpdateWithoutOwnerInput = {
@@ -9857,6 +12164,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     files?: MediaUpdateManyWithoutDriveNestedInput
+    folders?: FolderUpdateManyWithoutDriveNestedInput
     access?: DriveAccessUpdateManyWithoutDriveNestedInput
   }
 
@@ -9869,6 +12177,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     files?: MediaUncheckedUpdateManyWithoutDriveNestedInput
+    folders?: FolderUncheckedUpdateManyWithoutDriveNestedInput
     access?: DriveAccessUncheckedUpdateManyWithoutDriveNestedInput
   }
 
@@ -9903,6 +12212,122 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type FolderCreateManyParentInput = {
+    id?: string
+    name: string
+    driveId: string
+    userId: string
+    color?: string | null
+    isPinned?: boolean
+    orderIndex?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MediaCreateManyFolderInput = {
+    id?: string
+    filename: string
+    originalName: string
+    mimeType: string
+    size: number
+    ip?: string | null
+    userId?: string | null
+    transcodeStatus?: string
+    transcodeError?: string | null
+    createdAt?: Date | string
+    driveId?: string | null
+    isPinned?: boolean
+    orderIndex?: number
+  }
+
+  export type FolderUpdateWithoutParentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    isPinned?: BoolFieldUpdateOperationsInput | boolean
+    orderIndex?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    drive?: DriveUpdateOneRequiredWithoutFoldersNestedInput
+    subFolders?: FolderUpdateManyWithoutParentNestedInput
+    files?: MediaUpdateManyWithoutFolderNestedInput
+  }
+
+  export type FolderUncheckedUpdateWithoutParentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    driveId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    isPinned?: BoolFieldUpdateOperationsInput | boolean
+    orderIndex?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    subFolders?: FolderUncheckedUpdateManyWithoutParentNestedInput
+    files?: MediaUncheckedUpdateManyWithoutFolderNestedInput
+  }
+
+  export type FolderUncheckedUpdateManyWithoutParentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    driveId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    isPinned?: BoolFieldUpdateOperationsInput | boolean
+    orderIndex?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MediaUpdateWithoutFolderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    filename?: StringFieldUpdateOperationsInput | string
+    originalName?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
+    size?: IntFieldUpdateOperationsInput | number
+    ip?: NullableStringFieldUpdateOperationsInput | string | null
+    transcodeStatus?: StringFieldUpdateOperationsInput | string
+    transcodeError?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isPinned?: BoolFieldUpdateOperationsInput | boolean
+    orderIndex?: IntFieldUpdateOperationsInput | number
+    user?: UserUpdateOneWithoutMediaNestedInput
+    drive?: DriveUpdateOneWithoutFilesNestedInput
+  }
+
+  export type MediaUncheckedUpdateWithoutFolderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    filename?: StringFieldUpdateOperationsInput | string
+    originalName?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
+    size?: IntFieldUpdateOperationsInput | number
+    ip?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    transcodeStatus?: StringFieldUpdateOperationsInput | string
+    transcodeError?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    driveId?: NullableStringFieldUpdateOperationsInput | string | null
+    isPinned?: BoolFieldUpdateOperationsInput | boolean
+    orderIndex?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type MediaUncheckedUpdateManyWithoutFolderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    filename?: StringFieldUpdateOperationsInput | string
+    originalName?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
+    size?: IntFieldUpdateOperationsInput | number
+    ip?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    transcodeStatus?: StringFieldUpdateOperationsInput | string
+    transcodeError?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    driveId?: NullableStringFieldUpdateOperationsInput | string | null
+    isPinned?: BoolFieldUpdateOperationsInput | boolean
+    orderIndex?: IntFieldUpdateOperationsInput | number
+  }
+
   export type MediaCreateManyDriveInput = {
     id?: string
     filename: string
@@ -9911,10 +12336,24 @@ export namespace Prisma {
     size: number
     ip?: string | null
     userId?: string | null
-    isPrivate?: boolean
     transcodeStatus?: string
     transcodeError?: string | null
     createdAt?: Date | string
+    folderId?: string | null
+    isPinned?: boolean
+    orderIndex?: number
+  }
+
+  export type FolderCreateManyDriveInput = {
+    id?: string
+    name: string
+    parentId?: string | null
+    userId: string
+    color?: string | null
+    isPinned?: boolean
+    orderIndex?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type DriveAccessCreateManyDriveInput = {
@@ -9931,11 +12370,13 @@ export namespace Prisma {
     mimeType?: StringFieldUpdateOperationsInput | string
     size?: IntFieldUpdateOperationsInput | number
     ip?: NullableStringFieldUpdateOperationsInput | string | null
-    isPrivate?: BoolFieldUpdateOperationsInput | boolean
     transcodeStatus?: StringFieldUpdateOperationsInput | string
     transcodeError?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isPinned?: BoolFieldUpdateOperationsInput | boolean
+    orderIndex?: IntFieldUpdateOperationsInput | number
     user?: UserUpdateOneWithoutMediaNestedInput
+    folder?: FolderUpdateOneWithoutFilesNestedInput
   }
 
   export type MediaUncheckedUpdateWithoutDriveInput = {
@@ -9946,10 +12387,12 @@ export namespace Prisma {
     size?: IntFieldUpdateOperationsInput | number
     ip?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: NullableStringFieldUpdateOperationsInput | string | null
-    isPrivate?: BoolFieldUpdateOperationsInput | boolean
     transcodeStatus?: StringFieldUpdateOperationsInput | string
     transcodeError?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    folderId?: NullableStringFieldUpdateOperationsInput | string | null
+    isPinned?: BoolFieldUpdateOperationsInput | boolean
+    orderIndex?: IntFieldUpdateOperationsInput | number
   }
 
   export type MediaUncheckedUpdateManyWithoutDriveInput = {
@@ -9960,10 +12403,52 @@ export namespace Prisma {
     size?: IntFieldUpdateOperationsInput | number
     ip?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: NullableStringFieldUpdateOperationsInput | string | null
-    isPrivate?: BoolFieldUpdateOperationsInput | boolean
     transcodeStatus?: StringFieldUpdateOperationsInput | string
     transcodeError?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    folderId?: NullableStringFieldUpdateOperationsInput | string | null
+    isPinned?: BoolFieldUpdateOperationsInput | boolean
+    orderIndex?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type FolderUpdateWithoutDriveInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    isPinned?: BoolFieldUpdateOperationsInput | boolean
+    orderIndex?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parent?: FolderUpdateOneWithoutSubFoldersNestedInput
+    subFolders?: FolderUpdateManyWithoutParentNestedInput
+    files?: MediaUpdateManyWithoutFolderNestedInput
+  }
+
+  export type FolderUncheckedUpdateWithoutDriveInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    parentId?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    isPinned?: BoolFieldUpdateOperationsInput | boolean
+    orderIndex?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    subFolders?: FolderUncheckedUpdateManyWithoutParentNestedInput
+    files?: MediaUncheckedUpdateManyWithoutFolderNestedInput
+  }
+
+  export type FolderUncheckedUpdateManyWithoutDriveInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    parentId?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    isPinned?: BoolFieldUpdateOperationsInput | boolean
+    orderIndex?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type DriveAccessUpdateWithoutDriveInput = {

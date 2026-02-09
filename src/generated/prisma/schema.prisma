@@ -31,12 +31,32 @@ model Media {
   ip              String?
   userId          String?
   user            User?    @relation(fields: [userId], references: [id])
-  isPrivate       Boolean  @default(false)
   transcodeStatus String   @default("not_required") // pending, processing, completed, failed, not_required
   transcodeError  String?
   createdAt       DateTime @default(now())
   driveId         String?
   drive           Drive?   @relation(fields: [driveId], references: [id], onDelete: Cascade)
+  folderId        String?
+  folder          Folder?  @relation(fields: [folderId], references: [id], onDelete: Cascade)
+  isPinned        Boolean  @default(false)
+  orderIndex      Int      @default(0)
+}
+
+model Folder {
+  id         String   @id @default(uuid())
+  name       String
+  driveId    String
+  drive      Drive    @relation(fields: [driveId], references: [id], onDelete: Cascade)
+  parentId   String?
+  parent     Folder?  @relation("SubFolders", fields: [parentId], references: [id], onDelete: Cascade)
+  subFolders Folder[] @relation("SubFolders")
+  files      Media[]
+  userId     String
+  color      String?  @default("hsl(210, 100%, 50%)") // Default blue
+  isPinned   Boolean  @default(false)
+  orderIndex Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
 model Drive {
@@ -53,8 +73,9 @@ model Drive {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  files  Media[]
-  access DriveAccess[]
+  files   Media[]
+  folders Folder[]
+  access  DriveAccess[]
 }
 
 model DriveAccess {
@@ -78,8 +99,6 @@ model Settings {
   rateLimitWindow    Int     @default(10) // Cooldown in seconds
   defaultCompression String  @default("balanced") // none, high, balanced, small
   showNoCompression  Boolean @default(true)
-  showPrivateOption  Boolean @default(true)
-  forcePrivate       Boolean @default(false) // Force all uploads to be private
   smtpHost           String?
   smtpPort           Int?
   smtpUser           String?

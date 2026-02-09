@@ -84,11 +84,10 @@ export async function DELETE(
             return NextResponse.json({ error: 'Not found' }, { status: 404 });
         }
 
-        // Check ownership by userId or admin status
+        // Check ownership by userId
         const isOwner = session && media.userId === session.id;
-        const isAdmin = session?.isAdmin;
 
-        let canDelete = isOwner || isAdmin;
+        let canDelete = isOwner;
 
         // If not owner/admin, check if it's in a drive where the user has editor access
         if (!canDelete && session && media.driveId) {

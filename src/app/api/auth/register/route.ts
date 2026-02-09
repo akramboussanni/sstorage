@@ -43,7 +43,6 @@ export async function POST(request: NextRequest) {
             data: {
                 username,
                 password: hashedPassword,
-                isAdmin: false,
                 mustChangePassword: false,
             },
         });
@@ -52,7 +51,6 @@ export async function POST(request: NextRequest) {
         const token = await createSession({
             id: user.id,
             username: user.username,
-            isAdmin: user.isAdmin,
         });
 
         await setSessionCookie(token);
@@ -62,7 +60,6 @@ export async function POST(request: NextRequest) {
             user: {
                 id: user.id,
                 username: user.username,
-                isAdmin: user.isAdmin,
             },
         });
     } catch (error) {

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { Lock, AlertTriangle } from 'lucide-react';
 
 export default function ChangePasswordPage() {
     const router = useRouter();
@@ -93,7 +94,9 @@ export default function ChangePasswordPage() {
             color: '#fff',
             fontFamily: 'system-ui, sans-serif',
         }}>
-            <h1 style={{ marginBottom: '10px', fontSize: '1.5rem' }}>🔐 Change Password</h1>
+            <h1 style={{ marginBottom: '10px', fontSize: '1.5rem', display: 'flex', alignItems: 'center', gap: '10px', justifyContent: 'center' }}>
+                <Lock size={28} /> Change Password
+            </h1>
 
             {user.mustChangePassword && (
                 <p style={{
@@ -101,8 +104,12 @@ export default function ChangePasswordPage() {
                     marginBottom: '20px',
                     textAlign: 'center',
                     maxWidth: '300px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    justifyContent: 'center',
                 }}>
-                    ⚠️ You must change your password before continuing.
+                    <AlertTriangle size={16} /> You must change your password before continuing.
                 </p>
             )}
 

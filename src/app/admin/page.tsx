@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Dialog, useDialog } from '@/components/Dialog';
-import { MediaCard, MediaItem, spinnerStyles } from '@/components/MediaCard';
 import { Toast, useToast } from '@/components/Toast';
 
 interface User {
@@ -21,8 +20,6 @@ interface Settings {
     allowRegistration: boolean;
     defaultCompression: string;
     showNoCompression: boolean;
-    showPrivateOption: boolean;
-    forcePrivate: boolean;
     maxFileSize: string; // Serialized BigInt
     rateLimitWindow: number;
     smtpHost: string | null;
@@ -176,11 +173,10 @@ export default function AdminPage() {
     const router = useRouter();
     const [user, setUser] = useState<{ id: string; username: string; isAdmin: boolean } | null>(null);
     const [settings, setSettings] = useState<Settings | null>(null);
-    const [mediaList, setMediaList] = useState<MediaItem[]>([]);
     const [users, setUsers] = useState<User[]>([]);
     const [saving, setSaving] = useState(false);
     const [loading, setLoading] = useState(true);
-    const [activeTab, setActiveTab] = useState<'media' | 'settings' | 'users'>('media');
+    const [activeTab, setActiveTab] = useState<'settings' | 'users'>('settings');
     const { dialog, showDialog, closeDialog } = useDialog();
     const { toast, showToast } = useToast();
 
@@ -219,9 +215,8 @@ export default function AdminPage() {
         if (user) {
             Promise.all([
                 fetch('/api/settings').then(res => res.json()),
-                fetch('/api/admin/media').then(res => res.json()),
                 fetch('/api/admin/users').then(res => res.json()),
-            ]).then(([settingsData, mediaData, usersData]) => {
+            ]).then(([settingsData, usersData]) => {
                 setSettings(settingsData);
                 setSmtpHost(settingsData.smtpHost || '');
                 setSmtpPort(settingsData.smtpPort?.toString() || '');
@@ -232,14 +227,13 @@ export default function AdminPage() {
                 }
                 setGlobalRateLimit(settingsData.rateLimitWindow?.toString() || '10');
 
-                if (Array.isArray(mediaData)) setMediaList(mediaData);
                 if (Array.isArray(usersData)) setUsers(usersData);
                 setLoading(false);
             });
         }
     }, [user]);
 
-    const toggleSetting = async (key: keyof Pick<Settings, 'allowPublicUpload' | 'allowRegistration' | 'showNoCompression' | 'showPrivateOption' | 'forcePrivate'>) => {
+    const toggleSetting = async (key: keyof Pick<Settings, 'allowPublicUpload' | 'allowRegistration' | 'showNoCompression'>) => {
         if (!settings) return;
         setSaving(true);
         try {
@@ -351,26 +345,6 @@ export default function AdminPage() {
         });
     };
 
-    // ... (existing deleteMedia, copyToClipboard, etc.)
-    const deleteMedia = (mediaId: string) => {
-        showDialog('Delete File', 'Are you sure you want to delete this file?', 'confirm', async () => {
-            try {
-                const res = await fetch(`/api/media/${mediaId}`, { method: 'DELETE' });
-                if (res.ok) {
-                    setMediaList(prev => prev.filter(m => m.id !== mediaId));
-                } else {
-                    showDialog('Error', 'Failed to delete file');
-                }
-            } catch (err) {
-                showDialog('Error', 'Error deleting file');
-            }
-        });
-    };
-
-    const copyToClipboard = async (url: string) => {
-        await navigator.clipboard.writeText(url);
-        showToast('Link copied!');
-    };
 
     const handleLogout = async () => {
         await fetch('/api/auth/logout', { method: 'POST' });
@@ -429,7 +403,7 @@ export default function AdminPage() {
 
             {/* Tab Navigation */}
             <div style={{ display: 'flex', gap: '8px', marginBottom: '24px' }}>
-                {(['media', 'settings', 'users'] as const).map(tab => (
+                {(['settings', 'users'] as const).map(tab => (
                     <button key={tab} onClick={() => setActiveTab(tab)} style={{
                         padding: '8px 16px', backgroundColor: activeTab === tab ? '#5865f2' : '#1a1a1a',
                         color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', textTransform: 'capitalize'
@@ -497,8 +471,6 @@ export default function AdminPage() {
                                 </select>
                             </div>
                             <SettingToggle label="Show 'No Compression' option" description="Allow users to opt-out of compression" value={settings.showNoCompression} onChange={() => toggleSetting('showNoCompression')} disabled={saving} />
-                            <SettingToggle label="Show 'Private Upload' option" description="Allow users to hide uploads from admin" value={settings.showPrivateOption} onChange={() => toggleSetting('showPrivateOption')} disabled={saving} />
-                            <SettingToggle label="Force Private Uploads" description="ALL uploads will be private (hidden from admin) by default" value={settings.forcePrivate} onChange={() => toggleSetting('forcePrivate')} disabled={saving} />
                         </div>
 
                         {/* SMTP Configuration */}
@@ -572,17 +544,6 @@ export default function AdminPage() {
                     </div>
                 )}
 
-                {/* Media Tab (reused from before) */}
-                {activeTab === 'media' && (
-                    <div style={{ backgroundColor: '#1a1a1a', borderRadius: '8px', padding: '16px' }}>
-                        <h2 style={{ marginBottom: '16px', fontSize: '1.2rem' }}>Uploaded Media ({mediaList.length})</h2>
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '16px' }}>
-                            {mediaList.map((media) => (
-                                <MediaCard key={media.id} media={media} onDelete={deleteMedia} onCopyLink={copyToClipboard} showPrivateBadge={true} showIp={true} />
-                            ))}
-                        </div>
-                    </div>
-                )}
 
                 <a href="/" style={{ textAlign: 'center', color: '#5865f2', textDecoration: 'none' }}>← Back to Upload</a>
 
@@ -591,7 +552,6 @@ export default function AdminPage() {
                 </button>
             </div>
 
-            <style>{spinnerStyles}</style>
         </div>
     );
 }
