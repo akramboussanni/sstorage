@@ -21,36 +21,37 @@ import {
   Link,
   Pin,
   Palette,
+  LucideProps,
 } from "lucide-react";
 
 const iconStyle = { width: 16, height: 16, flexShrink: 0 };
 
 export const MenuIcons = {
-  Open: () => <ExternalLink style={iconStyle} />,
-  Copy: () => <Copy style={iconStyle} />,
-  CopyLink: () => <Link style={iconStyle} />,
-  Delete: () => <Trash2 style={iconStyle} />,
-  Rename: () => <PenTool style={iconStyle} />,
-  Folder: () => <Folder style={{ ...iconStyle, color: "#fbbf24" }} />,
-  Move: () => <Move style={iconStyle} />,
-  Cut: () => <Scissors style={iconStyle} />,
-  Paste: () => <Clipboard style={iconStyle} />,
-  Pin: () => <Pin style={iconStyle} />,
-  Palette: () => <Palette style={iconStyle} />,
+  Open: (props: LucideProps) => <ExternalLink {...props} style={{ ...iconStyle, ...props.style }} />,
+  Copy: (props: LucideProps) => <Copy {...props} style={{ ...iconStyle, ...props.style }} />,
+  CopyLink: (props: LucideProps) => <Link {...props} style={{ ...iconStyle, ...props.style }} />,
+  Delete: (props: LucideProps) => <Trash2 {...props} style={{ ...iconStyle, ...props.style }} />,
+  Rename: (props: LucideProps) => <PenTool {...props} style={{ ...iconStyle, ...props.style }} />,
+  Folder: (props: LucideProps) => <Folder {...props} style={{ ...iconStyle, color: "#fbbf24", ...props.style }} />,
+  Move: (props: LucideProps) => <Move {...props} style={{ ...iconStyle, ...props.style }} />,
+  Cut: (props: LucideProps) => <Scissors {...props} style={{ ...iconStyle, ...props.style }} />,
+  Paste: (props: LucideProps) => <Clipboard {...props} style={{ ...iconStyle, ...props.style }} />,
+  Pin: (props: LucideProps) => <Pin {...props} style={{ ...iconStyle, ...props.style }} />,
+  Palette: (props: LucideProps) => <Palette {...props} style={{ ...iconStyle, ...props.style }} />,
 };
 
 export const FileTypeIcons = {
-  File: () => <File style={{ width: 24, height: 24 }} />,
-  Image: () => <Image style={{ width: 48, height: 48 }} />,
-  Video: () => <Video style={{ width: 48, height: 48 }} />,
-  Audio: () => <Music style={{ width: 48, height: 48 }} />,
-  Pdf: () => <FileText style={{ width: 48, height: 48 }} />,
-  Document: () => <FileText style={{ width: 48, height: 48 }} />,
-  Spreadsheet: () => <BarChart3 style={{ width: 48, height: 48 }} />,
+  File: (props: LucideProps) => <File {...props} style={{ width: 24, height: 24, ...props.style }} />,
+  Image: (props: LucideProps) => <Image {...props} style={{ width: 48, height: 48, ...props.style }} />,
+  Video: (props: LucideProps) => <Video {...props} style={{ width: 48, height: 48, ...props.style }} />,
+  Audio: (props: LucideProps) => <Music {...props} style={{ width: 48, height: 48, ...props.style }} />,
+  Pdf: (props: LucideProps) => <FileText {...props} style={{ width: 48, height: 48, ...props.style }} />,
+  Document: (props: LucideProps) => <FileText {...props} style={{ width: 48, height: 48, ...props.style }} />,
+  Spreadsheet: (props: LucideProps) => <BarChart3 {...props} style={{ width: 48, height: 48, ...props.style }} />,
 };
 
 export const OtherIcons = {
-  Globe: () => <Globe style={{ width: 16, height: 16 }} />,
-  AlertCircle: () => <AlertCircle style={{ width: 16, height: 16 }} />,
-  Close: () => <X style={{ width: 16, height: 16 }} />,
+  Globe: (props: LucideProps) => <Globe {...props} style={{ width: 16, height: 16, ...props.style }} />,
+  AlertCircle: (props: LucideProps) => <AlertCircle {...props} style={{ width: 16, height: 16, ...props.style }} />,
+  Close: (props: LucideProps) => <X {...props} style={{ width: 16, height: 16, ...props.style }} />,
 };

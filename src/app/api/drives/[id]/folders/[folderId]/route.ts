@@ -191,7 +191,8 @@ export async function PATCH(
                 data: {
                     name: folder.name + ' (copy)',
                     driveId: folder.driveId,
-                    parentId: targetFolderId || null
+                    parentId: targetFolderId || null,
+                    userId: session.id
                 }
             });
             return NextResponse.json(copiedFolder);

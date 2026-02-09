@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { Folder, Globe } from 'lucide-react';
 import { ContextMenu, useContextMenu, ContextMenuItem } from './ContextMenu';
 import { PreviewCard } from './PreviewCard';
 import { MenuIcons, OtherIcons } from './Icons';
@@ -155,7 +156,7 @@ export function DriveCard({ drive, onDelete, onRename }: DriveCardProps) {
                                 flexShrink: 0,
                             }}
                         >
-                            <MenuIcons.Folder style={{ width: 28, height: 28, color: 'white' }} />
+                            <Folder style={{ width: 28, height: 28, color: 'white' }} />
                         </div>
                         <div style={{ minWidth: 0, flex: 1 }}>
                             <h3 style={{ margin: 0, fontSize: '1.125rem', fontWeight: 600, wordBreak: 'break-word' }}>{drive.name}</h3>
@@ -191,7 +192,7 @@ export function DriveCard({ drive, onDelete, onRename }: DriveCardProps) {
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: 'auto' }}>
                         {drive.isPublic && (
                             <span style={{ background: 'rgba(99, 102, 241, 0.1)', padding: '4px 8px', borderRadius: 6, color: 'var(--accent)', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                <OtherIcons.Globe style={{ width: 14, height: 14 }} /> Public
+                                <Globe style={{ width: 14, height: 14 }} /> Public
                             </span>
                         )}
                     </div>

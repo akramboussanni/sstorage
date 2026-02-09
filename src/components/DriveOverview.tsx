@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { Folder } from 'lucide-react';
 import { MenuIcons, OtherIcons } from './Icons';
 
 interface DriveItem {
@@ -118,7 +119,7 @@ export function DriveOverview({ drive, isOpen, onClose, onDelete, onRename }: Dr
                     <div style={{
                         flexShrink: 0,
                     }}>
-                        <MenuIcons.Folder style={{ width: 48, height: 48 }} />
+                        <Folder style={{ width: 48, height: 48, color: '#fbbf24' }} />
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
                         <h2 style={{
@@ -147,8 +148,8 @@ export function DriveOverview({ drive, isOpen, onClose, onDelete, onRename }: Dr
                         style={{ padding: '8px 12px', flexShrink: 0 }}
                         aria-label="Close"
                     >
-                        ✕
-                    </bu<OtherIcons.Close />ton>
+                        <OtherIcons.Close />
+                    </button>
                 </div>
 
                 {/* Content */}
