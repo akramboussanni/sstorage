@@ -1,7 +1,7 @@
 "use client";
 
 import {
-  ExternalLink,
+  Download,
   Copy,
   Trash2,
   PenTool,
@@ -27,7 +27,7 @@ import {
 const iconStyle = { width: 16, height: 16, flexShrink: 0 };
 
 export const MenuIcons = {
-  Open: (props: LucideProps) => <ExternalLink {...props} style={{ ...iconStyle, ...props.style }} />,
+  Open: (props: LucideProps) => <Download {...props} style={{ ...iconStyle, ...props.style }} />,
   Copy: (props: LucideProps) => <Copy {...props} style={{ ...iconStyle, ...props.style }} />,
   CopyLink: (props: LucideProps) => <Link {...props} style={{ ...iconStyle, ...props.style }} />,
   Delete: (props: LucideProps) => <Trash2 {...props} style={{ ...iconStyle, ...props.style }} />,

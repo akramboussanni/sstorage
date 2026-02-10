@@ -259,7 +259,7 @@ export async function handleUpload(
         });
 
         if (shouldTranscode) {
-            startTranscodeInBackground(fileId, filepath, quality);
+            startTranscodeInBackground(fileId, filename, quality);
         }
 
         return NextResponse.json({
