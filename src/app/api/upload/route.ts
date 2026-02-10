@@ -7,6 +7,8 @@ import { CompressionQuality } from '@/lib/transcode';
 const RATE_LIMIT_WINDOW = 10 * 1000; // 10 seconds
 const rateLimitMap = new Map<string, number>();
 
+export const maxDuration = 60; // Allow 60 seconds for heavy uploads (Vercel default is 30s)
+
 export async function POST(request: NextRequest) {
     try {
         // Check if public upload is allowed or user is logged in

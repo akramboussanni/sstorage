@@ -25,6 +25,8 @@ export async function handleUpload(
     context: UploadContext = {},
     preParsedFormData?: FormData
 ) {
+    let filepath = ''; // Declare in outer scope for catch block access
+    
     try {
         // Ensure directories exist
         if (!existsSync(UPLOAD_DIR)) {
@@ -67,7 +69,7 @@ export async function handleUpload(
         const fileId = isChunked ? uploadId! : uuidv4();
         const ext = file.name.split('.').pop() || '';
         const filename = `${fileId}.${ext}`;
-        const filepath = join(UPLOAD_DIR, filename);
+        filepath = join(UPLOAD_DIR, filename);
 
         let finalSize = 0;
 
@@ -104,32 +106,44 @@ export async function handleUpload(
                      }
                  }
                  
-                 // Create write stream for final file
-                 const writeStream = createWriteStream(filepath);
-                 
-                 for (let i = 0; i < totalChunks; i++) {
-                     const cp = join(chunkDir, `chunk-${i}`);
-                     const readStream = createReadStream(cp);
-                     await new Promise<void>((resolve, reject) => {
-                         readStream.pipe(writeStream, { end: false });
-                         readStream.on('end', () => resolve());
-                         readStream.on('error', reject);
-                     });
+                 try {
+                     // Create write stream for final file
+                     const writeStream = createWriteStream(filepath);
+                     
+                     for (let i = 0; i < totalChunks; i++) {
+                         const cp = join(chunkDir, `chunk-${i}`);
+                         const readStream = createReadStream(cp);
+                         await new Promise<void>((resolve, reject) => {
+                             readStream.pipe(writeStream, { end: false });
+                             readStream.on('end', () => resolve());
+                             readStream.on('error', reject);
+                         });
+                     }
+                     writeStream.end();
+                     
+                     // Wait for close with timeout
+                     await Promise.race([
+                         new Promise<void>((resolve, reject) => {
+                             writeStream.on('finish', () => resolve());
+                             writeStream.on('error', reject);
+                         }),
+                         new Promise<void>((_, reject) =>
+                             setTimeout(() => reject(new Error('Write stream timeout')), 30000)
+                         )
+                     ]);
+
+                     // Get final size
+                     const stats = await stat(filepath);
+                     finalSize = stats.size;
+
+                     // Clean up chunks
+                     await rm(chunkDir, { recursive: true, force: true });
+                 } catch (error: any) {
+                     // Clean up on assembly error
+                     await rm(chunkDir, { recursive: true, force: true }).catch(() => {});
+                     await rm(filepath, { force: true }).catch(() => {});
+                     throw error;
                  }
-                 writeStream.end();
-                 
-                 // Wait for close
-                 await new Promise<void>((resolve, reject) => {
-                     writeStream.on('finish', () => resolve());
-                     writeStream.on('error', reject);
-                 });
-
-                 // Get final size
-                 const stats = await stat(filepath);
-                 finalSize = stats.size;
-
-                 // Clean up chunks
-                 await rm(chunkDir, { recursive: true, force: true });
              } else {
                  return NextResponse.json({ success: true, chunkId: chunkIndex, message: 'Chunk received' });
              }
@@ -144,6 +158,43 @@ export async function handleUpload(
         // Processing (DB + Transcode)
         const isVideo = file.type.startsWith('video/');
         const shouldTranscode = isVideo && quality !== 'none';
+
+        // Validate foreign key references before creating media
+        if (driveId) {
+            const driveExists = await prisma.drive.findUnique({
+                where: { id: driveId },
+                select: { id: true }
+            });
+            if (!driveExists) {
+                // Clean up uploaded file if drive doesn't exist
+                await rm(filepath, { force: true }).catch(() => {});
+                return NextResponse.json({ error: 'Drive not found' }, { status: 404 });
+            }
+        }
+
+        if (folderId) {
+            const folderExists = await prisma.folder.findUnique({
+                where: { id: folderId },
+                select: { id: true }
+            });
+            if (!folderExists) {
+                // Clean up uploaded file if folder doesn't exist
+                await rm(filepath, { force: true }).catch(() => {});
+                return NextResponse.json({ error: 'Folder not found' }, { status: 404 });
+            }
+        }
+
+        if (context.userId) {
+            const userExists = await prisma.user.findUnique({
+                where: { id: context.userId },
+                select: { id: true }
+            });
+            if (!userExists) {
+                // Clean up uploaded file if user doesn't exist
+                await rm(filepath, { force: true }).catch(() => {});
+                return NextResponse.json({ error: 'User not found' }, { status: 404 });
+            }
+        }
 
         const media = await prisma.media.create({
             data: {
@@ -173,11 +224,23 @@ export async function handleUpload(
             media
         });
 
+
     } catch (error: any) {
         console.error('Upload error:', error);
-         if (error.code === 'P2003') {
-             return NextResponse.json({ error: 'Invalid reference (User, Drive, or Folder not found)' }, { status: 400 });
+        
+        // Clean up partial uploads
+        if (existsSync(filepath)) {
+            await rm(filepath, { force: true }).catch(() => {});
         }
+        
+        if (error.code === 'P2003') {
+            return NextResponse.json({ error: 'Invalid reference (User, Drive, or Folder not found)' }, { status: 400 });
+        }
+        
+        if (error.message?.includes('timeout') || error.code === 'ECONNRESET') {
+            return NextResponse.json({ error: 'Upload operation timed out. Please try again with a smaller file or better connection.' }, { status: 408 });
+        }
+        
         return NextResponse.json({ error: 'Upload failed', details: error.message }, { status: 500 });
     }
 }

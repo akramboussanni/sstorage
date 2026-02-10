@@ -242,15 +242,17 @@ export default function DrivePage() {
     try {
       const res = await fetch(`/api/drives/${driveId}`);
       if (!res.ok) {
-        router.push("/");
+        showToast("Drive not found", "error");
+        setTimeout(() => router.push("/"), 1000);
         return;
       }
       const data = await res.json();
       setDrive(data);
     } catch (err) {
-      router.push("/");
+      showToast("Failed to load drive", "error");
+      setTimeout(() => router.push("/"), 1000);
     }
-  }, [driveId, router]);
+  }, [driveId, router, showToast]);
 
   const loadContents = useCallback(async () => {
     try {
@@ -643,6 +645,27 @@ export default function DrivePage() {
         } else {
           const data = await res.json();
           showToast(data.error || "Failed to remove access", "error");
+        }
+      },
+    );
+  };
+
+  const handleDeleteDrive = async () => {
+    showDialog(
+      "Delete Drive",
+      `Are you sure you want to delete "${drive?.name}"? This action cannot be undone. All files and folders will be permanently deleted.`,
+      "confirm",
+      async () => {
+        const res = await fetch(`/api/drives/${driveId}`, {
+          method: "DELETE",
+        });
+
+        if (res.ok) {
+          showToast("Drive deleted successfully!");
+          setTimeout(() => router.push("/"), 1500);
+        } else {
+          const data = await res.json();
+          showToast(data.error || "Failed to delete drive", "error");
         }
       },
     );
@@ -1644,6 +1667,60 @@ export default function DrivePage() {
                     </button>
                   </div>
                 )}
+              </div>
+            </section>
+
+            {/* Danger Zone */}
+            <section
+              style={{
+                background: "var(--surface)",
+                border: "1px solid #ef4444",
+                borderRadius: "var(--radius-lg)",
+                overflow: "hidden",
+                marginTop: 20,
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  padding: "16px 18px",
+                  backgroundColor: "rgba(239, 68, 68, 0.05)",
+                  borderBottom: "1px solid #ef4444",
+                }}
+              >
+                <div>
+                  <h3
+                    style={{
+                      margin: 0,
+                      fontSize: "0.9375rem",
+                      fontWeight: 600,
+                      color: "#ef4444",
+                    }}
+                  >
+                    Danger Zone
+                  </h3>
+                  <p
+                    style={{
+                      margin: "2px 0 0 0",
+                      fontSize: "0.8125rem",
+                      color: "var(--muted-foreground)",
+                    }}
+                  >
+                    Permanently delete this drive and all its contents
+                  </p>
+                </div>
+              </div>
+              <div style={{ padding: "16px 18px" }}>
+                <button
+                  type="button"
+                  onClick={handleDeleteDrive}
+                  className="app-btn app-btn-danger"
+                  style={{ width: "100%" }}
+                >
+                  Delete Drive
+                </button>
               </div>
             </section>
           </div>
