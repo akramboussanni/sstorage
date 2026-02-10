@@ -295,6 +295,8 @@ export function MediaOverview({ media, isOpen, onClose, onDelete, onCopyLink }: 
                         >
                             ✕
                         </button>
+                    </div>
+                </div>
 
                 {/* Content */}
                 <div style={{
