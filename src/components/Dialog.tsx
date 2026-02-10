@@ -6,13 +6,16 @@ export interface DialogState {
     open: boolean;
     title: string;
     message: string;
-    type: 'confirm' | 'alert' | 'prompt' | 'choice';
+    type: 'confirm' | 'alert' | 'prompt' | 'choice' | 'checkbox';
     onConfirm?: () => void;
     onPrompt?: (value: string) => void;
     onChoice?: (value: string) => void;
     promptPlaceholder?: string;
     choices?: Array<{ label: string; value: string }>;
     selectedChoice?: string;
+    checkboxLabel?: string;
+    checkboxChecked?: boolean;
+    onCheckboxChange?: (checked: boolean) => void;
 }
 
 interface DialogProps {
@@ -82,6 +85,19 @@ export function Dialog({ state, onClose }: DialogProps) {
                         style={{ marginBottom: 20 }}
                     />
                 )}
+                {state.type === 'checkbox' && (
+                    <label style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 20, cursor: 'pointer' }}>
+                        <input
+                            type="checkbox"
+                            checked={state.checkboxChecked || false}
+                            onChange={(e) => {
+                                state.onCheckboxChange?.(e.target.checked);
+                            }}
+                            style={{ cursor: 'pointer' }}
+                        />
+                        <span>{state.checkboxLabel}</span>
+                    </label>
+                )}
                 {state.type === 'choice' && state.choices && (
                     <div style={{ marginBottom: 20, display: 'flex', flexDirection: 'column', gap: 8 }}>
                         {state.choices.map((choice) => (
@@ -104,7 +120,7 @@ export function Dialog({ state, onClose }: DialogProps) {
                     </div>
                 )}
                 <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
-                    {(state.type === 'confirm' || state.type === 'prompt') && (
+                    {(state.type === 'confirm' || state.type === 'prompt' || state.type === 'checkbox') && (
                         <button type="button" onClick={() => { onClose(); setInputValue(''); }} className="app-btn app-btn-secondary">
                             Cancel
                         </button>
@@ -128,15 +144,18 @@ export function useDialog() {
     const showDialog = (
         title: string, 
         message: string, 
-        type: 'confirm' | 'alert' | 'prompt' | 'choice' = 'alert', 
+        type: 'confirm' | 'alert' | 'prompt' | 'choice' | 'checkbox' = 'alert', 
         onConfirm?: () => void,
         onPrompt?: (value: string) => void,
         promptPlaceholder?: string,
         onChoice?: (value: string) => void,
         selectedChoice?: string,
-        choices?: Array<{ label: string; value: string }>
+        choices?: Array<{ label: string; value: string }>,
+        checkboxLabel?: string,
+        checkboxChecked?: boolean,
+        onCheckboxChange?: (checked: boolean) => void
     ) => {
-        setDialog({ open: true, title, message, type, onConfirm, onPrompt, promptPlaceholder, onChoice, selectedChoice, choices });
+        setDialog({ open: true, title, message, type, onConfirm, onPrompt, promptPlaceholder, onChoice, selectedChoice, choices, checkboxLabel, checkboxChecked, onCheckboxChange });
     };
 
     const closeDialog = () => setDialog({ ...dialog, open: false });

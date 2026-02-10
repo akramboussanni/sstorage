@@ -237,6 +237,8 @@ export default function DrivePage() {
   const [pickedColor, setPickedColor] = useState<string>("#3b82f6");
   const [pendingUploadFile, setPendingUploadFile] = useState<globalThis.File | null>(null);
   const [uploadQuality, setUploadQuality] = useState<"none" | "high" | "balanced" | "small">("balanced");
+  const [defaultCompression, setDefaultCompression] = useState<"none" | "high" | "balanced" | "small">("balanced");
+  const [showNoCompression, setShowNoCompression] = useState(true);
 
   const { dialog, showDialog, closeDialog } = useDialog();
   const { toast, showToast } = useToast();
@@ -350,6 +352,23 @@ export default function DrivePage() {
   }, [loadDrive, loadContents]);
 
   useEffect(() => {
+    const loadSettings = async () => {
+      try {
+        const res = await fetch('/api/settings');
+        if (res.ok) {
+          const settings = await res.json();
+          setDefaultCompression(settings.defaultCompression || 'balanced');
+          setShowNoCompression(settings.showNoCompression !== false);
+          setUploadQuality(settings.defaultCompression || 'balanced');
+        }
+      } catch (err) {
+        console.error('Failed to load settings:', err);
+      }
+    };
+    loadSettings();
+  }, []);
+
+  useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.ctrlKey && e.key === "a") {
         e.preventDefault();
@@ -407,42 +426,44 @@ export default function DrivePage() {
 
     const isVideo = file.type.startsWith('video/');
     
-    if (isVideo) {
-      // Show quality selector for video files
-      setUploadQuality("balanced");
+    if (isVideo && showNoCompression) {
+      // Show compression option for video files only if enabled
       setPendingUploadFile(file);
       showDialog(
-        "Select Compression Quality",
-        `Choose the compression level for "${file.name}":`,
-        "choice",
+        "Video Compression",
+        `Choose compression settings for "${file.name}":`,
+        "checkbox",
         async () => {
           if (!pendingUploadFile) return;
+          
+          // If uploadQuality is "none" (checkbox checked), use no compression; otherwise use default compression from settings
+          const quality = uploadQuality === "none" ? "none" : defaultCompression;
           
           await startUpload(pendingUploadFile, {
             driveId,
             folderId: currentFolderId || undefined,
-            quality: uploadQuality,
+            quality: quality,
           });
           
           setPendingUploadFile(null);
+          setUploadQuality(defaultCompression); // Reset to default
           loadContents();
         },
         undefined,
         undefined,
-        (selected: string) => setUploadQuality(selected as "none" | "high" | "balanced" | "small"),
-        uploadQuality,
-        [
-          { label: "None (original quality, no compression)", value: "none" },
-          { label: "High (20-30% compression, best quality)", value: "high" },
-          { label: "Balanced (40-60% compression, recommended)", value: "balanced" },
-          { label: "Small (60-80% compression, smallest size)", value: "small" },
-        ]
+        undefined,
+        undefined,
+        undefined,
+        "No compression (original quality)",
+        uploadQuality === "none",
+        (checked: boolean) => setUploadQuality(checked ? "none" : defaultCompression)
       );
     } else {
-      // Non-video files don't need quality selection
+      // Use default compression from settings or no dialog if showNoCompression is disabled
       await startUpload(file, {
         driveId,
         folderId: currentFolderId || undefined,
+        quality: isVideo ? defaultCompression : undefined,
       });
       
       loadContents();
