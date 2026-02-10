@@ -141,3 +141,82 @@ export async function DELETE(
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
 }
+
+export async function PUT(
+    request: NextRequest,
+    { params }: { params: Promise<{ id: string }> }
+) {
+    try {
+        const { id } = await params;
+        const session = await getSession();
+        const { originalName } = await request.json();
+
+        if (!originalName || typeof originalName !== 'string') {
+            return NextResponse.json({ error: 'Invalid file name' }, { status: 400 });
+        }
+
+        // Trim whitespace and validate
+        const newName = originalName.trim();
+        if (!newName || newName.length === 0) {
+            return NextResponse.json({ error: 'File name cannot be empty' }, { status: 400 });
+        }
+
+        const media = await prisma.media.findUnique({ where: { id } });
+
+        if (!media) {
+            return NextResponse.json({ error: 'Not found' }, { status: 404 });
+        }
+
+        // Check if user has permission to rename
+        let canRename = false;
+
+        // Owner can always rename
+        if (session && media.userId === session.id) {
+            canRename = true;
+        }
+
+        // Check if anonymous token matches (for anonymous uploads)
+        if (!canRename && !session && !media.userId && media.anonToken) {
+            const anonToken = request.cookies.get('sstorage_anon_token')?.value;
+            if (anonToken === media.anonToken) {
+                canRename = true;
+            }
+        }
+
+        // Check if user has editor access to the drive
+        if (!canRename && session && media.driveId) {
+            const driveAccess = await prisma.driveAccess.findUnique({
+                where: {
+                    driveId_userId: {
+                        driveId: media.driveId,
+                        userId: session.id
+                    }
+                }
+            });
+            if (driveAccess?.role === 'EDITOR') {
+                canRename = true;
+            } else {
+                // Also check if user is the drive owner
+                const drive = await prisma.drive.findUnique({ where: { id: media.driveId } });
+                if (drive?.ownerId === session.id) {
+                    canRename = true;
+                }
+            }
+        }
+
+        if (!canRename) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+
+        // Update the original name
+        const updatedMedia = await prisma.media.update({
+            where: { id },
+            data: { originalName: newName }
+        });
+
+        return NextResponse.json(updatedMedia);
+    } catch (error) {
+        console.error('Rename error:', error);
+        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    }
+}

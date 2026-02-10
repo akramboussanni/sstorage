@@ -12,6 +12,52 @@ const TEMP_DIR = join(UPLOAD_DIR, 'temp');
 
 const VALID_QUALITIES: CompressionQuality[] = ['none', 'high', 'balanced', 'small'];
 
+// MIME type mapping by file extension
+const MIME_TYPE_MAP: Record<string, string> = {
+    // Video formats
+    'mp4': 'video/mp4',
+    'webm': 'video/webm',
+    'avi': 'video/x-msvideo',
+    'mov': 'video/quicktime',
+    'qt': 'video/quicktime',
+    'flv': 'video/x-flv',
+    'wmv': 'video/x-ms-wmv',
+    'mkv': 'video/x-matroska',
+    '3gp': 'video/3gpp',
+    'f4v': 'video/x-f4v',
+    'mpg': 'video/mpeg',
+    'mpeg': 'video/mpeg',
+    'm4v': 'video/x-m4v',
+    'ts': 'video/mp2t',
+    'm3u8': 'application/vnd.apple.mpegurl',
+    
+    // Image formats
+    'jpg': 'image/jpeg',
+    'jpeg': 'image/jpeg',
+    'png': 'image/png',
+    'gif': 'image/gif',
+    'webp': 'image/webp',
+    'avif': 'image/avif',
+    'svg': 'image/svg+xml',
+    'ico': 'image/x-icon',
+    'bmp': 'image/bmp',
+    'tiff': 'image/tiff',
+    'tif': 'image/tiff',
+    'heic': 'image/heic',
+    'heif': 'image/heif',
+};
+
+function getMimeType(filename: string, browserMimeType?: string): string {
+    // If browser detected a MIME type and it's valid, use it
+    if (browserMimeType && browserMimeType !== '') {
+        return browserMimeType;
+    }
+    
+    // Fall back to extension-based detection
+    const ext = filename.split('.').pop()?.toLowerCase() || '';
+    return MIME_TYPE_MAP[ext] || browserMimeType || 'application/octet-stream';
+}
+
 export interface UploadContext {
     userId?: string | null;
     driveId?: string | null; // If provided, overrides form data
@@ -156,7 +202,8 @@ export async function handleUpload(
         }
 
         // Processing (DB + Transcode)
-        const isVideo = file.type.startsWith('video/');
+        const actualMimeType = getMimeType(file.name, file.type);
+        const isVideo = actualMimeType.startsWith('video/');
         const shouldTranscode = isVideo && quality !== 'none';
 
         // Validate foreign key references before creating media
@@ -201,7 +248,7 @@ export async function handleUpload(
                 id: fileId,
                 filename,
                 originalName: file.name,
-                mimeType: file.type,
+                mimeType: getMimeType(file.name, file.type),
                 size: finalSize,
                 anonToken: context.anonToken || null,
                 userId: context.userId || null,

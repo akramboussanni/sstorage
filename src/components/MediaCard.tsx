@@ -48,8 +48,33 @@ const formatDate = (dateString: string) => {
 
 export function MediaCard({ media, onDelete, onCopyLink, showPrivateBadge = true, showIp = false }: MediaCardProps) {
     const isTranscoding = media.transcodeStatus === 'pending' || media.transcodeStatus === 'processing';
-    const isVideo = media.mimeType.startsWith('video/');
-    const isImage = media.mimeType.startsWith('image/');
+    
+    // Helper to determine if media is playable
+    const isPlayableVideo = (mimeType: string) => {
+        return mimeType.startsWith('video/') || 
+               mimeType === 'video/quicktime' || 
+               mimeType === 'video/x-quicktime' ||
+               mimeType === 'video/mp4' ||
+               mimeType === 'video/webm' ||
+               mimeType === 'video/x-msvideo' ||
+               mimeType === 'video/mpeg';
+    };
+
+    const isPlayableImage = (mimeType: string) => {
+        return mimeType.startsWith('image/') ||
+               mimeType === 'image/jpeg' ||
+               mimeType === 'image/jpg' ||
+               mimeType === 'image/png' ||
+               mimeType === 'image/gif' ||
+               mimeType === 'image/webp' ||
+               mimeType === 'image/avif' ||
+               mimeType === 'image/svg+xml' ||
+               mimeType === 'image/x-icon' ||
+               mimeType === 'image/bmp';
+    };
+
+    const isVideo = isPlayableVideo(media.mimeType);
+    const isImage = isPlayableImage(media.mimeType);
     const mediaUrl = typeof window !== 'undefined' ? `${window.location.origin}/${media.id}` : `/${media.id}`;
     const { contextMenu, showContextMenu, closeContextMenu } = useContextMenu();
     const [isHovered, setIsHovered] = useState(false);
@@ -69,6 +94,19 @@ export function MediaCard({ media, onDelete, onCopyLink, showPrivateBadge = true
                 label: 'Copy link',
                 icon: <MenuIcons.Copy />,
                 onClick: () => onCopyLink?.(mediaUrl),
+            },
+            {
+                label: 'Rename',
+                icon: <MenuIcons.Rename />,
+                onClick: () => {
+                    closeContextMenu();
+                    setShowOverview(true);
+                    // Trigger rename mode after modal opens
+                    setTimeout(() => {
+                        const renameBtn = document.querySelector('[title="Rename"]') as HTMLButtonElement;
+                        renameBtn?.click();
+                    }, 100);
+                },
             },
             { separator: true },
             {

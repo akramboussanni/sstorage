@@ -33,19 +33,47 @@ const formatDate = (dateString: string) => {
 
 export function MediaOverview({ media, isOpen, onClose, onDelete, onCopyLink }: MediaOverviewProps) {
     const [isClosing, setIsClosing] = useState(false);
+    const [isRenaming, setIsRenaming] = useState(false);
+    const [newName, setNewName] = useState('');
     const mediaUrl = media && typeof window !== 'undefined' ? `${window.location.origin}/${media.id}` : media ? `/${media.id}` : '';
+
+    // Helper to determine if media is playable
+    const isPlayableVideo = (mimeType: string) => {
+        return mimeType.startsWith('video/') || 
+               mimeType === 'video/quicktime' || 
+               mimeType === 'video/x-quicktime' ||
+               mimeType === 'video/mp4' ||
+               mimeType === 'video/webm' ||
+               mimeType === 'video/x-msvideo' ||
+               mimeType === 'video/mpeg';
+    };
+
+    const isPlayableImage = (mimeType: string) => {
+        return mimeType.startsWith('image/') ||
+               mimeType === 'image/jpeg' ||
+               mimeType === 'image/jpg' ||
+               mimeType === 'image/png' ||
+               mimeType === 'image/gif' ||
+               mimeType === 'image/webp' ||
+               mimeType === 'image/avif' ||
+               mimeType === 'image/svg+xml' ||
+               mimeType === 'image/x-icon' ||
+               mimeType === 'image/bmp';
+    };
 
     useEffect(() => {
         if (isOpen) {
             setIsClosing(false);
             document.body.style.overflow = 'hidden';
+            setIsRenaming(false);
+            setNewName(media?.originalName || '');
         } else {
             document.body.style.overflow = '';
         }
         return () => {
             document.body.style.overflow = '';
         };
-    }, [isOpen]);
+    }, [isOpen, media?.originalName, media?.id]);
 
     useEffect(() => {
         const handleEscape = (e: KeyboardEvent) => {
@@ -65,10 +93,33 @@ export function MediaOverview({ media, isOpen, onClose, onDelete, onCopyLink }: 
         }, 150);
     };
 
+    const handleRename = async () => {
+        if (!newName.trim() || !media) return;
+
+        try {
+            const res = await fetch(`/api/media/${media.id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ originalName: newName.trim() }),
+            });
+
+            if (res.ok) {
+                setIsRenaming(false);
+                // Update the media object in UI - trigger a refresh
+                window.location.reload();
+            } else {
+                alert('Failed to rename file');
+            }
+        } catch (error) {
+            console.error('Rename error:', error);
+            alert('Failed to rename file');
+        }
+    };
+
     if (!isOpen || !media) return null;
 
-    const isVideo = media.mimeType.startsWith('video/');
-    const isImage = media.mimeType.startsWith('image/');
+    const isVideo = isPlayableVideo(media.mimeType);
+    const isImage = isPlayableImage(media.mimeType);
     const isTranscoding = media.transcodeStatus === 'pending' || media.transcodeStatus === 'processing';
 
     return (
@@ -205,6 +256,27 @@ export function MediaOverview({ media, isOpen, onClose, onDelete, onCopyLink }: 
                             </button>
                         )}
                         <button
+                            onClick={() => setIsRenaming(!isRenaming)}
+                            style={{ 
+                                padding: '8px',
+                                background: 'transparent',
+                                border: 'none',
+                                color: 'var(--foreground)',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                borderRadius: 'var(--radius)',
+                                transition: 'background-color 0.2s ease',
+                            }}
+                            title="Rename"
+                            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--surface-hover)'}
+                            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: 20, height: 20 }}>
+                                <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
+                            </svg>
+                        </button>
+                        <button
                             onClick={handleClose}
                             style={{
                                 padding: '8px',
@@ -223,8 +295,6 @@ export function MediaOverview({ media, isOpen, onClose, onDelete, onCopyLink }: 
                         >
                             ✕
                         </button>
-                    </div>
-                </div>
 
                 {/* Content */}
                 <div style={{
@@ -268,7 +338,6 @@ export function MediaOverview({ media, isOpen, onClose, onDelete, onCopyLink }: 
                             </div>
                         ) : isVideo ? (
                             <video
-                                src={`/api/media/${media.id}`}
                                 controls
                                 style={{
                                     maxWidth: '100%',
@@ -276,7 +345,14 @@ export function MediaOverview({ media, isOpen, onClose, onDelete, onCopyLink }: 
                                     width: 'auto',
                                     height: 'auto',
                                 }}
-                            />
+                            >
+                                <source src={`/api/media/${media.id}`} type={media.mimeType} />
+                                {/* Fallback source for common video types */}
+                                {(media.mimeType === 'video/quicktime' || media.mimeType === 'video/x-quicktime') && (
+                                    <source src={`/api/media/${media.id}`} type="video/mp4" />
+                                )}
+                                <p>Your browser does not support the video tag.</p>
+                            </video>
                         ) : isImage ? (
                             <img
                                 src={`/api/media/${media.id}`}
@@ -336,6 +412,52 @@ export function MediaOverview({ media, isOpen, onClose, onDelete, onCopyLink }: 
                         borderTop: '1px solid var(--border)',
                         background: 'var(--background)',
                     }}>
+                        {/* Rename Form */}
+                        {isRenaming && (
+                            <div style={{
+                                marginBottom: '20px',
+                                padding: '16px',
+                                background: 'var(--surface)',
+                                border: '1px solid var(--border)',
+                                borderRadius: 'var(--radius-lg)',
+                            }}>
+                                <div style={{ marginBottom: '12px', fontSize: '0.875rem', fontWeight: 500 }}>
+                                    Rename File
+                                </div>
+                                <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-end' }}>
+                                    <input
+                                        type="text"
+                                        value={newName}
+                                        onChange={(e) => setNewName(e.target.value)}
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter') handleRename();
+                                            if (e.key === 'Escape') setIsRenaming(false);
+                                        }}
+                                        className="app-input"
+                                        style={{ flex: 1 }}
+                                        autoFocus
+                                    />
+                                    <button
+                                        onClick={handleRename}
+                                        className="app-btn app-btn-success"
+                                        style={{ padding: '8px 16px' }}
+                                    >
+                                        Save
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            setIsRenaming(false);
+                                            setNewName(media?.originalName || '');
+                                        }}
+                                        className="app-btn app-btn-ghost"
+                                        style={{ padding: '8px 16px' }}
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+
                         <div style={{
                             display: 'grid',
                             gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
