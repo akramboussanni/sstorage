@@ -212,6 +212,8 @@ export default function DrivePage() {
   const [currentFolderParentId, setCurrentFolderParentId] = useState<
     string | null
   >(null);
+  const [currentFolderName, setCurrentFolderName] = useState<string | null>(null);
+  const [breadcrumbPath, setBreadcrumbPath] = useState<Array<{ id: string | null; name: string }>>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
@@ -289,7 +291,7 @@ export default function DrivePage() {
       setFiles(filesArray);
       setItems(sortedItems as any);
 
-      // Fetch the current folder's info to get its parent ID
+      // Fetch the current folder's info to get its parent ID and build breadcrumb
       if (currentFolderId) {
         try {
           const folderInfoRes = await fetch(
@@ -298,12 +300,41 @@ export default function DrivePage() {
           if (folderInfoRes.ok) {
             const folderInfo = await folderInfoRes.json();
             setCurrentFolderParentId(folderInfo.parentId || null);
+            setCurrentFolderName(folderInfo.name);
+            
+            // Build breadcrumb path by traversing up the parent hierarchy
+            const path = [{ id: null, name: drive?.name || 'Drive' }];
+            let parentId = folderInfo.parentId;
+            const visited = new Set<string>();
+            
+            while (parentId && !visited.has(parentId)) {
+              visited.add(parentId);
+              try {
+                const parentRes = await fetch(`/api/drives/${driveId}/folders/${parentId}`);
+                if (parentRes.ok) {
+                  const parentFolder = await parentRes.json();
+                  path.push({ id: parentFolder.id, name: parentFolder.name });
+                  parentId = parentFolder.parentId;
+                } else {
+                  break;
+                }
+              } catch {
+                break;
+              }
+            }
+            
+            // Reverse to get the correct order and add current folder
+            path.reverse();
+            path.push({ id: currentFolderId, name: folderInfo.name });
+            setBreadcrumbPath(path);
           }
         } catch (err) {
           console.error("Failed to load folder info:", err);
         }
       } else {
         setCurrentFolderParentId(null);
+        setCurrentFolderName(null);
+        setBreadcrumbPath([]);
       }
     } catch (err) {
       console.error("Failed to load contents:", err);
@@ -1728,7 +1759,7 @@ export default function DrivePage() {
       )}
 
       {/* Breadcrumb */}
-      {currentFolderId && (
+      {currentFolderId && breadcrumbPath.length > 0 && (
         <div
           style={{
             padding: "10px 20px",
@@ -1738,18 +1769,35 @@ export default function DrivePage() {
             alignItems: "center",
             gap: "8px",
             fontSize: "0.875rem",
+            overflowX: "auto",
           }}
         >
-          <button
-            type="button"
-            onClick={() => setCurrentFolderId(null)}
-            className="app-btn app-btn-ghost"
-            style={{ padding: "4px 8px" }}
-          >
-            {drive.name}
-          </button>
-          <span style={{ color: "var(--muted)" }}>/</span>
-          <span style={{ color: "var(--muted-foreground)" }}>Folder</span>
+          {breadcrumbPath.map((item, index) => (
+            <div key={item.id} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              {item.id === null ? (
+                <button
+                  type="button"
+                  onClick={() => setCurrentFolderId(null)}
+                  className="app-btn app-btn-ghost"
+                  style={{ padding: "4px 8px" }}
+                >
+                  {item.name}
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setCurrentFolderId(item.id)}
+                  className="app-btn app-btn-ghost"
+                  style={{ padding: "4px 8px" }}
+                >
+                  {item.name}
+                </button>
+              )}
+              {index < breadcrumbPath.length - 1 && (
+                <span style={{ color: "var(--muted)" }}>/</span>
+              )}
+            </div>
+          ))}
         </div>
       )}
 
