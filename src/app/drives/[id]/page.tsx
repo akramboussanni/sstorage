@@ -235,6 +235,8 @@ export default function DrivePage() {
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [colorPickerFolder, setColorPickerFolder] = useState<Folder | null>(null);
   const [pickedColor, setPickedColor] = useState<string>("#3b82f6");
+  const [pendingUploadFile, setPendingUploadFile] = useState<globalThis.File | null>(null);
+  const [uploadQuality, setUploadQuality] = useState<"none" | "high" | "balanced" | "small">("balanced");
 
   const { dialog, showDialog, closeDialog } = useDialog();
   const { toast, showToast } = useToast();
@@ -403,14 +405,49 @@ export default function DrivePage() {
     const file = e.target.files?.[0];
     if (!file || !drive?.canEdit) return;
 
-    await startUpload(file, {
+    const isVideo = file.type.startsWith('video/');
+    
+    if (isVideo) {
+      // Show quality selector for video files
+      setUploadQuality("balanced");
+      setPendingUploadFile(file);
+      showDialog(
+        "Select Compression Quality",
+        `Choose the compression level for "${file.name}":`,
+        "choice",
+        async () => {
+          if (!pendingUploadFile) return;
+          
+          await startUpload(pendingUploadFile, {
+            driveId,
+            folderId: currentFolderId || undefined,
+            quality: uploadQuality,
+          });
+          
+          setPendingUploadFile(null);
+          loadContents();
+        },
+        undefined,
+        undefined,
+        (selected: string) => setUploadQuality(selected as "none" | "high" | "balanced" | "small"),
+        uploadQuality,
+        [
+          { label: "None (original quality, no compression)", value: "none" },
+          { label: "High (20-30% compression, best quality)", value: "high" },
+          { label: "Balanced (40-60% compression, recommended)", value: "balanced" },
+          { label: "Small (60-80% compression, smallest size)", value: "small" },
+        ]
+      );
+    } else {
+      // Non-video files don't need quality selection
+      await startUpload(file, {
         driveId,
         folderId: currentFolderId || undefined,
-        // No quality select in drive page currently? If exist, add it.
-        // The original code passed 'folderId'. I see no 'quality' in local state.
-    });
+      });
+      
+      loadContents();
+    }
     
-    loadContents();
     e.target.value = "";
   };
 

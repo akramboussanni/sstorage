@@ -6,10 +6,13 @@ export interface DialogState {
     open: boolean;
     title: string;
     message: string;
-    type: 'confirm' | 'alert' | 'prompt';
+    type: 'confirm' | 'alert' | 'prompt' | 'choice';
     onConfirm?: () => void;
     onPrompt?: (value: string) => void;
+    onChoice?: (value: string) => void;
     promptPlaceholder?: string;
+    choices?: Array<{ label: string; value: string }>;
+    selectedChoice?: string;
 }
 
 interface DialogProps {
@@ -31,6 +34,9 @@ export function Dialog({ state, onClose }: DialogProps) {
     const handleConfirm = () => {
         if (state.type === 'prompt') {
             state.onPrompt?.(inputValue);
+        } else if (state.type === 'choice') {
+            state.onChoice?.(state.selectedChoice || '');
+            state.onConfirm?.();
         } else {
             state.onConfirm?.();
         }
@@ -76,6 +82,27 @@ export function Dialog({ state, onClose }: DialogProps) {
                         style={{ marginBottom: 20 }}
                     />
                 )}
+                {state.type === 'choice' && state.choices && (
+                    <div style={{ marginBottom: 20, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                        {state.choices.map((choice) => (
+                            <label key={choice.value} style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
+                                <input
+                                    type="radio"
+                                    name="choice"
+                                    value={choice.value}
+                                    checked={state.selectedChoice === choice.value}
+                                    onChange={(e) => {
+                                        if (state.onChoice) {
+                                            state.onChoice(e.target.value);
+                                        }
+                                    }}
+                                    style={{ cursor: 'pointer' }}
+                                />
+                                <span>{choice.label}</span>
+                            </label>
+                        ))}
+                    </div>
+                )}
                 <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
                     {(state.type === 'confirm' || state.type === 'prompt') && (
                         <button type="button" onClick={() => { onClose(); setInputValue(''); }} className="app-btn app-btn-secondary">
@@ -101,12 +128,15 @@ export function useDialog() {
     const showDialog = (
         title: string, 
         message: string, 
-        type: 'confirm' | 'alert' | 'prompt' = 'alert', 
+        type: 'confirm' | 'alert' | 'prompt' | 'choice' = 'alert', 
         onConfirm?: () => void,
         onPrompt?: (value: string) => void,
-        promptPlaceholder?: string
+        promptPlaceholder?: string,
+        onChoice?: (value: string) => void,
+        selectedChoice?: string,
+        choices?: Array<{ label: string; value: string }>
     ) => {
-        setDialog({ open: true, title, message, type, onConfirm, onPrompt, promptPlaceholder });
+        setDialog({ open: true, title, message, type, onConfirm, onPrompt, promptPlaceholder, onChoice, selectedChoice, choices });
     };
 
     const closeDialog = () => setDialog({ ...dialog, open: false });

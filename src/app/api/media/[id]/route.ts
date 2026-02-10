@@ -6,6 +6,20 @@ import { getSession } from '@/lib/auth';
 
 const UPLOAD_DIR = join(process.cwd(), 'uploads');
 
+// Helper to properly encode filename for Content-Disposition header
+function encodeContentDisposition(filename: string, inline: boolean = true) {
+    const disposition = inline ? 'inline' : 'attachment';
+    
+    // Check if filename is ASCII-safe
+    if (/^[\x20-\x7E]*$/.test(filename)) {
+        return `${disposition}; filename="${filename}"`;
+    }
+    
+    // Use RFC 5987 encoding for non-ASCII filenames
+    const encoded = encodeURIComponent(filename);
+    return `${disposition}; filename*=UTF-8''${encoded}`;
+}
+
 export async function GET(
     request: NextRequest,
     { params }: { params: Promise<{ id: string }> }
@@ -43,7 +57,7 @@ export async function GET(
                     'Accept-Ranges': 'bytes',
                     'Content-Length': chunksize.toString(),
                     'Content-Type': media.mimeType,
-                    'Content-Disposition': `inline; filename="${media.originalName}"`,
+                    'Content-Disposition': encodeContentDisposition(media.originalName, true),
                     'Cache-Control': 'public, max-age=31536000',
                 },
             });
@@ -58,7 +72,7 @@ export async function GET(
                 headers: {
                     'Content-Length': fileSize.toString(),
                     'Content-Type': media.mimeType,
-                    'Content-Disposition': `inline; filename="${media.originalName}"`,
+                    'Content-Disposition': encodeContentDisposition(media.originalName, true),
                     'Cache-Control': 'public, max-age=31536000',
                     'Accept-Ranges': 'bytes',
                 },
