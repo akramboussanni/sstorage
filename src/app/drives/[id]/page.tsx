@@ -303,7 +303,7 @@ export default function DrivePage() {
             setCurrentFolderName(folderInfo.name);
             
             // Build breadcrumb path by traversing up the parent hierarchy
-            const path = [{ id: null, name: drive?.name || 'Drive' }];
+            const path: Array<{ id: string | null; name: string }> = [{ id: null, name: drive?.name || 'Drive' }];
             let parentId = folderInfo.parentId;
             const visited = new Set<string>();
             
