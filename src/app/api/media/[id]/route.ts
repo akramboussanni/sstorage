@@ -47,10 +47,32 @@ export async function GET(
             const { Readable } = await import('stream');
 
             const file = createReadStream(filepath, { start, end });
-            // @ts-ignore
-            const stream = Readable.toWeb(file);
+            
+            // Use ReadableStream constructor for better compatibility
+            const webStream = new ReadableStream({
+                start(controller) {
+                    file.on('data', (chunk) => {
+                        try {
+                            controller.enqueue(chunk);
+                        } catch (e) {
+                            file.destroy();
+                            controller.error(e);
+                        }
+                    });
+                    file.on('end', () => {
+                        try {
+                            controller.close();
+                        } catch (e) {
+                            // Stream already closed, ignore
+                        }
+                    });
+                    file.on('error', (err) => {
+                        controller.error(err);
+                    });
+                }
+            });
 
-            return new NextResponse(stream as any, {
+            return new NextResponse(webStream, {
                 status: 206,
                 headers: {
                     'Content-Range': `bytes ${start}-${end}/${fileSize}`,
@@ -65,10 +87,32 @@ export async function GET(
             const { createReadStream } = await import('fs');
             const { Readable } = await import('stream');
             const file = createReadStream(filepath);
-            // @ts-ignore
-            const stream = Readable.toWeb(file);
+            
+            // Use ReadableStream constructor for better compatibility
+            const webStream = new ReadableStream({
+                start(controller) {
+                    file.on('data', (chunk) => {
+                        try {
+                            controller.enqueue(chunk);
+                        } catch (e) {
+                            file.destroy();
+                            controller.error(e);
+                        }
+                    });
+                    file.on('end', () => {
+                        try {
+                            controller.close();
+                        } catch (e) {
+                            // Stream already closed, ignore
+                        }
+                    });
+                    file.on('error', (err) => {
+                        controller.error(err);
+                    });
+                }
+            });
 
-            return new NextResponse(stream as any, {
+            return new NextResponse(webStream, {
                 headers: {
                     'Content-Length': fileSize.toString(),
                     'Content-Type': media.mimeType,

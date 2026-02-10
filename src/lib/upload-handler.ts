@@ -254,7 +254,7 @@ export async function handleUpload(
                 userId: context.userId || null,
                 driveId: driveId,
                 folderId: folderId,
-                transcodeStatus: shouldTranscode ? 'pending' : 'not_required',
+                transcodeStatus: shouldTranscode ? 'pending' : 'completed',
             }
         });
 
