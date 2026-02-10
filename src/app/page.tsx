@@ -9,6 +9,7 @@ import { MediaCard, MediaItem, spinnerStyles } from '@/components/MediaCard';
 import { UserPanel } from '@/components/UserPanel';
 import { DriveCard } from '@/components/DriveCard';
 import { ContextMenu, useContextMenu } from '@/components/ContextMenu';
+import { getOrCreateAnonToken } from '@/lib/client-token';
 
 type CompressionQuality = 'none' | 'high' | 'balanced' | 'small';
 
@@ -45,10 +46,15 @@ export default function Home() {
   };
 
   const refreshUploads = useCallback(() => {
+    // Fetch my uploads regardless of auth
+    fetch('/api/media/my').then(res => {
+      if (!res.ok) return [];
+      return res.json();
+    }).then(data => {
+      if (Array.isArray(data)) setMyUploads(data);
+    });
+
     if (user) {
-      fetch('/api/media/my').then(res => res.json()).then(data => {
-        if (Array.isArray(data)) setMyUploads(data);
-      });
       fetch('/api/drives').then(res => res.json()).then(data => {
         if (Array.isArray(data)) setDrives(data);
       });
@@ -59,6 +65,11 @@ export default function Home() {
     await fetch('/api/auth/logout', { method: 'POST' });
     window.location.reload();
   };
+
+  // Initialize anonymous token for unauthenticated users
+  useEffect(() => {
+    getOrCreateAnonToken();
+  }, []);
 
   useEffect(() => {
     Promise.all([
@@ -71,13 +82,15 @@ export default function Home() {
       }
       setUser(sessionData.user);
       setSettings(settingsData);
+      
+      // Fetch uploads unconditionally
+      fetch('/api/media/my').then(res => res.ok ? res.json() : []).then(data => {
+          if (Array.isArray(data)) setMyUploads(data);
+      });
+
       if (sessionData.user) {
-        Promise.all([
-          fetch('/api/media/my').then(res => res.json()),
-          fetch('/api/drives').then(res => res.json()),
-        ]).then(([myUploadsData, drivesData]) => {
-          if (Array.isArray(myUploadsData)) setMyUploads(myUploadsData);
-          if (Array.isArray(drivesData)) setDrives(drivesData);
+        fetch('/api/drives').then(res => res.json()).then(data => {
+          if (Array.isArray(data)) setDrives(data);
         });
       }
       setLoading(false);
@@ -343,7 +356,7 @@ export default function Home() {
         </div>
       )}
 
-      {user && myUploads.length > 0 && (
+      {myUploads.length > 0 && (
         <section style={{ marginTop: 48, width: '100%', maxWidth: 800 }}>
           <h2 style={{ fontSize: '1rem', fontWeight: 600, marginBottom: 16, color: 'var(--muted-foreground)' }}>
             My uploads · {myUploads.length}

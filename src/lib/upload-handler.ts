@@ -17,6 +17,7 @@ export interface UploadContext {
     driveId?: string | null; // If provided, overrides form data
     folderId?: string | null; // If provided, overrides form data
     forcedIp?: string;
+    anonToken?: string | null; // Token for anonymous users
 }
 
 export async function handleUpload(
@@ -144,10 +145,6 @@ export async function handleUpload(
         const isVideo = file.type.startsWith('video/');
         const shouldTranscode = isVideo && quality !== 'none';
 
-        // IP
-        const forwardedFor = request.headers.get('x-forwarded-for');
-        const ip = context.forcedIp || (forwardedFor ? forwardedFor.split(',')[0].trim() : '127.0.0.1');
-
         const media = await prisma.media.create({
             data: {
                 id: fileId,
@@ -155,7 +152,7 @@ export async function handleUpload(
                 originalName: file.name,
                 mimeType: file.type,
                 size: finalSize,
-                ip,
+                anonToken: context.anonToken || null,
                 userId: context.userId || null,
                 driveId: driveId,
                 folderId: folderId,

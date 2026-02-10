@@ -29,6 +29,7 @@ model Media {
   mimeType        String
   size            Int
   ip              String?
+  anonToken       String?  // Token for anonymous users
   userId          String?
   user            User?    @relation(fields: [userId], references: [id])
   transcodeStatus String   @default("not_required") // pending, processing, completed, failed, not_required

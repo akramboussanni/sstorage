@@ -89,6 +89,15 @@ export async function DELETE(
 
         let canDelete = isOwner;
 
+        // Check ownership by token for anonymous uploads
+        if (!canDelete && !session && !media.userId && media.anonToken) {
+            const anonToken = request.cookies.get('sstorage_anon_token')?.value;
+            
+            if (anonToken === media.anonToken) {
+                canDelete = true;
+            }
+        }
+
         // If not owner/admin, check if it's in a drive where the user has editor access
         if (!canDelete && session && media.driveId) {
             const driveAccess = await prisma.driveAccess.findUnique({

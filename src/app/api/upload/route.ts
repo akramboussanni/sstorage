@@ -52,6 +52,9 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'No file provided' }, { status: 400 });
         }
 
+        // Get anonymous token if not logged in
+        const anonToken = session ? null : request.cookies.get('sstorage_anon_token')?.value;
+
         // Determine max file size
         // 1. User custom limit (if logged in)
         // 2. Global setting limit
@@ -78,7 +81,7 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: `File too large (max ${limitMB.toFixed(0)}MB)` }, { status: 400 });
         }
 
-        return handleUpload(request, { userId: session?.id }, formData);
+        return handleUpload(request, { userId: session?.id, anonToken }, formData);
 
     } catch (error) {
         console.error('Upload error:', error);

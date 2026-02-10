@@ -1,18 +1,25 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 import { prisma } from '@/lib/db';
-import { getSession } from '@/lib/auth';
+import { getSession, getAnonToken } from '@/lib/auth';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
     try {
         const session = await getSession();
+        let where: any = {};
 
-        // Require authentication for my uploads
-        if (!session) {
-            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        if (session) {
+            where = { userId: session.id };
+        } else {
+            // Get token from cookies
+            const anonToken = request.cookies.get('sstorage_anon_token')?.value;
+            if (!anonToken) {
+                return NextResponse.json([]);
+            }
+            where = { userId: null, anonToken };
         }
 
         const media = await prisma.media.findMany({
-            where: { userId: session.id },
+            where,
             orderBy: { createdAt: 'desc' },
         });
 

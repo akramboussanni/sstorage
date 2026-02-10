@@ -2684,6 +2684,7 @@ export namespace Prisma {
     mimeType: string | null
     size: number | null
     ip: string | null
+    anonToken: string | null
     userId: string | null
     transcodeStatus: string | null
     transcodeError: string | null
@@ -2701,6 +2702,7 @@ export namespace Prisma {
     mimeType: string | null
     size: number | null
     ip: string | null
+    anonToken: string | null
     userId: string | null
     transcodeStatus: string | null
     transcodeError: string | null
@@ -2718,6 +2720,7 @@ export namespace Prisma {
     mimeType: number
     size: number
     ip: number
+    anonToken: number
     userId: number
     transcodeStatus: number
     transcodeError: number
@@ -2747,6 +2750,7 @@ export namespace Prisma {
     mimeType?: true
     size?: true
     ip?: true
+    anonToken?: true
     userId?: true
     transcodeStatus?: true
     transcodeError?: true
@@ -2764,6 +2768,7 @@ export namespace Prisma {
     mimeType?: true
     size?: true
     ip?: true
+    anonToken?: true
     userId?: true
     transcodeStatus?: true
     transcodeError?: true
@@ -2781,6 +2786,7 @@ export namespace Prisma {
     mimeType?: true
     size?: true
     ip?: true
+    anonToken?: true
     userId?: true
     transcodeStatus?: true
     transcodeError?: true
@@ -2885,6 +2891,7 @@ export namespace Prisma {
     mimeType: string
     size: number
     ip: string | null
+    anonToken: string | null
     userId: string | null
     transcodeStatus: string
     transcodeError: string | null
@@ -2921,6 +2928,7 @@ export namespace Prisma {
     mimeType?: boolean
     size?: boolean
     ip?: boolean
+    anonToken?: boolean
     userId?: boolean
     transcodeStatus?: boolean
     transcodeError?: boolean
@@ -2941,6 +2949,7 @@ export namespace Prisma {
     mimeType?: boolean
     size?: boolean
     ip?: boolean
+    anonToken?: boolean
     userId?: boolean
     transcodeStatus?: boolean
     transcodeError?: boolean
@@ -2961,6 +2970,7 @@ export namespace Prisma {
     mimeType?: boolean
     size?: boolean
     ip?: boolean
+    anonToken?: boolean
     userId?: boolean
     transcodeStatus?: boolean
     transcodeError?: boolean
@@ -2981,6 +2991,7 @@ export namespace Prisma {
     mimeType?: boolean
     size?: boolean
     ip?: boolean
+    anonToken?: boolean
     userId?: boolean
     transcodeStatus?: boolean
     transcodeError?: boolean
@@ -2991,7 +3002,7 @@ export namespace Prisma {
     orderIndex?: boolean
   }
 
-  export type MediaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "filename" | "originalName" | "mimeType" | "size" | "ip" | "userId" | "transcodeStatus" | "transcodeError" | "createdAt" | "driveId" | "folderId" | "isPinned" | "orderIndex", ExtArgs["result"]["media"]>
+  export type MediaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "filename" | "originalName" | "mimeType" | "size" | "ip" | "anonToken" | "userId" | "transcodeStatus" | "transcodeError" | "createdAt" | "driveId" | "folderId" | "isPinned" | "orderIndex", ExtArgs["result"]["media"]>
   export type MediaInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | Media$userArgs<ExtArgs>
     drive?: boolean | Media$driveArgs<ExtArgs>
@@ -3022,6 +3033,7 @@ export namespace Prisma {
       mimeType: string
       size: number
       ip: string | null
+      anonToken: string | null
       userId: string | null
       transcodeStatus: string
       transcodeError: string | null
@@ -3462,6 +3474,7 @@ export namespace Prisma {
     readonly mimeType: FieldRef<"Media", 'String'>
     readonly size: FieldRef<"Media", 'Int'>
     readonly ip: FieldRef<"Media", 'String'>
+    readonly anonToken: FieldRef<"Media", 'String'>
     readonly userId: FieldRef<"Media", 'String'>
     readonly transcodeStatus: FieldRef<"Media", 'String'>
     readonly transcodeError: FieldRef<"Media", 'String'>
@@ -8582,6 +8595,7 @@ export namespace Prisma {
     mimeType: 'mimeType',
     size: 'size',
     ip: 'ip',
+    anonToken: 'anonToken',
     userId: 'userId',
     transcodeStatus: 'transcodeStatus',
     transcodeError: 'transcodeError',
@@ -8808,6 +8822,7 @@ export namespace Prisma {
     mimeType?: StringFilter<"Media"> | string
     size?: IntFilter<"Media"> | number
     ip?: StringNullableFilter<"Media"> | string | null
+    anonToken?: StringNullableFilter<"Media"> | string | null
     userId?: StringNullableFilter<"Media"> | string | null
     transcodeStatus?: StringFilter<"Media"> | string
     transcodeError?: StringNullableFilter<"Media"> | string | null
@@ -8828,6 +8843,7 @@ export namespace Prisma {
     mimeType?: SortOrder
     size?: SortOrder
     ip?: SortOrderInput | SortOrder
+    anonToken?: SortOrderInput | SortOrder
     userId?: SortOrderInput | SortOrder
     transcodeStatus?: SortOrder
     transcodeError?: SortOrderInput | SortOrder
@@ -8851,6 +8867,7 @@ export namespace Prisma {
     mimeType?: StringFilter<"Media"> | string
     size?: IntFilter<"Media"> | number
     ip?: StringNullableFilter<"Media"> | string | null
+    anonToken?: StringNullableFilter<"Media"> | string | null
     userId?: StringNullableFilter<"Media"> | string | null
     transcodeStatus?: StringFilter<"Media"> | string
     transcodeError?: StringNullableFilter<"Media"> | string | null
@@ -8871,6 +8888,7 @@ export namespace Prisma {
     mimeType?: SortOrder
     size?: SortOrder
     ip?: SortOrderInput | SortOrder
+    anonToken?: SortOrderInput | SortOrder
     userId?: SortOrderInput | SortOrder
     transcodeStatus?: SortOrder
     transcodeError?: SortOrderInput | SortOrder
@@ -8896,6 +8914,7 @@ export namespace Prisma {
     mimeType?: StringWithAggregatesFilter<"Media"> | string
     size?: IntWithAggregatesFilter<"Media"> | number
     ip?: StringNullableWithAggregatesFilter<"Media"> | string | null
+    anonToken?: StringNullableWithAggregatesFilter<"Media"> | string | null
     userId?: StringNullableWithAggregatesFilter<"Media"> | string | null
     transcodeStatus?: StringWithAggregatesFilter<"Media"> | string
     transcodeError?: StringNullableWithAggregatesFilter<"Media"> | string | null
@@ -9320,6 +9339,7 @@ export namespace Prisma {
     mimeType: string
     size: number
     ip?: string | null
+    anonToken?: string | null
     transcodeStatus?: string
     transcodeError?: string | null
     createdAt?: Date | string
@@ -9337,6 +9357,7 @@ export namespace Prisma {
     mimeType: string
     size: number
     ip?: string | null
+    anonToken?: string | null
     userId?: string | null
     transcodeStatus?: string
     transcodeError?: string | null
@@ -9354,6 +9375,7 @@ export namespace Prisma {
     mimeType?: StringFieldUpdateOperationsInput | string
     size?: IntFieldUpdateOperationsInput | number
     ip?: NullableStringFieldUpdateOperationsInput | string | null
+    anonToken?: NullableStringFieldUpdateOperationsInput | string | null
     transcodeStatus?: StringFieldUpdateOperationsInput | string
     transcodeError?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -9371,6 +9393,7 @@ export namespace Prisma {
     mimeType?: StringFieldUpdateOperationsInput | string
     size?: IntFieldUpdateOperationsInput | number
     ip?: NullableStringFieldUpdateOperationsInput | string | null
+    anonToken?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     transcodeStatus?: StringFieldUpdateOperationsInput | string
     transcodeError?: NullableStringFieldUpdateOperationsInput | string | null
@@ -9388,6 +9411,7 @@ export namespace Prisma {
     mimeType: string
     size: number
     ip?: string | null
+    anonToken?: string | null
     userId?: string | null
     transcodeStatus?: string
     transcodeError?: string | null
@@ -9405,6 +9429,7 @@ export namespace Prisma {
     mimeType?: StringFieldUpdateOperationsInput | string
     size?: IntFieldUpdateOperationsInput | number
     ip?: NullableStringFieldUpdateOperationsInput | string | null
+    anonToken?: NullableStringFieldUpdateOperationsInput | string | null
     transcodeStatus?: StringFieldUpdateOperationsInput | string
     transcodeError?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -9419,6 +9444,7 @@ export namespace Prisma {
     mimeType?: StringFieldUpdateOperationsInput | string
     size?: IntFieldUpdateOperationsInput | number
     ip?: NullableStringFieldUpdateOperationsInput | string | null
+    anonToken?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     transcodeStatus?: StringFieldUpdateOperationsInput | string
     transcodeError?: NullableStringFieldUpdateOperationsInput | string | null
@@ -10021,6 +10047,7 @@ export namespace Prisma {
     mimeType?: SortOrder
     size?: SortOrder
     ip?: SortOrder
+    anonToken?: SortOrder
     userId?: SortOrder
     transcodeStatus?: SortOrder
     transcodeError?: SortOrder
@@ -10043,6 +10070,7 @@ export namespace Prisma {
     mimeType?: SortOrder
     size?: SortOrder
     ip?: SortOrder
+    anonToken?: SortOrder
     userId?: SortOrder
     transcodeStatus?: SortOrder
     transcodeError?: SortOrder
@@ -10060,6 +10088,7 @@ export namespace Prisma {
     mimeType?: SortOrder
     size?: SortOrder
     ip?: SortOrder
+    anonToken?: SortOrder
     userId?: SortOrder
     transcodeStatus?: SortOrder
     transcodeError?: SortOrder
@@ -11062,6 +11091,7 @@ export namespace Prisma {
     mimeType: string
     size: number
     ip?: string | null
+    anonToken?: string | null
     transcodeStatus?: string
     transcodeError?: string | null
     createdAt?: Date | string
@@ -11078,6 +11108,7 @@ export namespace Prisma {
     mimeType: string
     size: number
     ip?: string | null
+    anonToken?: string | null
     transcodeStatus?: string
     transcodeError?: string | null
     createdAt?: Date | string
@@ -11180,6 +11211,7 @@ export namespace Prisma {
     mimeType?: StringFilter<"Media"> | string
     size?: IntFilter<"Media"> | number
     ip?: StringNullableFilter<"Media"> | string | null
+    anonToken?: StringNullableFilter<"Media"> | string | null
     userId?: StringNullableFilter<"Media"> | string | null
     transcodeStatus?: StringFilter<"Media"> | string
     transcodeError?: StringNullableFilter<"Media"> | string | null
@@ -11563,6 +11595,7 @@ export namespace Prisma {
     mimeType: string
     size: number
     ip?: string | null
+    anonToken?: string | null
     transcodeStatus?: string
     transcodeError?: string | null
     createdAt?: Date | string
@@ -11579,6 +11612,7 @@ export namespace Prisma {
     mimeType: string
     size: number
     ip?: string | null
+    anonToken?: string | null
     userId?: string | null
     transcodeStatus?: string
     transcodeError?: string | null
@@ -11759,6 +11793,7 @@ export namespace Prisma {
     mimeType: string
     size: number
     ip?: string | null
+    anonToken?: string | null
     transcodeStatus?: string
     transcodeError?: string | null
     createdAt?: Date | string
@@ -11775,6 +11810,7 @@ export namespace Prisma {
     mimeType: string
     size: number
     ip?: string | null
+    anonToken?: string | null
     userId?: string | null
     transcodeStatus?: string
     transcodeError?: string | null
@@ -12081,6 +12117,7 @@ export namespace Prisma {
     mimeType: string
     size: number
     ip?: string | null
+    anonToken?: string | null
     transcodeStatus?: string
     transcodeError?: string | null
     createdAt?: Date | string
@@ -12114,6 +12151,7 @@ export namespace Prisma {
     mimeType?: StringFieldUpdateOperationsInput | string
     size?: IntFieldUpdateOperationsInput | number
     ip?: NullableStringFieldUpdateOperationsInput | string | null
+    anonToken?: NullableStringFieldUpdateOperationsInput | string | null
     transcodeStatus?: StringFieldUpdateOperationsInput | string
     transcodeError?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12130,6 +12168,7 @@ export namespace Prisma {
     mimeType?: StringFieldUpdateOperationsInput | string
     size?: IntFieldUpdateOperationsInput | number
     ip?: NullableStringFieldUpdateOperationsInput | string | null
+    anonToken?: NullableStringFieldUpdateOperationsInput | string | null
     transcodeStatus?: StringFieldUpdateOperationsInput | string
     transcodeError?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12146,6 +12185,7 @@ export namespace Prisma {
     mimeType?: StringFieldUpdateOperationsInput | string
     size?: IntFieldUpdateOperationsInput | number
     ip?: NullableStringFieldUpdateOperationsInput | string | null
+    anonToken?: NullableStringFieldUpdateOperationsInput | string | null
     transcodeStatus?: StringFieldUpdateOperationsInput | string
     transcodeError?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12231,6 +12271,7 @@ export namespace Prisma {
     mimeType: string
     size: number
     ip?: string | null
+    anonToken?: string | null
     userId?: string | null
     transcodeStatus?: string
     transcodeError?: string | null
@@ -12287,6 +12328,7 @@ export namespace Prisma {
     mimeType?: StringFieldUpdateOperationsInput | string
     size?: IntFieldUpdateOperationsInput | number
     ip?: NullableStringFieldUpdateOperationsInput | string | null
+    anonToken?: NullableStringFieldUpdateOperationsInput | string | null
     transcodeStatus?: StringFieldUpdateOperationsInput | string
     transcodeError?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12303,6 +12345,7 @@ export namespace Prisma {
     mimeType?: StringFieldUpdateOperationsInput | string
     size?: IntFieldUpdateOperationsInput | number
     ip?: NullableStringFieldUpdateOperationsInput | string | null
+    anonToken?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     transcodeStatus?: StringFieldUpdateOperationsInput | string
     transcodeError?: NullableStringFieldUpdateOperationsInput | string | null
@@ -12319,6 +12362,7 @@ export namespace Prisma {
     mimeType?: StringFieldUpdateOperationsInput | string
     size?: IntFieldUpdateOperationsInput | number
     ip?: NullableStringFieldUpdateOperationsInput | string | null
+    anonToken?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     transcodeStatus?: StringFieldUpdateOperationsInput | string
     transcodeError?: NullableStringFieldUpdateOperationsInput | string | null
@@ -12335,6 +12379,7 @@ export namespace Prisma {
     mimeType: string
     size: number
     ip?: string | null
+    anonToken?: string | null
     userId?: string | null
     transcodeStatus?: string
     transcodeError?: string | null
@@ -12370,6 +12415,7 @@ export namespace Prisma {
     mimeType?: StringFieldUpdateOperationsInput | string
     size?: IntFieldUpdateOperationsInput | number
     ip?: NullableStringFieldUpdateOperationsInput | string | null
+    anonToken?: NullableStringFieldUpdateOperationsInput | string | null
     transcodeStatus?: StringFieldUpdateOperationsInput | string
     transcodeError?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12386,6 +12432,7 @@ export namespace Prisma {
     mimeType?: StringFieldUpdateOperationsInput | string
     size?: IntFieldUpdateOperationsInput | number
     ip?: NullableStringFieldUpdateOperationsInput | string | null
+    anonToken?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     transcodeStatus?: StringFieldUpdateOperationsInput | string
     transcodeError?: NullableStringFieldUpdateOperationsInput | string | null
@@ -12402,6 +12449,7 @@ export namespace Prisma {
     mimeType?: StringFieldUpdateOperationsInput | string
     size?: IntFieldUpdateOperationsInput | number
     ip?: NullableStringFieldUpdateOperationsInput | string | null
+    anonToken?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     transcodeStatus?: StringFieldUpdateOperationsInput | string
     transcodeError?: NullableStringFieldUpdateOperationsInput | string | null
