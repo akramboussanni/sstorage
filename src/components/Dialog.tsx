@@ -25,12 +25,16 @@ interface DialogProps {
 
 export function Dialog({ state, onClose }: DialogProps) {
     const [inputValue, setInputValue] = useState('');
+    const [checkboxValue, setCheckboxValue] = useState(state.checkboxChecked || false);
     
     useEffect(() => {
         if (state.open && state.type === 'prompt') {
             setInputValue('');
         }
-    }, [state.open, state.type]);
+        if (state.open && state.type === 'checkbox') {
+            setCheckboxValue(state.checkboxChecked || false);
+        }
+    }, [state.open, state.type, state.checkboxChecked]);
     
     if (!state.open) return null;
 
@@ -89,8 +93,9 @@ export function Dialog({ state, onClose }: DialogProps) {
                     <label style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 20, cursor: 'pointer' }}>
                         <input
                             type="checkbox"
-                            checked={state.checkboxChecked || false}
+                            checked={checkboxValue}
                             onChange={(e) => {
+                                setCheckboxValue(e.target.checked);
                                 state.onCheckboxChange?.(e.target.checked);
                             }}
                             style={{ cursor: 'pointer' }}
